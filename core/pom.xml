@@ -2,17 +2,25 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>org.duckhawk</groupId>
+	<artifactId>duckhawk</artifactId>
+	<version>1.0-SNAPSHOT</version>
+  </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.duckhawk</groupId>
-  <artifactId>duckhawk</artifactId>
+  <artifactId>duckhawk-core</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
-  <name>DuckHawk</name>
+  <name>DuckHawk Core</name>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/duckhawk/trunk</connection>
-    <url>http://svn.codehaus.org/duckhawk/trunk</url>
+    <connection>scm:svn:http://svn.codehaus.org/duckhawk/trunk/core/</connection>
+    <url>http://svn.codehaus.org/duckhawk/trunk/core/</url>
   </scm>
+
+  <description>
+	Core Duckhawk Framework
+  </description>
 
   <organization>
     <name>The DuckHawk project</name>
@@ -26,18 +34,6 @@
       <url>http://www.gnu.org/copyleft/lgpl.txt</url>
     </license>
   </licenses>
-
-  <developers>
-    <developer>
-      <name>Andrea Aime</name>
-      <id>aaime</id>
-      <email>aaime@users.sourceforge.net</email>
-      <organization>The Open Planning Project</organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-  </developers>
 
   <dependencies>
     <dependency>
