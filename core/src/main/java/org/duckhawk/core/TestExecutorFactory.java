@@ -13,4 +13,6 @@ public interface TestExecutorFactory {
      * @return
      */
     TestExecutor buildTestExecutor();
+    
+    TestMetadata getMetadata();
 }

@@ -6,8 +6,9 @@ import java.text.NumberFormat;
 import junit.textui.TestRunner;
 
 import org.duckhawk.core.TestExecutor;
-import org.duckhawk.core.TimedTestEvent;
+import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TimedTestListener;
+import org.duckhawk.core.util.PerformanceSummarizer;
 import org.duckhawk.junit3.TimedTest;
 
 public class MathTest extends TimedTest {
@@ -32,19 +33,40 @@ public class MathTest extends TimedTest {
     }
 
     public static class SysOutListener implements TimedTestListener {
-
         NumberFormat format = new DecimalFormat("0.#######");
 
-        public void testRunExecuted(TimedTestEvent event) {
-            TestExecutor executor = event.getSource();
-            String msg = executor.getProductId() + " "
-                    + executor.getProductVersion() + " - "
-                    + executor.getTestId() + ": ";
-            if (event.getException() != null)
-                msg += "FAILED,  " + event.getException().getMessage();
+        PerformanceSummarizer summarizer = new PerformanceSummarizer();
+
+        public void testCallExecuted(TestExecutor executor,
+                TestMetadata metadata, double time, Throwable exception) {
+            summarizer.accumulate(time);
+            String msg = metadata.getProductId() + " "
+                    + metadata.getProductVersion() + " - "
+                    + metadata.getTestId() + ": ";
+            if (exception != null)
+                msg += "FAILED,  " + exception.getMessage();
             else
-                msg += format.format(event.getTime()) + "s";
+                msg += format.format(time) + "s";
             System.out.println(msg);
+
+        }
+
+        public void testRunCompleted(TestMetadata metadata) {
+            String msg = metadata.getProductId() + " "
+                    + metadata.getProductVersion() + " - "
+                    + metadata.getTestId() + ": completed!";
+            System.out.println(msg);
+            summarizer.done();
+            System.out.println(summarizer);
+
+        }
+
+        public void testRunStarting(TestMetadata metadata, int callCount) {
+            String msg = metadata.getProductId() + " "
+                    + metadata.getProductVersion() + " - "
+                    + metadata.getTestId() + ": started!";
+            System.out.println(msg);
+            summarizer.start(callCount);
         }
 
     }

@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestExecutorFactory;
+import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TimedTestRunner;
 
 public abstract class AbstractPerformanceTest extends TestCase {
@@ -16,9 +17,9 @@ public abstract class AbstractPerformanceTest extends TestCase {
     protected String productVersion;
 
     public AbstractPerformanceTest(String productId, String productVersion) {
-        if(productId == null)
+        if (productId == null)
             throw new IllegalArgumentException("ProductId not specified");
-        if(productVersion == null)
+        if (productVersion == null)
             throw new IllegalArgumentException("VersionId not specified");
         this.productId = productId;
         this.productVersion = productVersion;
@@ -29,9 +30,11 @@ public abstract class AbstractPerformanceTest extends TestCase {
     @Override
     protected void runTest() throws Throwable {
         TimedTestRunner runner = getPerformanceTester();
-        runner.evaluatePerformance(new JUnitTestExecutorFactory(getRunMethod()));
+        runner
+                .evaluatePerformance(new JUnitTestExecutorFactory(
+                        getRunMethod()));
     }
-    
+
     private Method getRunMethod() {
         assertNotNull(getName());
         Method runMethod = null;
@@ -49,12 +52,17 @@ public abstract class AbstractPerformanceTest extends TestCase {
         }
         return runMethod;
     }
-    
+
     private class JUnitTestExecutorFactory implements TestExecutorFactory {
         private Method runMethod;
 
+        private TestMetadata metadata;
+
         public JUnitTestExecutorFactory(Method runMethod) {
             this.runMethod = runMethod;
+            String id = runMethod.getDeclaringClass().getName() + "."
+                    + runMethod.getName() + "()";
+            this.metadata = new TestMetadata(id, productId, productVersion);
         }
 
         /**
@@ -63,10 +71,14 @@ public abstract class AbstractPerformanceTest extends TestCase {
          * @return
          */
         public TestExecutor buildTestExecutor() {
-            return new JUnitTestExecutor(AbstractPerformanceTest.this, runMethod, productId, productVersion);
+            return new JUnitTestExecutor(AbstractPerformanceTest.this,
+                    runMethod);
+        }
+
+        public TestMetadata getMetadata() {
+            return metadata;
         }
 
     }
 
-    
 }
