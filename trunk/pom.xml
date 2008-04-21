@@ -22,7 +22,7 @@
 
   <licenses>
     <license>
-      <name>Lesser General Public License (GPL)</name>
+      <name>Lesser General Public License (LGPL)</name>
       <url>http://www.gnu.org/copyleft/lgpl.txt</url>
     </license>
   </licenses>
@@ -38,6 +38,41 @@
       </roles>
     </developer>
   </developers>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>3.8.2</version>
+      </dependency>
+      <dependency>
+        <groupId>xmlunit</groupId>
+        <artifactId>xmlunit</artifactId>
+        <version>1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.easymock</groupId>
+        <artifactId>easymock</artifactId>
+        <version>2.3</version>
+      </dependency>
+      <dependency>
+        <groupId>httpunit</groupId>
+        <artifactId>httpunit</artifactId>
+        <version>1.6.2</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.14</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <distributionManagement>
     <repository>
@@ -53,10 +88,7 @@
   </distributionManagement>
 
   <modules>
-    <module>core</module>
-	<!--
-	<module>wfs</module>
-	<module>awdip</module>
-	-->
+    <module>dh-core</module>
+    <module>dh-junit3</module>
   </modules>
 </project>  
