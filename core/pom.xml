@@ -9,125 +9,28 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.duckhawk</groupId>
-  <artifactId>duckhawk-core</artifactId>
+  <artifactId>dh-core</artifactId>
   <packaging>jar</packaging>
   <name>DuckHawk Core</name>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/duckhawk/trunk/core/</connection>
-    <url>http://svn.codehaus.org/duckhawk/trunk/core/</url>
+    <connection>scm:svn:http://svn.codehaus.org/duckhawk/trunk/dh-core/</connection>
+    <url>http://svn.codehaus.org/duckhawk/trunk/dh-core/</url>
   </scm>
 
   <description>
 	Core Duckhawk Framework
   </description>
 
-  <organization>
-    <name>The DuckHawk project</name>
-    <url>http://docs.codehaus.org/display/DH/Home</url>
-  </organization>
-  <inceptionYear>2008</inceptionYear>
-
-  <licenses>
-    <license>
-      <name>Lesser General Public License (GPL)</name>
-      <url>http://www.gnu.org/copyleft/lgpl.txt</url>
-    </license>
-  </licenses>
-
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.2</version>
-    </dependency>
-    <dependency>
-      <groupId>xmlunit</groupId>
-      <artifactId>xmlunit</artifactId>
-      <version>1.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.easymock</groupId>
-      <artifactId>easymock</artifactId>
-      <version>2.3</version>
-    </dependency>
-    <dependency>
-      <groupId>httpunit</groupId>
-      <artifactId>httpunit</artifactId>
-      <version>1.6.2</version>
-    </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
-      <version>1.1.1</version>
     </dependency>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
-      <version>1.2.14</version>
     </dependency>
   </dependencies>
 
-  <build>
-    <plugins>
-
-      <!-- Compilation. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source><!-- The -source argument for the Java compiler. -->
-          <target>1.5</target><!-- The -target argument for the Java compiler. -->
-          <debug>true</debug><!-- Whether to include debugging information.   -->
-          <encoding>UTF-8</encoding><!-- The -encoding argument for the Java compiler. -->
-        </configuration>
-      </plugin>
-
-      <!-- unit testing -->
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-          <includes>
-            <include>**/*Test.java</include>
-          </includes>
-          <forkMode>once</forkMode>
-          <printSummary>true</printSummary>
-        </configuration>
-      </plugin>
-
-      <!-- Generate source jars -->
-      <plugin>
-        <inherited>true</inherited>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <configuration>
-          <attach>true</attach>
-        </configuration>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-    </plugins>
-  </build>
-
-  <distributionManagement>
-    <repository>
-      <id>codehaus.org</id>
-      <name>DuckHawk Central Repository</name>
-      <url>dav:https://dav.codehaus.org/repository/duckhawk/</url>
-    </repository>
-    <snapshotRepository>
-      <id>codehaus.org</id>
-      <name>DuckHawk Central Development Repository</name>
-      <url>dav:https://dav.codehaus.org/snapshots.repository/duckhawk/</url>
-    </snapshotRepository>
-  </distributionManagement>
 </project>
