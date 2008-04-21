@@ -73,6 +73,56 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  
+  <build>
+    <plugins>
+
+      <!-- Compilation. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source><!-- The -source argument for the Java compiler. -->
+          <target>1.5</target><!-- The -target argument for the Java compiler. -->
+          <debug>true</debug><!-- Whether to include debugging information.   -->
+          <encoding>UTF-8</encoding><!-- The -encoding argument for the Java compiler. -->
+        </configuration>
+      </plugin>
+
+      <!-- unit testing -->
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+          <includes>
+            <include>**/*Test.java</include>
+          </includes>
+          <forkMode>once</forkMode>
+          <printSummary>true</printSummary>
+        </configuration>
+      </plugin>
+
+      <!-- Generate source jars -->
+      <plugin>
+        <inherited>true</inherited>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <configuration>
+          <attach>true</attach>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
 
   <distributionManagement>
     <repository>
