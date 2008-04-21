@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import junit.framework.TestCase;
 
 import org.duckhawk.core.TestExecutor;
+import org.duckhawk.core.TestProperties;
 
 class JUnitTestExecutor implements TestExecutor {
 
@@ -18,7 +19,7 @@ class JUnitTestExecutor implements TestExecutor {
         this.method = method;
     }
 
-    public void run() throws Throwable {
+    public void run(TestProperties properties) throws Throwable {
         try {
             method.invoke(test);
         } catch (InvocationTargetException e) {
@@ -27,6 +28,10 @@ class JUnitTestExecutor implements TestExecutor {
         } catch (IllegalAccessException e) {
             e.fillInStackTrace();
             throw e;
+        } finally {
+            if(test instanceof PropertyTest) {
+                ((PropertyTest) test).fillProperties(properties);
+            }
         }
     }
 

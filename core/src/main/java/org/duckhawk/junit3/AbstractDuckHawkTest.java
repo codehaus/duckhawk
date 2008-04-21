@@ -2,21 +2,37 @@ package org.duckhawk.junit3;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Map;
 
 import junit.framework.TestCase;
 
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestExecutorFactory;
 import org.duckhawk.core.TestMetadata;
+import org.duckhawk.core.TestProperties;
+import org.duckhawk.core.TestPropertiesImpl;
 import org.duckhawk.core.TimedTestRunner;
 
-public abstract class AbstractPerformanceTest extends TestCase {
+public abstract class AbstractDuckHawkTest extends TestCase implements PropertyTest {
 
+    /**
+     * The product id for this test run
+     */
     protected String productId;
 
+    /**
+     * The product version for this test run
+     */
     protected String productVersion;
 
-    public AbstractPerformanceTest(String productId, String productVersion) {
+    /**
+     * The properties for the single test run. <br>
+     * They are cleared each time {@link #setUp()} is called, and they are
+     * supposed to gather properties specific to the test method being run.
+     */
+    protected TestProperties properties;
+
+    public AbstractDuckHawkTest(String productId, String productVersion) {
         if (productId == null)
             throw new IllegalArgumentException("ProductId not specified");
         if (productVersion == null)
@@ -25,11 +41,22 @@ public abstract class AbstractPerformanceTest extends TestCase {
         this.productVersion = productVersion;
     }
 
-    protected abstract TimedTestRunner getPerformanceTester();
+    @Override
+    protected void setUp() throws Exception {
+        if (properties == null)
+            properties = new TestPropertiesImpl();
+        properties.clear();
+    }
+    
+    public void fillProperties(TestProperties callProperties) {
+        callProperties.putAll(properties);
+    }
+
+    protected abstract TimedTestRunner getTestRunner();
 
     @Override
     protected void runTest() throws Throwable {
-        TimedTestRunner runner = getPerformanceTester();
+        TimedTestRunner runner = getTestRunner();
         runner
                 .evaluatePerformance(new JUnitTestExecutorFactory(
                         getRunMethod()));
@@ -70,12 +97,11 @@ public abstract class AbstractPerformanceTest extends TestCase {
          * 
          * @return
          */
-        public TestExecutor buildTestExecutor() {
-            return new JUnitTestExecutor(AbstractPerformanceTest.this,
-                    runMethod);
+        public TestExecutor createTestExecutor() {
+            return new JUnitTestExecutor(AbstractDuckHawkTest.this, runMethod);
         }
 
-        public TestMetadata getMetadata() {
+        public TestMetadata createMetadata() {
             return metadata;
         }
 
