@@ -7,11 +7,11 @@ import java.util.Arrays;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
-import org.duckhawk.core.TimedTestListener;
+import org.duckhawk.core.TestListener;
 
 /**
  * A performance numbers summarizer. It can be used direcly or act as a
- * {@link TimedTestListener}.
+ * {@link TestListener}.
  * <p>
  * When used directly:
  * <ul>
@@ -42,7 +42,7 @@ import org.duckhawk.core.TimedTestListener;
  * @author Andrea Aime (TOPP)
  * 
  */
-public class PerformanceSummarizer implements TimedTestListener {
+public class PerformanceSummarizer implements TestListener {
     private static NumberFormat format = new DecimalFormat("0.#######");
 
     double min;

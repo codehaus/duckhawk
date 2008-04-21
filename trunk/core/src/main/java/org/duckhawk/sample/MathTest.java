@@ -2,18 +2,17 @@ package org.duckhawk.sample;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Map;
 
 import junit.textui.TestRunner;
 
 import org.duckhawk.core.TestExecutor;
+import org.duckhawk.core.TestListener;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
-import org.duckhawk.core.TimedTestListener;
 import org.duckhawk.core.util.PerformanceSummarizer;
-import org.duckhawk.junit3.TimedTest;
+import org.duckhawk.junit3.PerformanceTest;
 
-public class MathTest extends TimedTest {
+public class MathTest extends PerformanceTest {
 
     public MathTest() {
         // Load test, 10 threads in parallel each doing 50 requests
@@ -40,7 +39,7 @@ public class MathTest extends TimedTest {
         properties.put(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
     }
 
-    public static class SysOutListener implements TimedTestListener {
+    public static class SysOutListener implements TestListener {
         NumberFormat format = new DecimalFormat("0.#######");
 
         public void testCallExecuted(TestExecutor executor,

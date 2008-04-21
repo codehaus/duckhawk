@@ -1,18 +1,16 @@
 package org.duckhawk.core;
 
-import java.util.Map;
-
 /**
  * Interface implemented by classes that need to be notified of test run
  * outcomes.
  * <p>
- * Typical implementors may be test outcome storage engines or on the fly
- * reporting classes.
+ * Typical implementors may be test outcome storage engines, summarizers, or on
+ * the fly reporting classes.
  * 
  * @author Andrea Aime (TOPP)
  * 
  */
-public interface TimedTestListener {
+public interface TestListener {
     /**
      * Called when a {@link TestExecutor} single call completed.
      * 
