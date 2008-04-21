@@ -12,7 +12,12 @@ public interface TestExecutorFactory {
      * 
      * @return
      */
-    TestExecutor buildTestExecutor();
+    TestExecutor createTestExecutor();
     
-    TestMetadata getMetadata();
+    /**
+     * Creates the metadata object
+     * @see TestMetadata
+     * @return
+     */
+    TestMetadata createMetadata();
 }

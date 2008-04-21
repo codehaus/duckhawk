@@ -39,17 +39,18 @@ public class TimedTestRunner {
 
     public void evaluatePerformance(TestExecutorFactory factory) {
         int callCount = numThreads * repetitions;
-        TestMetadata metadata = factory.getMetadata();
-        fireStartEvent(metadata, callCount);
+        TestMetadata metadata = factory.createMetadata();
+        TestProperties testProperties = new TestPropertiesImpl();
+        fireStartEvent(metadata, testProperties, callCount);
         try {
             if (numThreads == 1) {
-                TestExecutor executor = factory.buildTestExecutor();
+                TestExecutor executor = factory.createTestExecutor();
                 runSingle(executor, metadata);
             } else {
                 runParallel(factory, metadata);
             }
         } finally {
-            fireEndEvent(metadata);
+            fireEndEvent(metadata, testProperties);
         }
 
     }
@@ -62,7 +63,7 @@ public class TimedTestRunner {
 
                 public void run() {
                     try {
-                        runSingle(factory.buildTestExecutor(), metadata);
+                        runSingle(factory.createTestExecutor(), metadata);
                     } finally {
                         // no matter what happens notify the test run ended
                         testEnded();
@@ -92,25 +93,29 @@ public class TimedTestRunner {
         double totalTime = 0;
 
         // warmup
+        TestProperties runProperties = new TestPropertiesImpl();
         try {
-            executor.run();
+            executor.run(runProperties);
         } catch (Throwable t) {
             // notify
         }
 
         // loop and time
         for (int i = 0; i < repetitions; i++) {
+            // default values and properties cleanup
+            double time = 0d;
+            Throwable exception = null;
+            runProperties.clear();
             try {
                 long start = System.nanoTime();
-                executor.run();
+                executor.run(runProperties);
                 long end = System.nanoTime();
-                double time = ((end - start) / 1000000000.0);
+                time = ((end - start) / 1000000000.0);
                 totalTime += time;
-                fireTimeEvent(time, executor, metadata, null);
             } catch (Throwable t) {
-                // notify
-                fireTimeEvent(0d, executor, metadata, t);
+                exception = t;
             }
+            fireTimeEvent(time, executor, metadata, runProperties, exception);
         }
 
         return totalTime;
@@ -125,7 +130,8 @@ public class TimedTestRunner {
      * @param throwable
      */
     private void fireTimeEvent(double time, TestExecutor executor,
-            TestMetadata metadata, Throwable throwable) {
+            TestMetadata metadata, TestProperties properties,
+            Throwable throwable) {
         if (listeners.size() == 0)
             return;
 
@@ -134,7 +140,8 @@ public class TimedTestRunner {
             // This part is synchronized so that the listeners do not have to
             // deal with concurrency issues
             synchronized (this) {
-                listener.testCallExecuted(executor, metadata, time, throwable);
+                listener.testCallExecuted(executor, metadata, properties, time,
+                        throwable);
             }
         }
     }
@@ -142,33 +149,38 @@ public class TimedTestRunner {
     /**
      * Notifies listeners that a performance test is about to start
      * 
+     * @param testProperties
+     * 
      * @param executor
      * @param callCount
      */
     private synchronized void fireStartEvent(TestMetadata metadata,
-            int callCount) {
+            TestProperties testProperties, int callCount) {
         if (listeners.size() == 0)
             return;
 
         // notify listeners
         for (TimedTestListener listener : listeners) {
-            listener.testRunStarting(metadata, callCount);
+            listener.testRunStarting(metadata, testProperties, callCount);
         }
     }
 
     /**
      * Notifies listeners that a performance test is about to start
      * 
+     * @param testProperties
+     * 
      * @param executor
      * @param callCount
      */
-    private synchronized void fireEndEvent(TestMetadata metadata) {
+    private synchronized void fireEndEvent(TestMetadata metadata,
+            TestProperties testProperties) {
         if (listeners.size() == 0)
             return;
 
         // notify listeners
         for (TimedTestListener listener : listeners) {
-            listener.testRunCompleted(metadata);
+            listener.testRunCompleted(metadata, testProperties);
         }
     }
 

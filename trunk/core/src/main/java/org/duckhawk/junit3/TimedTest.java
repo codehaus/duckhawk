@@ -3,7 +3,7 @@ package org.duckhawk.junit3;
 import org.duckhawk.core.TimedTestListener;
 import org.duckhawk.core.TimedTestRunner;
 
-public abstract class TimedTest extends AbstractPerformanceTest {
+public abstract class TimedTest extends AbstractDuckHawkTest {
 
     protected int times;
     private TimedTestListener[] listeners;
@@ -17,7 +17,7 @@ public abstract class TimedTest extends AbstractPerformanceTest {
         this.listeners = listeners;
     }
 
-    protected TimedTestRunner getPerformanceTester() {
+    protected TimedTestRunner getTestRunner() {
         TimedTestRunner runner = new TimedTestRunner(times, numThreads);
         for (TimedTestListener listener : listeners) {
             runner.addTestRunListener(listener);
