@@ -11,9 +11,17 @@ import org.duckhawk.core.TestExecutorFactory;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestPropertiesImpl;
-import org.duckhawk.core.TimedTestRunner;
+import org.duckhawk.core.TestRunner;
 
-public abstract class AbstractDuckHawkTest extends TestCase implements PropertyTest {
+/**
+ * The abstract integration between JUnit3 and DuckHawk. Subclasses specializes
+ * it for conformance and performance tests
+ * 
+ * @author Andrea Aime (TOPP)
+ * 
+ */
+public abstract class AbstractDuckHawkTest extends TestCase implements
+        PropertyTest {
 
     /**
      * The product id for this test run
@@ -32,6 +40,12 @@ public abstract class AbstractDuckHawkTest extends TestCase implements PropertyT
      */
     protected TestProperties properties;
 
+    /**
+     * Creates a new test with the minimum properties needed to identify a test.
+     * 
+     * @param productId
+     * @param productVersion
+     */
     public AbstractDuckHawkTest(String productId, String productVersion) {
         if (productId == null)
             throw new IllegalArgumentException("ProductId not specified");
@@ -41,25 +55,26 @@ public abstract class AbstractDuckHawkTest extends TestCase implements PropertyT
         this.productVersion = productVersion;
     }
 
+    /**
+     * Clears up the 
+     */
     @Override
     protected void setUp() throws Exception {
         if (properties == null)
             properties = new TestPropertiesImpl();
         properties.clear();
     }
-    
+
     public void fillProperties(TestProperties callProperties) {
         callProperties.putAll(properties);
     }
 
-    protected abstract TimedTestRunner getTestRunner();
+    protected abstract TestRunner getTestRunner();
 
     @Override
     protected void runTest() throws Throwable {
-        TimedTestRunner runner = getTestRunner();
-        runner
-                .evaluatePerformance(new JUnitTestExecutorFactory(
-                        getRunMethod()));
+        TestRunner runner = getTestRunner();
+        runner.runTests(new JUnitTestExecutorFactory(getRunMethod()));
     }
 
     private Method getRunMethod() {
