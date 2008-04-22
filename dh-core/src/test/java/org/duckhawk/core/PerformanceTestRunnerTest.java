@@ -2,11 +2,6 @@ package org.duckhawk.core;
 import static org.easymock.EasyMock.*;
 import junit.framework.TestCase;
 
-import org.duckhawk.core.PerformanceTestRunner;
-import org.duckhawk.core.TestExecutor;
-import org.duckhawk.core.TestListener;
-import org.duckhawk.core.TestProperties;
-import org.duckhawk.core.TestRunner;
 import org.easymock.IAnswer;
 
 public class PerformanceTestRunnerTest extends TestCase {
@@ -77,7 +72,6 @@ public class PerformanceTestRunnerTest extends TestCase {
     
     public void testAccumulateProperties() throws Throwable {
         new TestRunnerScaffolding() {
-            private Object thread;
             int count;
             
             @Override
