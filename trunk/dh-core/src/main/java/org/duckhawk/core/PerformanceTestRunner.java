@@ -2,6 +2,16 @@ package org.duckhawk.core;
 
 import java.security.InvalidParameterException;
 
+/**
+ * Runs a certain test a number of times in sequence, without pauses, with a
+ * warmup run before the actual performance test runs (so the
+ * {@link TestExecutor} is actually run <code>repetition + 1</code> times,
+ * whilst listeners only get notified <code>repetition</code> times.<br>
+ * The same {@link TestExecutor} is used to run all the calls.
+ * 
+ * @author Andrea Aime (TOPP)
+ * 
+ */
 public class PerformanceTestRunner extends ConformanceTestRunner implements
         TestRunner {
     /**
@@ -9,82 +19,27 @@ public class PerformanceTestRunner extends ConformanceTestRunner implements
      */
     int repetitions;
 
-    /**
-     * Number of concurrent threads running the TestExecutor
-     */
-    protected int numThreads;
-
-    /**
-     * Number of threads that still have to terminate
-     */
-    private int expiredThreads;
-
     public PerformanceTestRunner(int repetitions) {
-        this(repetitions, 1);
-    }
-
-    public PerformanceTestRunner(int repetitions, int numThreads) {
         this.repetitions = repetitions;
-        this.numThreads = numThreads;
         ensurePositive(repetitions, "repetitions");
-        ensurePositive(numThreads, "numThreads");
-
     }
 
-    private void ensurePositive(int number, String variable) {
+    protected void ensurePositive(int number, String variable) {
         if (number <= 0)
             throw new InvalidParameterException("Parameter " + variable
                     + " must be positive");
     }
 
     public void runTests(TestExecutorFactory factory) {
-        int callCount = numThreads * repetitions;
         TestMetadata metadata = factory.createMetadata();
         TestProperties testProperties = new TestPropertiesImpl();
-        fireStartEvent(metadata, testProperties, callCount);
+        fireStartEvent(metadata, testProperties, repetitions);
         try {
-            if (numThreads == 1) {
-                TestExecutor executor = factory.createTestExecutor();
-                runRepeated(executor, metadata);
-            } else {
-                runParallel(factory, metadata);
-            }
+            TestExecutor executor = factory.createTestExecutor();
+            runRepeated(executor, metadata);
         } finally {
             fireEndEvent(metadata, testProperties);
         }
-    }
-
-    protected synchronized void runParallel(final TestExecutorFactory factory,
-            final TestMetadata metadata) {
-        expiredThreads = 0;
-        for (int i = 0; i < numThreads; i++) {
-            Thread runner = new Thread() {
-
-                public void run() {
-                    try {
-                        runRepeated(factory.createTestExecutor(), metadata);
-                    } finally {
-                        // no matter what happens mark this thread as "done"
-                        testEnded();
-                    }
-                }
-
-            };
-            runner.start();
-        }
-
-        while (expiredThreads < numThreads) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                return;
-            }
-        }
-    }
-
-    private synchronized void testEnded() {
-        expiredThreads++;
-        notifyAll();
     }
 
     protected void runRepeated(TestExecutor executor, TestMetadata metadata) {

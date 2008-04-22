@@ -7,6 +7,7 @@ import org.duckhawk.core.TestListener;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestPropertiesImpl;
+import org.duckhawk.core.TestRunner;
 
 
 
@@ -16,22 +17,27 @@ import org.duckhawk.core.TestPropertiesImpl;
  *
  */
 public class TestRunnerScaffolding {
-    TestMetadata metadata;
-    TestProperties emptyProperties;
+    protected TestMetadata metadata;
+    protected TestProperties emptyProperties;
+    protected TestExecutor executor;
+    protected TestExecutorFactory factory;
+    protected TestListener[] listeners;
+    protected TestRunner runner;
     
     
-    public TestRunnerScaffolding() {
+    protected TestRunner buildTestRunner() {
+        return new ConformanceTestRunner();
+    }
+
+    public void performTest() throws Throwable {
         metadata = new TestMetadata("test", "whosGonnaTestTheTests", "0.1");
         emptyProperties = new TestPropertiesImpl();
-    }
-    
-    public void performTest() throws Throwable {
-        TestExecutor executor = buildExecutor();
-        TestExecutorFactory factory = buildFactory(executor);
-        TestListener[] listeners = buildTestListeners(executor);
+        executor = buildExecutor();
+        factory = buildFactory(executor);
+        listeners = buildTestListeners(executor);
+        runner = buildTestRunner();
         
         // run the tests
-        ConformanceTestRunner runner = new ConformanceTestRunner();
         for (TestListener testListener : listeners) {
             runner.addTestRunListener(testListener);
         }

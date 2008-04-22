@@ -5,6 +5,7 @@ import org.duckhawk.core.ConformanceTestRunner;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestExecutorFactory;
 import org.duckhawk.core.TestListener;
+import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestPropertiesImpl;
 import org.easymock.IAnswer;
@@ -67,9 +68,12 @@ public class ConformanceTestRunnerTest extends TestCase {
             }
         
             public void performTest() throws Throwable {
-                TestExecutor executor = buildExecutor();
-                TestExecutorFactory factory = buildFactory(executor);
-                TestListener[] listeners = buildTestListeners(executor);
+                metadata = new TestMetadata("test", "whosGonnaTestTheTests", "0.1");
+                emptyProperties = new TestPropertiesImpl();
+                executor = buildExecutor();
+                factory = buildFactory(executor);
+                listeners = buildTestListeners(executor);
+                runner = buildTestRunner();
                 
                 // run the tests
                 ConformanceTestRunner runner = new ConformanceTestRunner();
