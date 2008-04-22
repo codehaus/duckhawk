@@ -67,14 +67,7 @@ public class ConformanceTestRunnerTest extends TestCase {
                 return executor;
             }
         
-            public void performTest() throws Throwable {
-                metadata = new TestMetadata("test", "whosGonnaTestTheTests", "0.1");
-                emptyProperties = new TestPropertiesImpl();
-                executor = buildExecutor();
-                factory = buildFactory(executor);
-                listeners = buildTestListeners(executor);
-                runner = buildTestRunner();
-                
+            protected void run() {
                 // run the tests
                 ConformanceTestRunner runner = new ConformanceTestRunner();
                 for (TestListener testListener : listeners) {
@@ -87,13 +80,6 @@ public class ConformanceTestRunnerTest extends TestCase {
                     runner.removeTestRunListener(testListener);
                 }
                 runner.runTests(factory);
-
-                // make sure all expectations are matched so far
-                verify(factory);
-                verify(executor);
-                for (TestListener testListener : listeners) {
-                    verify(testListener);
-                }
             }
         
         }.performTest();
