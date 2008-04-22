@@ -73,7 +73,7 @@ public class PerformanceSummarizer implements TestListener {
 
     public void accumulate(double time) {
         if (callCount >= times.length) {
-            double[] temp = new double[times.length * 3 / 2];
+            double[] temp = new double[times.length * 3 / 2 + 1];
             System.arraycopy(times, 0, temp, 0, times.length);
             times = temp;
         }
@@ -83,18 +83,22 @@ public class PerformanceSummarizer implements TestListener {
         total += time;
         if (time < min)
             min = time;
-        else if (time > max)
+        if (time > max)
             max = time;
     }
 
     public void done() {
-        Arrays.sort(times, 0, callCount);
-        if (callCount % 2 == 0) {
-            median = (times[callCount / 2] + times[callCount / 2 + 1]) / 2;
+        if(callCount > 0) {
+            Arrays.sort(times, 0, callCount);
+            if (callCount % 2 == 0) {
+                median = (times[(callCount - 1) / 2] + times[callCount / 2]) / 2;
+            } else {
+                median = times[callCount / 2];
+            }
+            times = null;
         } else {
-            median = times[callCount / 2];
+            median = Double.NaN;
         }
-        times = null;
     }
 
     public double getTotal() {
