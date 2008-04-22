@@ -30,26 +30,36 @@ public class TestRunnerScaffolding {
     }
 
     public void performTest() throws Throwable {
-        metadata = new TestMetadata("test", "whosGonnaTestTheTests", "0.1");
-        emptyProperties = new TestPropertiesImpl();
-        executor = buildExecutor();
-        factory = buildFactory(executor);
-        listeners = buildTestListeners(executor);
-        runner = buildTestRunner();
-        
-        // run the tests
-        for (TestListener testListener : listeners) {
-            runner.addTestRunListener(testListener);
-        }
-        runner.runTests(factory);
-        runner.dispose();
+        init();
+        run();
+        check();
+    }
 
+    private void check() {
         // make sure all expectations are matched
         verify(factory);
         verify(executor);
         for (TestListener testListener : listeners) {
             verify(testListener);
         }
+    }
+
+    private void init() throws Throwable {
+        metadata = new TestMetadata("test", "whosGonnaTestTheTests", "0.1");
+        emptyProperties = new TestPropertiesImpl();
+        executor = buildExecutor();
+        factory = buildFactory(executor);
+        listeners = buildTestListeners(executor);
+        runner = buildTestRunner();
+    }
+
+    protected void run() {
+        // run the tests
+        for (TestListener testListener : listeners) {
+            runner.addTestRunListener(testListener);
+        }
+        runner.runTests(factory);
+        runner.dispose();
     }
 
     protected TestListener[] buildTestListeners(TestExecutor executor) {
