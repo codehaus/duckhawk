@@ -9,8 +9,8 @@ import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestListener;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
-import org.duckhawk.core.util.PerformanceSummarizer;
 import org.duckhawk.junit3.PerformanceTest;
+import org.duckhawk.util.PerformanceSummarizer;
 
 public class MathTest extends PerformanceTest {
 

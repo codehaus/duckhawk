@@ -1,3 +1,4 @@
+package org.duckhawk.core;
 import static org.easymock.EasyMock.*;
 import junit.framework.TestCase;
 
