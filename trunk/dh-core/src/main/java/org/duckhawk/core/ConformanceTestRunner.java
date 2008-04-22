@@ -69,7 +69,7 @@ public class ConformanceTestRunner implements TestRunner {
         for (TestListener listener : listeners) {
             // This part is synchronized so that the listeners do not have to
             // deal with concurrency issues
-            synchronized (this) {
+            synchronized (listeners) {
                 listener.testCallExecuted(executor, metadata, properties, time,
                         throwable);
             }
