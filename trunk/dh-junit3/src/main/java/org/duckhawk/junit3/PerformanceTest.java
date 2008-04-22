@@ -1,6 +1,7 @@
 package org.duckhawk.junit3;
 
 import org.duckhawk.core.PerformanceTestRunner;
+import org.duckhawk.core.StressTestRunner;
 import org.duckhawk.core.TestListener;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestRunner;
@@ -44,7 +45,11 @@ public abstract class PerformanceTest extends AbstractDuckHawkTest {
     }
 
     protected TestRunner getTestRunner() {
-        TestRunner runner = new PerformanceTestRunner(times, numThreads);
+        TestRunner runner = null;
+        if (numThreads > 1)
+            runner = new PerformanceTestRunner(times);
+        else
+            runner = new StressTestRunner(times, numThreads);
         for (TestListener listener : listeners) {
             runner.addTestRunListener(listener);
         }
