@@ -2,13 +2,6 @@ package org.duckhawk.core;
 import static org.easymock.EasyMock.*;
 import junit.framework.TestCase;
 
-import org.duckhawk.core.ConformanceTestRunner;
-import org.duckhawk.core.TestExecutor;
-import org.duckhawk.core.TestExecutorFactory;
-import org.duckhawk.core.TestListener;
-import org.duckhawk.core.TestMetadata;
-import org.duckhawk.core.TestProperties;
-import org.duckhawk.core.TestPropertiesImpl;
 import org.easymock.IAnswer;
 
 public class ConformanceTestRunnerTest extends TestCase {
