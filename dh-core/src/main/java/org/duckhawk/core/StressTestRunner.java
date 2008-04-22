@@ -11,12 +11,22 @@ public class StressTestRunner extends PerformanceTestRunner {
      * Number of threads that still have to terminate
      */
     protected int expiredThreads;
+    
+    /**
+     * Number of seconds
+     */
+    protected int rampUp;
 
-    public StressTestRunner(int perThreadRepetitions, int numThreads) {
+    public StressTestRunner(int perThreadRepetitions, int numThreads, int rampUp) {
         super(perThreadRepetitions);
         this.numThreads = numThreads;
-        ensurePositive(numThreads, "numThreads");
-
+        this.rampUp = rampUp;
+        ensurePositive(numThreads, "numThreads", true);
+        ensurePositive(rampUp, "rampUp", false);
+    }
+    
+    public StressTestRunner(int perThreadRepetitions, int numThreads) {
+        this(perThreadRepetitions, numThreads, 0);
     }
 
     public void runTests(TestExecutorFactory factory) {
@@ -47,7 +57,22 @@ public class StressTestRunner extends PerformanceTestRunner {
     protected synchronized void runParallel(final TestExecutorFactory factory,
             final TestMetadata metadata) {
         expiredThreads = 0;
+        long rampDelay = numThreads == 1 ? 0 : rampUp * 1000 / (numThreads - 1);
+        long start = System.nanoTime();
         for (int i = 0; i < numThreads; i++) {
+            // make sure we sleep only the time necessary to get to the next 
+            // start time in the ramp (provided there is a ramp, of course)
+            long targetStartTime = rampDelay * i;
+            long sleepTime = targetStartTime - (System.nanoTime() - start) / 1000000;
+            while(rampDelay > 0 && sleepTime > 0) {
+                try {
+                    Thread.sleep(sleepTime);
+                } catch(InterruptedException e) {
+                    // forget about it and go back on sleeping if necessary
+                }
+                sleepTime = targetStartTime - (System.nanoTime() - start) / 1000000;
+            }
+            
             Thread runner = new Thread() {
 
                 public void run() {

@@ -21,11 +21,11 @@ public class PerformanceTestRunner extends ConformanceTestRunner implements
 
     public PerformanceTestRunner(int repetitions) {
         this.repetitions = repetitions;
-        ensurePositive(repetitions, "repetitions");
+        ensurePositive(repetitions, "repetitions", true);
     }
 
-    protected void ensurePositive(int number, String variable) {
-        if (number <= 0)
+    protected void ensurePositive(long number, String variable, boolean strict) {
+        if (number < 0 || (strict && number == 0))
             throw new InvalidParameterException("Parameter " + variable
                     + " must be positive");
     }

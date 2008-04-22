@@ -34,22 +34,15 @@ public abstract class PerformanceTest extends AbstractDuckHawkTest {
 
     private TestListener[] listeners;
 
-    private int numThreads;
-
     public PerformanceTest(String productId, String productVersion, int times,
-            int numThreads, TestListener... listeners) {
+            TestListener... listeners) {
         super(productId, productVersion);
         this.times = times;
-        this.numThreads = numThreads;
         this.listeners = listeners;
     }
-
+    
     protected TestRunner getTestRunner() {
-        TestRunner runner = null;
-        if (numThreads > 1)
-            runner = new PerformanceTestRunner(times);
-        else
-            runner = new StressTestRunner(times, numThreads);
+        TestRunner runner = new PerformanceTestRunner(times);
         for (TestListener listener : listeners) {
             runner.addTestRunListener(listener);
         }
