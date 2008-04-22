@@ -1,4 +1,4 @@
-package org.duckhawk.core.util;
+package org.duckhawk.util;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

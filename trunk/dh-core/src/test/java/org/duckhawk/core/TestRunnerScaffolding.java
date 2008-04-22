@@ -1,3 +1,4 @@
+package org.duckhawk.core;
 import static org.easymock.EasyMock.*;
 
 import org.duckhawk.core.ConformanceTestRunner;
