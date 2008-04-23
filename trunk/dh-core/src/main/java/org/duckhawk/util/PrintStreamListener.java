@@ -61,7 +61,7 @@ public class PrintStreamListener implements TestListener {
             boolean dumpStackTraces, PrintStream out) {
         this.dumpSingleCalls = dumpSingleCalls;
         this.dumpStackTraces = dumpStackTraces;
-        this.out = System.out;
+        this.out = out;
     }
 
     public void testCallExecuted(TestExecutor executor, TestMetadata metadata,
