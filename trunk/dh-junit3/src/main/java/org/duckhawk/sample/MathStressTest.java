@@ -1,5 +1,7 @@
 package org.duckhawk.sample;
 
+import junit.textui.TestRunner;
+
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.junit3.StressTest;
 import org.duckhawk.util.PerformanceSummarizer;
@@ -32,5 +34,4 @@ public class MathStressTest extends StressTest {
         Thread.sleep(50);
         properties.put(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
     }
-
 }
