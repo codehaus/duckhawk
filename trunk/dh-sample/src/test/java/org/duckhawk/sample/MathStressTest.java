@@ -1,7 +1,5 @@
 package org.duckhawk.sample;
 
-import junit.textui.TestRunner;
-
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.junit3.StressTest;
 import org.duckhawk.util.PerformanceSummarizer;
