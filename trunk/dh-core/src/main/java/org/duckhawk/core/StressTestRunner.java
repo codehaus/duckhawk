@@ -17,6 +17,12 @@ public class StressTestRunner extends PerformanceTestRunner {
      */
     protected int rampUp;
 
+    /**
+     * Creates a new stress tester that will use multiple threads to hit the TestExecutors
+     * @param perThreadRepetitions
+     * @param numThreads
+     * @param rampUp
+     */
     public StressTestRunner(int perThreadRepetitions, int numThreads, int rampUp) {
         super(perThreadRepetitions);
         this.numThreads = numThreads;
@@ -37,7 +43,7 @@ public class StressTestRunner extends PerformanceTestRunner {
         try {
             if (numThreads == 1) {
                 TestExecutor executor = factory.createTestExecutor();
-                runRepeated(executor, metadata);
+                runLinear(executor, metadata);
             } else {
                 runParallel(factory, metadata);
             }
@@ -63,21 +69,15 @@ public class StressTestRunner extends PerformanceTestRunner {
             // make sure we sleep only the time necessary to get to the next 
             // start time in the ramp (provided there is a ramp, of course)
             long targetStartTime = rampDelay * i;
-            long sleepTime = targetStartTime - (System.nanoTime() - start) / 1000000;
-            while(rampDelay > 0 && sleepTime > 0) {
-                try {
-                    Thread.sleep(sleepTime);
-                } catch(InterruptedException e) {
-                    // forget about it and go back on sleeping if necessary
-                }
-                sleepTime = targetStartTime - (System.nanoTime() - start) / 1000000;
+            if(rampDelay > 0) {
+                sleepUpToTarget(start, targetStartTime);
             }
             
             Thread runner = new Thread() {
 
                 public void run() {
                     try {
-                        runRepeated(factory.createTestExecutor(), metadata);
+                        runLinear(factory.createTestExecutor(), metadata);
                     } finally {
                         // no matter what happens mark this thread as "done"
                         testEnded();
