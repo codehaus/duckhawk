@@ -87,6 +87,7 @@ public class TestRunnerScaffolding {
         // build an executor that does nothing (and set expectations)
         TestExecutor executor = createMock(TestExecutor.class);
         executor.run(emptyProperties);
+        executor.check(emptyProperties);
         replay(executor);
         return executor;
     }

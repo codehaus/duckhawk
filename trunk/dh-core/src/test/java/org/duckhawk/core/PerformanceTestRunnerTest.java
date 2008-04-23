@@ -64,6 +64,8 @@ public class PerformanceTestRunnerTest extends TestCase {
                 });
                 // check it's called 20 timed (timed runs) + 1 (warmup)
                 expectLastCall().times(20 + 1);
+                executor.check(emptyProperties);
+                expectLastCall().times(20 + 1);
                 replay(executor);
                 return executor;
             }
@@ -109,6 +111,8 @@ public class PerformanceTestRunnerTest extends TestCase {
                 TestExecutor executor = createMock(TestExecutor.class);
                 executor.run(emptyProperties);
                 // check it's called 20 timed (timed runs) + 1 (warmup)
+                expectLastCall().times(20 + 1);
+                executor.check(emptyProperties);
                 expectLastCall().times(20 + 1);
                 replay(executor);
                 return executor;
