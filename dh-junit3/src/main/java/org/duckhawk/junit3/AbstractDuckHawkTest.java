@@ -74,9 +74,6 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
             // methods of this class but excludes the
             // inherited ones.
             runMethod = getClass().getMethod(getName(), new Class[0]);
-            // just for the sake of testing... member of inner classes cannot be accessed apparently...
-            if(!runMethod.isAccessible())
-                runMethod.setAccessible(true);
         } catch (NoSuchMethodException e) {
             fail("Method \"" + getName() + "\" not found");
         }

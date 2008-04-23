@@ -47,6 +47,7 @@ public class PerformanceTestRunner extends ConformanceTestRunner implements
         TestProperties runProperties = new TestPropertiesImpl();
         try {
             executor.run(runProperties);
+            executor.check(runProperties);
         } catch (Throwable t) {
             // notify
         }

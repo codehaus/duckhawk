@@ -8,8 +8,8 @@ import org.duckhawk.util.PrintStreamListener;
 public class MathStressTest extends StressTest {
 
     public MathStressTest() {
-        // Load test, 5 threads in parallel each doing 50 requests, with a ramp up time of 3 seconds
-        super("Math", "1.0", 50, 5, 3, new PerformanceSummarizer(), new PrintStreamListener(true, true));
+        // Load test, 5 threads in parallel each doing 10 requests, with a ramp up time of 3 seconds
+        super("Math", "1.0", 10, 5, 2, new PerformanceSummarizer(), new PrintStreamListener(true, true));
     }
 
     public void testSqrt() throws Exception {

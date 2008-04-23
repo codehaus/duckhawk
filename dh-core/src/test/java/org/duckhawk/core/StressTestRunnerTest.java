@@ -80,6 +80,8 @@ public class StressTestRunnerTest extends TestCase {
                 // check it's called (5 times (timed runs) + 1 (warmup)) * 5
                 // threads
                 expectLastCall().times((5 + 1) * 5);
+                executor.check(emptyProperties);
+                expectLastCall().times((5 + 1) * 5);
                 replay(executor);
                 return executor;
             }
@@ -142,6 +144,8 @@ public class StressTestRunnerTest extends TestCase {
                 });
                 // check it's called 20 timed (timed runs) + 1 (warmup)
                 expectLastCall().times(20 + 1);
+                executor.check(emptyProperties);
+                expectLastCall().times(20 + 1);
                 replay(executor);
                 return executor;
             }
@@ -183,7 +187,7 @@ public class StressTestRunnerTest extends TestCase {
                 expectLastCall().andAnswer(new IAnswer<Object>() {
                     public Object answer() throws Throwable {
                         threads.add(Thread.currentThread());
-                        Thread.sleep(100);
+                        Thread.sleep(50);
                         // make sure we're actually ramping up, that is, the elapsed time over the number of
                         // different threads seen so far is bigger than the ramp up rate (we cannot test equality,
                         // a well working system will have it slightly bigger)
@@ -194,6 +198,8 @@ public class StressTestRunnerTest extends TestCase {
 
                 });
                 // check it's called requests times by each thread, plus one extra warmup call per thread
+                expectLastCall().times((requests + 1) * numThreads);
+                executor.check(emptyProperties);
                 expectLastCall().times((requests + 1) * numThreads);
                 replay(executor);
                 return executor;

@@ -38,6 +38,7 @@ public class ConformanceTestRunner implements TestRunner {
         long start = 0l;
         long end;
         Throwable exception = null;
+        // run the timed part and time it no matter what happens
         try {
             start = System.nanoTime();
             executor.run(runProperties);
@@ -45,6 +46,14 @@ public class ConformanceTestRunner implements TestRunner {
             exception = t;
         } finally {
             end = System.nanoTime();
+        }
+        // run the check part
+        if(exception == null) {
+            try {
+                executor.check(runProperties);
+            } catch (Throwable t) {
+                exception = t;
+            }
         }
         time = ((end - start) / 1000000000.0);
         fireCallEvent(time, executor, metadata, runProperties, exception);

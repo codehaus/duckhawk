@@ -70,6 +70,16 @@ public interface TestExecutor {
      * @throws Throwable
      * @returns
      */
-    public void run(TestProperties runProperties) throws Throwable;
+    public void run(TestProperties callProperties) throws Throwable;
+    
+    /**
+     * This method is called after run. Run is the timed part of the execution,
+     * check can take as much time as it sees fit to perform validity checks
+     * on the result without affecting the timing, but only the conformance
+     * of this test run
+     * @param callProperties
+     * @throws Throwable
+     */
+    public void check(TestProperties callProperties) throws Throwable;
 
 }

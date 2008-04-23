@@ -10,29 +10,57 @@ import org.duckhawk.core.TestProperties;
 
 class JUnitTestExecutor implements TestExecutor {
 
-    Method method;
+    Method runMethod;
+
+    Method checkMethod;
 
     TestCase test;
 
     public JUnitTestExecutor(TestCase test, Method method) {
         this.test = test;
-        this.method = method;
+        this.runMethod = method;
+        this.runMethod.setAccessible(true);
+        try {
+            String checkMethodName = "check" + method.getName().substring(4);
+            checkMethod = test.getClass().getDeclaredMethod(checkMethodName,
+                    new Class[0]);
+            checkMethod.setAccessible(true);
+        } catch (NoSuchMethodException e) {
+            // ok, fine, no checking
+        }
     }
 
-    public void run(TestProperties properties) throws Throwable {
+    public void run(TestProperties callProperties) throws Throwable {
+        Exception currentException = null;
         try {
-            method.invoke(test);
+            runMethod.invoke(test);
+        } catch (InvocationTargetException e) {
+            e.fillInStackTrace();
+            currentException = e;
+            throw e.getTargetException();
+        } finally {
+            if (test instanceof PropertyTest
+                    && (currentException != null || checkMethod == null)) {
+                ((PropertyTest) test).fillProperties(callProperties);
+            }
+        }
+    }
+
+    public void check(TestProperties callProperties) throws Throwable {
+        if (checkMethod == null)
+            return;
+
+        try {
+            checkMethod.invoke(test);
         } catch (InvocationTargetException e) {
             e.fillInStackTrace();
             throw e.getTargetException();
-        } catch (IllegalAccessException e) {
-            e.fillInStackTrace();
-            throw e;
         } finally {
-            if(test instanceof PropertyTest) {
-                ((PropertyTest) test).fillProperties(properties);
+            if (test instanceof PropertyTest) {
+                ((PropertyTest) test).fillProperties(callProperties);
             }
         }
+
     }
 
 }

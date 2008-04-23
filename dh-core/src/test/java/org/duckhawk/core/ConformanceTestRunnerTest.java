@@ -57,6 +57,8 @@ public class ConformanceTestRunnerTest extends TestCase {
                 TestExecutor executor = createMock(TestExecutor.class);
                 executor.run(emptyProperties);
                 expectLastCall().times(2);
+                executor.check(emptyProperties);
+                expectLastCall().times(2);
                 replay(executor);
                 return executor;
             }
@@ -145,6 +147,7 @@ public class ConformanceTestRunnerTest extends TestCase {
                     }
 
                 });
+                executor.check(callProperties);
                 replay(executor);
                 return executor;
             }
