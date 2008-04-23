@@ -33,9 +33,7 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
     protected String productVersion;
 
     /**
-     * The properties for the single test run. <br>
-     * They are cleared each time {@link #setUp()} is called, and they are
-     * supposed to gather properties specific to the test method being run.
+     * The properties for the single test run.
      */
     protected TestProperties properties;
 
@@ -52,16 +50,7 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
             throw new IllegalArgumentException("VersionId not specified");
         this.productId = productId;
         this.productVersion = productVersion;
-    }
-
-    /**
-     * Clears up the 
-     */
-    @Override
-    protected void setUp() throws Exception {
-        if (properties == null)
-            properties = new TestPropertiesImpl();
-        properties.clear();
+        this.properties = new TestPropertiesImpl();
     }
 
     public void fillProperties(TestProperties callProperties) {
@@ -85,6 +74,9 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
             // methods of this class but excludes the
             // inherited ones.
             runMethod = getClass().getMethod(getName(), new Class[0]);
+            // just for the sake of testing... member of inner classes cannot be accessed apparently...
+            if(!runMethod.isAccessible())
+                runMethod.setAccessible(true);
         } catch (NoSuchMethodException e) {
             fail("Method \"" + getName() + "\" not found");
         }

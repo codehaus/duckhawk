@@ -8,6 +8,12 @@ import org.duckhawk.junit3.PerformanceTest;
 import org.duckhawk.util.PrintStreamListener;
 
 public class MathPerfTest extends PerformanceTest {
+    
+    @Override
+    protected void setUp() throws Exception {
+//        // TODO Auto-generated method stub
+//        super.setUp();
+    }
 
     public MathPerfTest() {
         super("Math", "1.0", 50, new PrintStreamListener(true, true));

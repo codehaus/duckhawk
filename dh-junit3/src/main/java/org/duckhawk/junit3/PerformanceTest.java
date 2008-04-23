@@ -43,9 +43,10 @@ public abstract class PerformanceTest extends AbstractDuckHawkTest {
     
     protected TestRunner getTestRunner() {
         TestRunner runner = new PerformanceTestRunner(times);
-        for (TestListener listener : listeners) {
-            runner.addTestRunListener(listener);
-        }
+        if(listeners != null)
+            for (TestListener listener : listeners) {
+                runner.addTestRunListener(listener);
+            }
         return runner;
     }
 }
