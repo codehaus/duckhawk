@@ -159,5 +159,6 @@
   <modules>
     <module>dh-core</module>
     <module>dh-junit3</module>
+    <module>dh-sample</module>
   </modules>
 </project>  
