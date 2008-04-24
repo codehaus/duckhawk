@@ -160,5 +160,6 @@
     <module>dh-core</module>
     <module>dh-junit3</module>
     <module>dh-sample</module>
+    <module>awdip</module>
   </modules>
 </project>  
