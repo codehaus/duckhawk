@@ -8,6 +8,12 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>DuckHawk AWDIP</name>
+  
+  <parent>
+    <groupId>org.duckhawk</groupId>
+	<artifactId>duckhawk</artifactId>
+	<version>1.0-SNAPSHOT</version>
+  </parent>
 
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/duckhawk/trunk/awdip/</connection>
