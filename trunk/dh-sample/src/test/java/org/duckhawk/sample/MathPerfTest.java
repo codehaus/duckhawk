@@ -1,6 +1,8 @@
 package org.duckhawk.sample;
 
 
+import junit.textui.TestRunner;
+
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.junit3.PerformanceTest;
 import org.duckhawk.util.PrintStreamListener;
@@ -40,6 +42,11 @@ public class MathPerfTest extends PerformanceTest {
         properties.put(TestExecutor.KEY_REQUEST, "log(12.5)");
         result = Math.log(12.5);
         properties.put(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
+    }
+    
+    public static void main(String[] args) {
+        TestRunner runner = new TestRunner();
+        runner.run(MathPerfTest.class);
     }
 
 }
