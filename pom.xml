@@ -71,6 +71,11 @@
         <artifactId>log4j</artifactId>
         <version>1.2.14</version>
       </dependency>
+      <dependency>
+        <groupId>com.thoughtworks.xstream</groupId>
+        <artifactId>xstream</artifactId>
+        <version>1.3</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -159,6 +164,8 @@
   <modules>
     <module>dh-core</module>
     <module>dh-junit3</module>
+    <module>dh-model</module>
+    <module>dh-xstream</module>
     <module>dh-sample</module>
     <module>awdip</module>
   </modules>
