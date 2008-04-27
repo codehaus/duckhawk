@@ -4,10 +4,17 @@ import org.duckhawk.core.StressTestRunner;
 import org.duckhawk.core.TestListener;
 import org.duckhawk.core.TestRunner;
 
-public class StressTest extends AbstractDuckHawkTest {
+/**
+ * @author  Andrea Aime (TOPP)
+ */
+public abstract class StressTest extends AbstractDuckHawkTest {
 
     protected int times;
 
+    /**
+     * @uml.property  name="listeners"
+     * @uml.associationEnd  multiplicity="(0 -1)"
+     */
     private TestListener[] listeners;
 
     private int numThreads;
