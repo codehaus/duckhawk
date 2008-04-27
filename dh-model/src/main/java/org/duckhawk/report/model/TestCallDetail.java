@@ -1,5 +1,6 @@
 package org.duckhawk.report.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class TestCallDetail {
@@ -58,6 +59,8 @@ public class TestCallDetail {
     }
 
     public Map<String, String> getCallProperties() {
+        if(callProperties == null)
+            callProperties = new HashMap<String, String>();
         return callProperties;
     }
 
