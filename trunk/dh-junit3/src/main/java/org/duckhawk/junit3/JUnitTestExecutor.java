@@ -10,11 +10,11 @@ import org.duckhawk.core.TestProperties;
 
 class JUnitTestExecutor implements TestExecutor {
 
-    Method runMethod;
+    protected Method runMethod;
 
-    Method checkMethod;
+    protected Method checkMethod;
 
-    TestCase test;
+    protected TestCase test;
 
     public JUnitTestExecutor(TestCase test, Method method) {
         this.test = test;

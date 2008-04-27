@@ -13,11 +13,9 @@ import org.duckhawk.core.TestPropertiesImpl;
 import org.duckhawk.core.TestRunner;
 
 /**
- * The abstract integration between JUnit3 and DuckHawk. Subclasses specializes
- * it for conformance and performance tests
- * 
- * @author Andrea Aime (TOPP)
- * 
+ * The abstract integration between JUnit3 and DuckHawk. Subclasses specializes it for conformance and performance tests
+ * @author     Andrea Aime (TOPP)
+ * @uml.dependency   supplier="org.duckhawk.junit3.JUnitTestExecutor"
  */
 public abstract class AbstractDuckHawkTest extends TestCase implements
         PropertyTest {
@@ -83,6 +81,9 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
         return runMethod;
     }
 
+    /**
+     * @author   Andrea Aime (TOPP)
+     */
     private class JUnitTestExecutorFactory implements TestExecutorFactory {
         private Method runMethod;
 
@@ -91,7 +92,7 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
         public JUnitTestExecutorFactory(Method runMethod) {
             this.runMethod = runMethod;
             String id = runMethod.getDeclaringClass().getName() + "."
-                    + runMethod.getName() + "()";
+                    + runMethod.getName();
             this.metadata = new TestMetadata(id, productId, productVersion);
         }
 
