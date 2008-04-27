@@ -29,5 +29,10 @@
       <artifactId>dh-junit3</artifactId>
 	    <version>${project.version}</version>	
     </dependency>
+	<dependency>
+      <groupId>org.duckhawk</groupId>
+      <artifactId>dh-xstream</artifactId>
+	    <version>${project.version}</version>	
+    </dependency>
   </dependencies>
 </project>
