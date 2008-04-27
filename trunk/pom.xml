@@ -126,7 +126,7 @@
       <groupId>org.codehaus.mojo</groupId>
       <artifactId>cobertura-maven-plugin</artifactId>
      </plugin>
-
+     
       <!-- Generate source jars -->
       <plugin>
         <inherited>true</inherited>
@@ -147,6 +147,24 @@
 
     </plugins>
   </build>
+  
+  <reporting>
+    <plugins>
+      <!-- Check for automatically detectable bugs -->
+      <plugin>
+       <groupId>org.codehaus.mojo</groupId>
+       <artifactId>findbugs-maven-plugin</artifactId>
+       <version>1.1.1</version>
+       <configuration>
+         <xmlOutput>false</xmlOutput>
+         <threshold>Normal</threshold>
+         <debug>false</debug>
+         <relaxed>false</relaxed>
+       </configuration>
+     </plugin>
+   </plugins>
+ </reporting>
+
 
   <distributionManagement>
     <repository>
