@@ -19,16 +19,15 @@ import java.util.Random;
  * @author Andrea Aime (TOPP)
  * 
  */
-public class PerformanceTestRunner extends ConformanceTestRunner implements
-        TestRunner {
+public class PerformanceTestRunner extends ConformanceTestRunner  {
     /**
      * How many times the test must be run (besides the warm up run)
      */
-    int repetitions;
+    protected int repetitions;
 
-    private double time;
+    protected double time;
 
-    private Random random;
+    protected Random random;
 
     /**
      * Builds a performance test runner that will issue <code>repetition</code>
