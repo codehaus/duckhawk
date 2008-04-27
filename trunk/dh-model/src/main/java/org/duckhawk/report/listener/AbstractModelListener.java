@@ -23,21 +23,32 @@ public abstract class AbstractModelListener implements TestListener {
      * ensures these maps won't grow too much *
      */
 
-    private Map<String, Map<String, TestRun>> testRunCache;
+    private Map<String, Map<String, TestRun>> testRunCache = new HashMap<String, Map<String,TestRun>>();
 
-    private Map<TestMetadata, TestResult> testResultCache;
+    private Map<TestMetadata, TestResult> testResultCache = new HashMap<TestMetadata, TestResult>();
 
     public void testCallExecuted(TestExecutor executor, TestMetadata metadata,
             TestProperties callProperties, double time, Throwable exception) {
         TestResult result = getTestResult(metadata);
+        String exceptionMessage = exception != null ? exception.getMessage() : null; 
         TestCallDetail detail = new TestCallDetail(time, exception != null,
-                exception.getMessage(), result);
+                exceptionMessage, result);
+        Map<String, String> props = detail.getCallProperties();
+        fillProperties(callProperties, props);
+        try {
+            handleDetail(detail);
+        } catch(Exception e) {
+            throw new RuntimeException("Listener bombed out during execution", e);
+        }
+    }
+
+    private void fillProperties(TestProperties callProperties,
+            Map<String, String> props) {
         for (String name : callProperties.keySet()) {
             Object value = callProperties.get(name);
             String converted = convert(value);
-            detail.getCallProperties().put(name, converted);
+            props.put(name, converted);
         }
-        handleDetail(detail);
     }
 
     private String convert(Object value) {
@@ -51,13 +62,28 @@ public abstract class AbstractModelListener implements TestListener {
     public void testRunCompleted(TestMetadata metadata,
             TestProperties testProperties) {
         TestResult result = getTestResult(metadata);
-        testEnded(result);
+        result.getTestProperties().clear();
+        if(testProperties != null)
+            fillProperties(testProperties, result.getTestProperties());
+        try {
+            testEnded(result);
+        } catch(Exception e) {
+            throw new RuntimeException("Listener bombed out during execution", e);
+        }
     }
 
     public void testRunStarting(TestMetadata metadata,
             TestProperties testProperties, int callNumber) {
         // forces the creation of the test run
-        testStarting(getTestResult(metadata));
+        try {
+            TestResult testResult = getTestResult(metadata);
+            testResult.getTestProperties().clear();
+            if(testProperties != null)
+                fillProperties(testProperties, testResult.getTestProperties());
+            testStarting(testResult);
+        } catch(Exception e) {
+            throw new RuntimeException("Listener bombed out during execution", e);
+        }
     }
 
     protected TestRun getTestRun(TestMetadata metadata) {
@@ -97,10 +123,10 @@ public abstract class AbstractModelListener implements TestListener {
         return result;
     }
     
-    protected abstract void testStarting(TestResult result);
+    protected abstract void testStarting(TestResult result) throws Exception;
 
-    protected abstract void testEnded(TestResult result);
+    protected abstract void testEnded(TestResult result) throws Exception;
 
-    protected abstract void handleDetail(TestCallDetail detail);
+    protected abstract void handleDetail(TestCallDetail detail) throws Exception;
 
 }
