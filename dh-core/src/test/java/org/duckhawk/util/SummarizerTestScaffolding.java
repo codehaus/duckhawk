@@ -8,6 +8,9 @@ import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestPropertiesImpl;
 import org.easymock.EasyMock;
 
+/**
+ * @author   Andrea Aime (TOPP)
+ */
 public class SummarizerTestScaffolding {
     double[] times;
 

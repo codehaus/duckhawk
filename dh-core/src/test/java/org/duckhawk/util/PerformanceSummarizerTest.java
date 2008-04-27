@@ -2,6 +2,9 @@ package org.duckhawk.util;
 
 import junit.framework.TestCase;
 
+/**
+ * @author   Andrea Aime (TOPP)
+ */
 public class PerformanceSummarizerTest extends TestCase {
     private PerformanceSummarizer summarizer;
 

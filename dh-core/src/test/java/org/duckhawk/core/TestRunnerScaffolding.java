@@ -14,14 +14,17 @@ import org.duckhawk.core.TestRunner;
 
 /**
  * A little scaffolding to avoid repeating over and over the same code (but allows for variants)
- * @author Andrea Aime (TOPP)
- *
+ * @author   Andrea Aime (TOPP)
  */
 public class TestRunnerScaffolding {
     protected TestMetadata metadata;
     protected TestProperties emptyProperties;
     protected TestExecutor executor;
     protected TestExecutorFactory factory;
+    /**
+     * @uml.property  name="listeners"
+     * @uml.associationEnd  multiplicity="(0 -1)"
+     */
     protected TestListener[] listeners;
     protected TestRunner runner;
     

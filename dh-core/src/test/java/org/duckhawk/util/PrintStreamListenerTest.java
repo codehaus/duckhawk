@@ -10,6 +10,9 @@ import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestPropertiesImpl;
 import org.easymock.EasyMock;
 
+/**
+ * @author   Andrea Aime (TOPP)
+ */
 public class PrintStreamListenerTest extends TestCase {
 
     private ByteArrayOutputStream bos;

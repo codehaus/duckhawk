@@ -10,53 +10,42 @@ import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestListener;
 
 /**
- * A performance numbers summarizer. It can be used direcly or act as a
- * {@link TestListener}.
- * <p>
- * When used directly:
- * <ul>
- * <li>create the summarizer</li>
- * <li>call {@link #start(int)}</li>
- * <li>call {@link #accumulate(double)} for each time event you want to record</li>
- * <li>call {@link #done()} when the series end to have the statistics computed</li>
- * <li>call the getters to grab the statistics</li>
- * </ul>
- * </p>
- * <p>
- * When used as a listener:
- * <ul>
- * <li>create the summarizer and put it in the listener chain before any other
- * listener that might use the summaries
- * <li>other listeners will be able to grab the following properties once the
- * test run is complete:
- * <ul>
- * <li>{@link TestExecutor#KEY_CALL_COUNT}</li>
- * <li>{@link TestExecutor#KEY_AVG_TIME}</li>
- * <li>{@link TestExecutor#KEY_MED_TIME}</li>
- * <li>{@link TestExecutor#KEY_MIN_TIME}</li>
- * <li>{@link TestExecutor#KEY_MAX_TIME}</li>
- * <li>{@link TestExecutor#KEY_TOTAL_TIME}</li>
- * </ul>
- * </ul>
- * 
- * @author Andrea Aime (TOPP)
- * 
+ * A performance numbers summarizer. It can be used direcly or act as a {@link TestListener} . <p> When used directly: <ul> <li>create the summarizer</li> <li>call  {@link #start(int)} </li> <li>call  {@link #accumulate(double)}  for each time event you want to record</li> <li>call  {@link #done()}  when the series end to have the statistics computed</li> <li>call the getters to grab the statistics</li> </ul> </p> <p> When used as a listener: <ul> <li>create the summarizer and put it in the listener chain before any other listener that might use the summaries <li>other listeners will be able to grab the following properties once the test run is complete: <ul> <li> {@link TestExecutor#KEY_CALL_COUNT} </li> <li> {@link TestExecutor#KEY_AVG_TIME} </li> <li> {@link TestExecutor#KEY_MED_TIME} </li> <li> {@link TestExecutor#KEY_MIN_TIME} </li> <li> {@link TestExecutor#KEY_MAX_TIME} </li> <li> {@link TestExecutor#KEY_TOTAL_TIME} </li> </ul> </ul>
+ * @author  Andrea Aime (TOPP)
  */
 public class PerformanceSummarizer implements TestListener {
     private static NumberFormat format = new DecimalFormat("0.#######");
 
+    /**
+     * @uml.property  name="min"
+     */
     double min;
 
+    /**
+     * @uml.property  name="max"
+     */
     double max;
 
+    /**
+     * @uml.property  name="total"
+     */
     double total;
 
+    /**
+     * @uml.property  name="callCount"
+     */
     int callCount;
 
+    /**
+     * @uml.property  name="average"
+     */
     double average;
 
     double[] times;
 
+    /**
+     * @uml.property  name="median"
+     */
     double median;
 
     public void start(int expectedCallCount) {
@@ -101,26 +90,50 @@ public class PerformanceSummarizer implements TestListener {
         }
     }
 
+    /**
+     * @return
+     * @uml.property  name="total"
+     */
     public double getTotal() {
         return total;
     }
 
+    /**
+     * @return
+     * @uml.property  name="min"
+     */
     public double getMin() {
         return min;
     }
 
+    /**
+     * @return
+     * @uml.property  name="max"
+     */
     public double getMax() {
         return max;
     }
 
+    /**
+     * @return
+     * @uml.property  name="callCount"
+     */
     public int getCallCount() {
         return callCount;
     }
 
+    /**
+     * @return
+     * @uml.property  name="average"
+     */
     public double getAverage() {
         return total / callCount;
     }
 
+    /**
+     * @return
+     * @uml.property  name="median"
+     */
     public double getMedian() {
         return median;
     }
