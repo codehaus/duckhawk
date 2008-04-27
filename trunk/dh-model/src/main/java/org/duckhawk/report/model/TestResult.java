@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TestResult {
+    
+    Test test;
+
+    TestRun testRun;
 
     double time;
 
     String failureMessage;
-
-    Test test;
-
-    TestRun testRun;
 
     Map<String, String> testProperties;
 
