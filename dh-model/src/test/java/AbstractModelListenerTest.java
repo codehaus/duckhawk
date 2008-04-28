@@ -8,6 +8,9 @@ import org.duckhawk.report.listener.AbstractModelListener;
 import org.duckhawk.report.model.TestCallDetail;
 import org.duckhawk.report.model.TestResult;
 
+/**
+ * @author   Andrea Aime (TOPP)
+ */
 public class AbstractModelListenerTest extends TestCase {
 
     public TestCallDetail detail;
@@ -58,6 +61,6 @@ public class AbstractModelListenerTest extends TestCase {
         assertEquals(metadata.getTestId(), startResult.getTest().getName());
         assertEquals(TestType.undetermined, startResult.getTest().getType());
         assertEquals(1, startResult.getTestProperties().size());
-        assertEquals("2.3", startResult.getTestProperties().get("totalTime"));
+        assertEquals(new Double(2.3), startResult.getTestProperties().get("totalTime"));
     }
 }

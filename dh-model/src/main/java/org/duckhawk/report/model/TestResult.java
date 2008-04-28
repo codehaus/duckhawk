@@ -1,19 +1,31 @@
 package org.duckhawk.report.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.duckhawk.core.TestProperties;
+import org.duckhawk.core.TestPropertiesImpl;
 
+/**
+ * @author   Andrea Aime (TOPP)
+ */
 public class TestResult {
     
     Test test;
 
     TestRun testRun;
 
+    /**
+     * @uml.property  name="time"
+     */
     double time;
 
+    /**
+     * @uml.property  name="failureMessage"
+     */
     String failureMessage;
 
-    Map<String, String> testProperties;
+    /**
+     * @uml.property  name="testProperties"
+     */
+    TestProperties testProperties;
 
     protected TestResult() {
     }
@@ -31,36 +43,68 @@ public class TestResult {
         this.testRun = testRun;
     }
 
+    /**
+     * @return
+     * @uml.property  name="time"
+     */
     public double getTime() {
         return time;
     }
 
+    /**
+     * @param time
+     * @uml.property  name="time"
+     */
     public void setTime(double time) {
         this.time = time;
     }
 
+    /**
+     * @return
+     * @uml.property  name="failureMessage"
+     */
     public String getFailureMessage() {
         return failureMessage;
     }
 
+    /**
+     * @param failureMessage
+     * @uml.property  name="failureMessage"
+     */
     public void setFailureMessage(String failureMessage) {
         this.failureMessage = failureMessage;
     }
 
+    /**
+     * @return
+     * @uml.property  name="testRun"
+     */
     public TestRun getTestRun() {
         return testRun;
     }
 
+    /**
+     * @param testRun
+     * @uml.property  name="testRun"
+     */
     public void setTestRun(TestRun testRun) {
         this.testRun = testRun;
     }
 
-    public Map<String, String> getTestProperties() {
+    /**
+     * @return
+     * @uml.property  name="testProperties"
+     */
+    public TestProperties getTestProperties() {
         if (testProperties == null)
-            testProperties = new HashMap<String, String>();
+            testProperties = new TestPropertiesImpl();
         return testProperties;
     }
 
+    /**
+     * @return
+     * @uml.property  name="test"
+     */
     public Test getTest() {
         return test;
     }

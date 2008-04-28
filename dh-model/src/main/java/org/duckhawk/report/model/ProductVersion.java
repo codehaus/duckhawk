@@ -2,15 +2,19 @@ package org.duckhawk.report.model;
 
 /**
  * Marks the version of a product (a release number, a branch).
- * 
- * @author Andrea Aime - TOPP
- * 
+ * @author   Andrea Aime - TOPP
  */
 public class ProductVersion {
+    /**
+     * @uml.property  name="id"
+     */
     long id;
 
     Product product;
 
+    /**
+     * @uml.property  name="version"
+     */
     String version;
 
     protected ProductVersion() {
@@ -22,26 +26,50 @@ public class ProductVersion {
         this.version = version;
     }
 
+    /**
+     * @return
+     * @uml.property  name="id"
+     */
     public long getId() {
         return id;
     }
 
+    /**
+     * @param id
+     * @uml.property  name="id"
+     */
     public void setId(long id) {
         this.id = id;
     }
 
+    /**
+     * @return
+     * @uml.property  name="product"
+     */
     public Product getProduct() {
         return product;
     }
 
+    /**
+     * @param product
+     * @uml.property  name="product"
+     */
     public void setProduct(Product product) {
         this.product = product;
     }
 
+    /**
+     * @return
+     * @uml.property  name="version"
+     */
     public String getVersion() {
         return version;
     }
 
+    /**
+     * @param version
+     * @uml.property  name="version"
+     */
     public void setVersion(String version) {
         this.version = version;
     }

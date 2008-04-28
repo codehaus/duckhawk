@@ -33,8 +33,8 @@ public abstract class AbstractModelListener implements TestListener {
         String exceptionMessage = exception != null ? exception.getMessage() : null; 
         TestCallDetail detail = new TestCallDetail(time, exception != null,
                 exceptionMessage, result);
-        Map<String, String> props = detail.getCallProperties();
-        fillProperties(callProperties, props);
+        detail.getCallProperties().clear();
+        detail.getCallProperties().putAll(detail.getCallProperties());
         try {
             handleDetail(detail);
         } catch(Exception e) {
@@ -63,8 +63,11 @@ public abstract class AbstractModelListener implements TestListener {
             TestProperties testProperties) {
         TestResult result = getTestResult(metadata);
         result.getTestProperties().clear();
-        if(testProperties != null)
-            fillProperties(testProperties, result.getTestProperties());
+        if(testProperties != null) {
+            result.getTestProperties().clear();
+            result.getTestProperties().putAll(testProperties);
+        }
+            
         try {
             testEnded(result);
         } catch(Exception e) {
@@ -76,11 +79,14 @@ public abstract class AbstractModelListener implements TestListener {
             TestProperties testProperties, int callNumber) {
         // forces the creation of the test run
         try {
-            TestResult testResult = getTestResult(metadata);
-            testResult.getTestProperties().clear();
-            if(testProperties != null)
-                fillProperties(testProperties, testResult.getTestProperties());
-            testStarting(testResult);
+            TestResult result = getTestResult(metadata);
+            result.getTestProperties().clear();
+            if(result != null) {
+                result.getTestProperties().clear();
+                result.getTestProperties().putAll(testProperties);
+            }
+                
+            testStarting(result);
         } catch(Exception e) {
             throw new RuntimeException("Listener bombed out during execution", e);
         }
