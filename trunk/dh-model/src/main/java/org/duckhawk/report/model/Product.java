@@ -1,8 +1,17 @@
 package org.duckhawk.report.model;
 
+/**
+ * @author  Andrea Aime (TOPP)
+ */
 public class Product {
+    /**
+     * @uml.property  name="id"
+     */
     long id;
 
+    /**
+     * @uml.property  name="name"
+     */
     String name;
 
     protected Product() {
@@ -12,18 +21,34 @@ public class Product {
         this.name = name;
     }
 
+    /**
+     * @param id
+     * @uml.property  name="id"
+     */
     public void setId(long id) {
         this.id = id;
     }
 
+    /**
+     * @return
+     * @uml.property  name="id"
+     */
     public long getId() {
         return id;
     }
 
+    /**
+     * @return
+     * @uml.property  name="name"
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @param name
+     * @uml.property  name="name"
+     */
     public void setName(String name) {
         this.name = name;
     }
