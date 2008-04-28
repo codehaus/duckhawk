@@ -11,6 +11,7 @@ import org.duckhawk.report.model.ProductVersion;
 import org.duckhawk.report.model.Test;
 import org.duckhawk.report.model.TestCallDetail;
 import org.duckhawk.report.model.TestResult;
+import org.duckhawk.report.model.TestRun;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -21,6 +22,8 @@ public class XStreamDumper extends AbstractModelListener {
     ObjectOutputStream detailsOos;
 
     File root;
+
+    File mainReportFile;
 
     File detailsRoot;
 
@@ -40,8 +43,46 @@ public class XStreamDumper extends AbstractModelListener {
                     + " is supposed to be a directory");
 
         xsResults = new XStream();
+        customizeResultsXStream();
+
+        xsDetails = new XStream();
+        customizeDetailsXStream();
+
+        // this shutdown hook is necessary to properly close the files...
+        // TODO: try to find a way to specify an event instead of this trick,
+        // which is
+        // specific to the way junit3 integration is working
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+
+            @Override
+            public void run() {
+                close();
+            }
+
+        });
+    }
+
+    /**
+     * Customizes XStream dumper for writing down single test calls
+     */
+    protected void customizeDetailsXStream() {
+        xsDetails.setMode(XStream.NO_REFERENCES);
+        xsDetails.registerConverter(new TestPropertiesConverter(xsDetails.getMapper()));
+        xsDetails.alias("TestCallDetail", TestCallDetail.class);
+        xsDetails.omitField(TestCallDetail.class, "id");
+        xsDetails.omitField(TestCallDetail.class, "testRun");
+    }
+
+    /**
+     * Customizes XStream dumper for writing down single the full run summary ({@link TestRun}
+     * and {@link TestResult} objects)
+     */
+    protected void customizeResultsXStream() {
         xsResults.setMode(XStream.NO_REFERENCES);
+        xsResults.registerConverter(new TestPropertiesConverter(xsResults.getMapper()));
+        xsResults.registerConverter(new ProductVersionConverter());
         xsResults.alias("TestResult", TestResult.class);
+        xsResults.alias("TestInformation", TestRun.class);
         xsResults.omitField(TestResult.class, "id");
         xsResults.omitField(TestResult.class, "testRun");
         xsResults.omitField(TestResult.class, "product");
@@ -49,35 +90,10 @@ public class XStreamDumper extends AbstractModelListener {
         xsResults.omitField(ProductVersion.class, "id");
         xsResults.omitField(Test.class, "id");
         xsResults.omitField(Test.class, "product");
-
-        xsDetails = new XStream();
-        xsDetails.setMode(XStream.NO_REFERENCES);
-        xsDetails.alias("TestCallDetail", TestCallDetail.class);
-        xsDetails.omitField(TestCallDetail.class, "id");
-        xsDetails.omitField(TestCallDetail.class, "testRun");
-        
-        // this shutdown hook is necessary to properly close the files...
-        // TODO: try to find a way to specify an event instead of this trick, which is
-        // specific to the way junit3 integration is working
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-        
-            @Override
-            public void run() {
-                try {
-                    if(resultsOos != null)
-                        resultsOos.close();
-                } catch(IOException e) {
-                    // I should really get logging going...
-                }
-                try {
-                    if(detailsOos != null)
-                        detailsOos.close();
-                } catch(IOException e) {
-                    // same here
-                }
-            }
-        
-        });
+        xsResults.useAttributeFor(Test.class, "name");
+        xsResults.useAttributeFor(Test.class, "type");
+        xsResults.omitField(TestRun.class, "id");
+        xsResults.omitField(TestRun.class, "reference");
     }
 
     @Override
@@ -89,9 +105,9 @@ public class XStreamDumper extends AbstractModelListener {
             String name = sanitizeFileName(testRunId);
 
             // build the report object output stream
-            File testRunReport = new File(root, name + ".xml");
+            mainReportFile = new File(root, name + ".xml");
             BufferedOutputStream os = new BufferedOutputStream(
-                    new FileOutputStream(testRunReport));
+                    new FileOutputStream(mainReportFile));
             resultsOos = xsResults.createObjectOutputStream(os, "TestSummary");
             resultsOos.writeObject(result.getTestRun());
 
@@ -104,7 +120,9 @@ public class XStreamDumper extends AbstractModelListener {
         }
 
         // let's create the detail report file
-        File callReport = new File(detailsRoot, sanitizeFileName(result.getTest().getName()) + ".xml");
+        File callReport = new File(detailsRoot, sanitizeFileName(result
+                .getTest().getName())
+                + ".xml");
         BufferedOutputStream os = new BufferedOutputStream(
                 new FileOutputStream(callReport));
         detailsOos = xsDetails.createObjectOutputStream(os, "TestCallDetails");
@@ -118,7 +136,7 @@ public class XStreamDumper extends AbstractModelListener {
     protected void testEnded(TestResult result) throws Exception {
         detailsOos.flush();
         detailsOos.close();
-        
+
         resultsOos.writeObject(result);
     }
 
@@ -127,5 +145,38 @@ public class XStreamDumper extends AbstractModelListener {
         detailsOos.writeObject(detail);
     }
 
+    /**
+     * Closes the dumper, makes sure xml files are closed
+     */
+    public void close() {
+        try {
+            if (resultsOos != null) {
+                resultsOos.close();
+                resultsOos = null;
+            }
+
+        } catch (IOException e) {
+            // I should really get logging going...
+        }
+        try {
+            if (detailsOos != null) {
+                detailsOos.close();
+                detailsOos = null;
+            }
+        } catch (IOException e) {
+            // same here
+        }
+    }
+
+    /**
+     * Returns the {@link File} for the main xml report. The detailed reports
+     * will be in a directory with the same name as the file (minus the
+     * <code>.xml</code> extension.
+     * 
+     * @return
+     */
+    public File getMainReportFile() {
+        return mainReportFile;
+    }
 
 }
