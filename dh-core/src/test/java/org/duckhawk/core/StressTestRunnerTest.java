@@ -148,7 +148,7 @@ public class StressTestRunnerTest extends TestCase {
     public void testRampUp() throws Throwable {
         final Set<Thread> threads = new HashSet<Thread>();
         final long start = System.nanoTime();
-        final int numThreads = 50;
+        final int numThreads = 10;
         final int rampUp = 2;
         final int requests = 5;
         new TestRunnerScaffolding(numThreads, 1) {
