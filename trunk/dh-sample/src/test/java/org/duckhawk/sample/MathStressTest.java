@@ -17,7 +17,7 @@ public class MathStressTest extends StressTest {
         if (listeners == null) {
             listeners = new TestListener[] {
                     new PerformanceSummarizer(), //
-                    new PrintStreamListener(true, true), // 
+                    new PrintStreamListener(false, true), // 
                     new XStreamDumper(new File("./target/dh-report"))
             };
         }
