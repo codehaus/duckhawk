@@ -5,6 +5,10 @@ import junit.framework.TestCase;
 import org.easymock.IAnswer;
 
 public class ConformanceTestRunnerTest extends TestCase {
+    
+    private TestPropertiesImpl testProperties;
+
+    
 
     
     public void testSuccessfulRun() throws Throwable {
@@ -19,10 +23,10 @@ public class ConformanceTestRunnerTest extends TestCase {
             protected TestListener[] buildTestListeners() {
                 // build a listener that will expect throwables
                 TestListener listener = createMock(TestListener.class);
-                listener.testRunStarting(metadata, emptyProperties, 1);
+                listener.testRunStarting(eq(metadata), isA(TestProperties.class), eq(1));
                 listener.testCallExecuted(isA(TestExecutor.class), same(metadata),
                         eq(emptyProperties), anyDouble(), eq(t));
-                listener.testRunCompleted(metadata, emptyProperties);
+                listener.testRunCompleted(eq(metadata), isA(TestProperties.class));
                 replay(listener);
                 return new TestListener[] {listener};
             }
@@ -114,11 +118,9 @@ public class ConformanceTestRunnerTest extends TestCase {
             @Override
             protected TestListener[] buildTestListeners() {
                 // build a listener that will expect the properties the runner has set
-                TestListener listener = createMock(TestListener.class);
-                listener.testRunStarting(metadata, emptyProperties, 1);
+                TestListener listener = createNiceMock(TestListener.class);
                 listener.testCallExecuted(isA(TestExecutor.class), same(metadata),
                         eq(callProperties), anyDouble(), eq((Throwable) null));
-                listener.testRunCompleted(metadata, emptyProperties);
                 replay(listener);
                 return new TestListener[] {listener};
             }
@@ -144,6 +146,29 @@ public class ConformanceTestRunnerTest extends TestCase {
         
         }.performTest();
     }
+    
+    public void testTestProperties() throws Throwable {
+        new TestRunnerScaffolding() {
+            TestProperties testProperties = new TestPropertiesImpl();
+            
+            {
+                testProperties.put(TestExecutor.KEY_TEST_TYPE, TestType.conformance.toString());
+            }
+        
+            @Override
+            protected TestListener[] buildTestListeners() {
+                // build a listener that will expect the properties the runner has set
+                TestListener listener = createMock(TestListener.class);
+                listener.testRunStarting(metadata, testProperties, 1);
+                listener.testCallExecuted(isA(TestExecutor.class), same(metadata),
+                        isA(TestProperties.class), anyDouble(), eq((Throwable) null));
+                listener.testRunCompleted(metadata, testProperties);
+                replay(listener);
+                return new TestListener[] {listener};
+            }
+        
+        }.performTest();
+    }
 
     public void testListenerProperties() throws Throwable {
         new TestRunnerScaffolding() {
@@ -157,7 +182,7 @@ public class ConformanceTestRunnerTest extends TestCase {
             protected TestListener[] buildTestListeners() {
                 // build a listener that will add a property
                 TestListener listener1 = createMock(TestListener.class);
-                listener1.testRunStarting(metadata, emptyProperties, 1);
+                listener1.testRunStarting(eq(metadata), isA(TestProperties.class), eq(1));
                 listener1.testCallExecuted(isA(TestExecutor.class), same(metadata),
                         eq(emptyProperties), anyDouble(), eq((Throwable) null));
                 expectLastCall().andAnswer(new IAnswer<Object>() {
@@ -169,16 +194,16 @@ public class ConformanceTestRunnerTest extends TestCase {
                     }
 
                 });
-                listener1.testRunCompleted(metadata, emptyProperties);
+                listener1.testRunCompleted(eq(metadata), isA(TestProperties.class));
                 replay(listener1);
 
                 // build a listener that will check that the property set by the other
                 // listener is visible
                 TestListener listener2 = createMock(TestListener.class);
-                listener2.testRunStarting(metadata, emptyProperties, 1);
+                listener2.testRunStarting(eq(metadata), isA(TestProperties.class), eq(1));
                 listener2.testCallExecuted(isA(TestExecutor.class), same(metadata),
                         eq(listenerProperties), anyDouble(), eq((Throwable) null));
-                listener2.testRunCompleted(metadata, emptyProperties);
+                listener2.testRunCompleted(eq(metadata), isA(TestProperties.class));
                 replay(listener2);
                 
                 return new TestListener[] {listener1, listener2};

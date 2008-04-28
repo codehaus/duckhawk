@@ -5,5 +5,5 @@ package org.duckhawk.core;
  * @author   Andrea Aime (TOPP)
  */
 public enum TestType {
-    undetermined, conformance, timed, stress, workload;
+    undetermined, conformance, performance, stress, workload;
 }

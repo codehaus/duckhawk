@@ -77,10 +77,10 @@ public class TestRunnerScaffolding {
     protected TestListener[] buildTestListeners() {
         // build a listener and set expectations
         TestListener listener = createMock(TestListener.class);
-        listener.testRunStarting(metadata, emptyProperties, 1);
+        listener.testRunStarting(eq(metadata), isA(TestProperties.class), eq(1));
         listener.testCallExecuted(isA(TestExecutor.class), same(metadata),
                 eq(emptyProperties), anyDouble(), eq((Throwable) null));
-        listener.testRunCompleted(metadata, emptyProperties);
+        listener.testRunCompleted(eq(metadata), isA(TestProperties.class));
         replay(listener);
         return new TestListener[] {listener};
     }
