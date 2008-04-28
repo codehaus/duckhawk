@@ -61,6 +61,11 @@ public interface TestExecutor {
      * {@link TestExecutor} during a test run
      */
     public static final String KEY_TOTAL_TIME = "totalTime";
+    
+    /**
+     * The kind of test being run
+     */
+    public static final String KEY_TEST_TYPE = "testType";
 
     /**
      * Executes the test and fills in the eventual test properties for this test

@@ -57,12 +57,12 @@ public class StressTestRunnerTest extends TestCase {
             @Override
             protected TestListener[] buildTestListeners() {
                 TestListener listener = createMock(TestListener.class);
-                listener.testRunStarting(metadata, emptyProperties, 25);
+                listener.testRunStarting(eq(metadata), isA(TestProperties.class), eq(25));
                 listener.testCallExecuted(isA(TestExecutor.class),
                         eq(metadata), eq(emptyProperties), anyDouble(),
                         eq((Throwable) null));
                 expectLastCall().times(25);
-                listener.testRunCompleted(metadata, emptyProperties);
+                listener.testRunCompleted(eq(metadata), isA(TestProperties.class));
                 replay(listener);
                 return new TestListener[] { listener };
             }
@@ -109,12 +109,12 @@ public class StressTestRunnerTest extends TestCase {
             @Override
             protected TestListener[] buildTestListeners() {
                 TestListener listener = createMock(TestListener.class);
-                listener.testRunStarting(metadata, emptyProperties, 20);
+                listener.testRunStarting(eq(metadata), isA(TestProperties.class), eq(20));
                 listener.testCallExecuted(isA(TestExecutor.class),
                         eq(metadata), eq(emptyProperties), anyDouble(),
                         eq((Throwable) null));
                 expectLastCall().times(20);
-                listener.testRunCompleted(metadata, emptyProperties);
+                listener.testRunCompleted(eq(metadata), isA(TestProperties.class));
                 replay(listener);
                 return new TestListener[] { listener };
             }
@@ -160,8 +160,8 @@ public class StressTestRunnerTest extends TestCase {
             @Override
             protected TestListener[] buildTestListeners() {
                 TestListener listener = createMock(TestListener.class);
-                listener.testRunStarting(metadata, emptyProperties, requests
-                        * numThreads);
+                listener.testRunStarting(eq(metadata), isA(TestProperties.class), eq(requests
+                        * numThreads));
                 // make sure we don't get any exception from the runner, since
                 // that means
                 // the assert failed
@@ -169,7 +169,7 @@ public class StressTestRunnerTest extends TestCase {
                         eq(metadata), eq(emptyProperties), anyDouble(),
                         eq((Throwable) null));
                 expectLastCall().times(requests * numThreads);
-                listener.testRunCompleted(metadata, emptyProperties);
+                listener.testRunCompleted(eq(metadata), isA(TestProperties.class));
                 replay(listener);
                 return new TestListener[] { listener };
             }

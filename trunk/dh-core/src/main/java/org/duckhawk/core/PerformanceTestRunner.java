@@ -21,6 +21,21 @@ import java.util.Random;
  */
 public class PerformanceTestRunner extends ConformanceTestRunner  {
     /**
+     * The number of repetitions for this performance test
+     */
+    public static final String KEY_REPETITIONS = "testRepetitions";
+    
+    /**
+     * Number of seconds in which the test is run (for randomly distributed tests)
+     */
+    public static final String KEY_TIME = "testDistributionTime";
+    
+    /**
+     * The distribution generator for the random distributed test
+     */
+    public static final String KEY_DISTRIBUTION = "testDistributionGenerator";
+    
+    /**
      * How many times the test must be run (besides the warm up run)
      */
     protected int repetitions;
@@ -82,6 +97,12 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
     public void runTests(TestExecutorFactory factory) {
         TestMetadata metadata = factory.createMetadata();
         TestProperties testProperties = new TestPropertiesImpl();
+        testProperties.put(TestExecutor.KEY_TEST_TYPE, TestType.performance.toString());
+        testProperties.put(KEY_REPETITIONS, TestType.performance.toString());
+        if(random != null) {
+            testProperties.put(KEY_TIME, time);
+            testProperties.put(KEY_DISTRIBUTION, random);
+        }
         fireStartEvent(metadata, testProperties, repetitions);
         try {
             TestExecutor executor = factory.createTestExecutor();

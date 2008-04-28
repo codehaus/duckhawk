@@ -1,6 +1,16 @@
 package org.duckhawk.core;
 
 public class StressTestRunner extends PerformanceTestRunner {
+    
+    /**
+     * The number of threads used to run the stress test
+     */
+    public static final String KEY_NUMTHREADS = "testThreadNumber";
+    
+    /**
+     * The ramp up time in seconds, if any
+     */
+    public static final String KEY_RAMPUP = "testRampUpTime";
 
     /**
      * Number of concurrent threads running the TestExecutor
@@ -39,6 +49,14 @@ public class StressTestRunner extends PerformanceTestRunner {
         int callCount = numThreads * repetitions;
         TestMetadata metadata = factory.createMetadata();
         TestProperties testProperties = new TestPropertiesImpl();
+        testProperties.put(TestExecutor.KEY_TEST_TYPE, TestType.stress.toString());
+        testProperties.put(KEY_REPETITIONS, TestType.performance.toString());
+        testProperties.put(KEY_NUMTHREADS, numThreads);
+        testProperties.put(KEY_RAMPUP, rampUp);
+        if(random != null) {
+            testProperties.put(KEY_TIME, time);
+            testProperties.put(KEY_DISTRIBUTION, random);
+        }
         fireStartEvent(metadata, testProperties, callCount);
         try {
             if (numThreads == 1) {

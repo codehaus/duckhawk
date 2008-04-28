@@ -13,6 +13,7 @@ public class ConformanceTestRunner implements TestRunner {
     public void runTests(TestExecutorFactory factory) {
         TestMetadata metadata = factory.createMetadata();
         TestProperties testProperties = new TestPropertiesImpl();
+        testProperties.put(TestExecutor.KEY_TEST_TYPE, TestType.conformance.toString());
         fireStartEvent(metadata, testProperties, 1);
         try {
             TestExecutor executor = factory.createTestExecutor();

@@ -37,11 +37,11 @@ public class PerformanceTestRunnerTest extends TestCase {
             @Override
             protected TestListener[] buildTestListeners() {
                 TestListener listener = createMock(TestListener.class);
-                listener.testRunStarting(metadata, emptyProperties, 20);
+                listener.testRunStarting(eq(metadata), isA(TestProperties.class), eq(20));
                 listener.testCallExecuted(isA(TestExecutor.class), eq(metadata),
                         eq(emptyProperties), anyDouble(), eq((Throwable) null));
                 expectLastCall().times(20);
-                listener.testRunCompleted(metadata, emptyProperties);
+                listener.testRunCompleted(eq(metadata), isA(TestProperties.class));
                 replay(listener);
                 return new TestListener[] { listener };
             }
@@ -84,7 +84,7 @@ public class PerformanceTestRunnerTest extends TestCase {
             @Override
             protected TestListener[] buildTestListeners() {
                 TestListener listener = createMock(TestListener.class);
-                listener.testRunStarting(metadata, emptyProperties, 20);
+                listener.testRunStarting(eq(metadata), isA(TestProperties.class), eq(20));
                 listener.testCallExecuted(isA(TestExecutor.class), eq(metadata),
                         isA(TestProperties.class), anyDouble(), eq((Throwable) null));
                 expectLastCall().andAnswer(new IAnswer<Object>() {
@@ -100,7 +100,7 @@ public class PerformanceTestRunnerTest extends TestCase {
                 
                 });
                 expectLastCall().times(20);
-                listener.testRunCompleted(metadata, emptyProperties);
+                listener.testRunCompleted(eq(metadata), isA(TestProperties.class));
                 replay(listener);
                 return new TestListener[] { listener };
             }
