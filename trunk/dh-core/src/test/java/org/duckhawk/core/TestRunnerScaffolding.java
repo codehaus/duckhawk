@@ -1,14 +1,10 @@
 package org.duckhawk.core;
 import static org.easymock.EasyMock.*;
 
-import org.duckhawk.core.ConformanceTestRunner;
-import org.duckhawk.core.TestExecutor;
-import org.duckhawk.core.TestExecutorFactory;
-import org.duckhawk.core.TestListener;
-import org.duckhawk.core.TestMetadata;
-import org.duckhawk.core.TestProperties;
-import org.duckhawk.core.TestPropertiesImpl;
-import org.duckhawk.core.TestRunner;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.easymock.IAnswer;
 
 
 
@@ -19,7 +15,7 @@ import org.duckhawk.core.TestRunner;
 public class TestRunnerScaffolding {
     protected TestMetadata metadata;
     protected TestProperties emptyProperties;
-    protected TestExecutor executor;
+    protected List<TestExecutor> executors = new ArrayList<TestExecutor>();
     protected TestExecutorFactory factory;
     /**
      * @uml.property  name="listeners"
@@ -27,6 +23,17 @@ public class TestRunnerScaffolding {
      */
     protected TestListener[] listeners;
     protected TestRunner runner;
+    protected int expectedTestExecutors;
+    protected int expectedRunCount;
+    
+    public TestRunnerScaffolding() {
+        this(1, 1);
+    }
+    
+    public TestRunnerScaffolding(int expectedTestExecutors, int expectedRunCount) {
+        this.expectedTestExecutors = expectedTestExecutors;
+        this.expectedRunCount = expectedRunCount;
+    }
     
     
     protected TestRunner buildTestRunner() {
@@ -42,7 +49,9 @@ public class TestRunnerScaffolding {
     private void check() {
         // make sure all expectations are matched
         verify(factory);
-        verify(executor);
+        for (TestExecutor executor : executors) {
+            verify(executor);
+        }
         for (TestListener testListener : listeners) {
             verify(testListener);
         }
@@ -51,9 +60,8 @@ public class TestRunnerScaffolding {
     private void init() throws Throwable {
         metadata = new TestMetadata("test", "whosGonnaTestTheTests", "0.1");
         emptyProperties = new TestPropertiesImpl();
-        executor = buildExecutor();
-        factory = buildFactory(executor);
-        listeners = buildTestListeners(executor);
+        factory = buildFactory(expectedTestExecutors, expectedRunCount);
+        listeners = buildTestListeners();
         runner = buildTestRunner();
     }
 
@@ -66,22 +74,30 @@ public class TestRunnerScaffolding {
         runner.dispose();
     }
 
-    protected TestListener[] buildTestListeners(TestExecutor executor) {
+    protected TestListener[] buildTestListeners() {
         // build a listener and set expectations
         TestListener listener = createMock(TestListener.class);
         listener.testRunStarting(metadata, emptyProperties, 1);
-        listener.testCallExecuted(same(executor), same(metadata),
+        listener.testCallExecuted(isA(TestExecutor.class), same(metadata),
                 eq(emptyProperties), anyDouble(), eq((Throwable) null));
         listener.testRunCompleted(metadata, emptyProperties);
         replay(listener);
         return new TestListener[] {listener};
     }
 
-    protected TestExecutorFactory buildFactory(TestExecutor executor) {
+    protected TestExecutorFactory buildFactory(int expectedTestExecutors, int expectedRunCount) throws Throwable {
         // build a factory and set expectations
         TestExecutorFactory factory = createMock(TestExecutorFactory.class);
-        expect(factory.createMetadata()).andReturn(metadata);
-        expect(factory.createTestExecutor()).andReturn(executor);
+        expect(factory.createMetadata()).andReturn(metadata).times(expectedRunCount);
+        expect(factory.createTestExecutor()).andAnswer(new IAnswer<TestExecutor>() {
+            
+            public TestExecutor answer() throws Throwable {
+                TestExecutor executor = buildExecutor();
+                executors.add(executor);
+                return executor;
+            }
+        
+        }).times(expectedTestExecutors * expectedRunCount);
         replay(factory);
         return factory;
     }

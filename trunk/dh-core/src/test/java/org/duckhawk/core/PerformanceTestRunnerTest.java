@@ -35,10 +35,10 @@ public class PerformanceTestRunnerTest extends TestCase {
             }
 
             @Override
-            protected TestListener[] buildTestListeners(TestExecutor executor) {
+            protected TestListener[] buildTestListeners() {
                 TestListener listener = createMock(TestListener.class);
                 listener.testRunStarting(metadata, emptyProperties, 20);
-                listener.testCallExecuted(eq(executor), eq(metadata),
+                listener.testCallExecuted(isA(TestExecutor.class), eq(metadata),
                         eq(emptyProperties), anyDouble(), eq((Throwable) null));
                 expectLastCall().times(20);
                 listener.testRunCompleted(metadata, emptyProperties);
@@ -82,10 +82,10 @@ public class PerformanceTestRunnerTest extends TestCase {
             }
 
             @Override
-            protected TestListener[] buildTestListeners(TestExecutor executor) {
+            protected TestListener[] buildTestListeners() {
                 TestListener listener = createMock(TestListener.class);
                 listener.testRunStarting(metadata, emptyProperties, 20);
-                listener.testCallExecuted(eq(executor), eq(metadata),
+                listener.testCallExecuted(isA(TestExecutor.class), eq(metadata),
                         isA(TestProperties.class), anyDouble(), eq((Throwable) null));
                 expectLastCall().andAnswer(new IAnswer<Object>() {
                 
