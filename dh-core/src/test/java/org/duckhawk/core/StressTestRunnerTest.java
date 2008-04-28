@@ -2,6 +2,7 @@ package org.duckhawk.core;
 
 import static org.easymock.EasyMock.*;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,19 +46,21 @@ public class StressTestRunnerTest extends TestCase {
     }
 
     public void testRunRepeatedMultiThread() throws Throwable {
-        final Set<Thread> threads = new HashSet<Thread>();
-        new TestRunnerScaffolding() {
+        final Set<Thread> threads = Collections
+                .synchronizedSet(new HashSet<Thread>());
+        new TestRunnerScaffolding(5, 1) {
             @Override
             protected TestRunner buildTestRunner() {
                 return new StressTestRunner(5, 5);
             }
 
             @Override
-            protected TestListener[] buildTestListeners(TestExecutor executor) {
+            protected TestListener[] buildTestListeners() {
                 TestListener listener = createMock(TestListener.class);
                 listener.testRunStarting(metadata, emptyProperties, 25);
-                listener.testCallExecuted(eq(executor), eq(metadata),
-                        eq(emptyProperties), anyDouble(), eq((Throwable) null));
+                listener.testCallExecuted(isA(TestExecutor.class),
+                        eq(metadata), eq(emptyProperties), anyDouble(),
+                        eq((Throwable) null));
                 expectLastCall().times(25);
                 listener.testRunCompleted(metadata, emptyProperties);
                 replay(listener);
@@ -77,24 +80,13 @@ public class StressTestRunnerTest extends TestCase {
                     }
 
                 });
-                // check it's called (5 times (timed runs) + 1 (warmup)) * 5
+                // check it's called (5 times (timed runs) + 1 (warmup))
                 // threads
-                expectLastCall().times((5 + 1) * 5);
+                expectLastCall().times(5 + 1);
                 executor.check(emptyProperties);
-                expectLastCall().times((5 + 1) * 5);
+                expectLastCall().times(5 + 1);
                 replay(executor);
                 return executor;
-            }
-
-            @Override
-            protected TestExecutorFactory buildFactory(TestExecutor executor) {
-                // build a factory and set expectations
-                TestExecutorFactory factory = createMock(TestExecutorFactory.class);
-                expect(factory.createMetadata()).andReturn(metadata);
-                expect(factory.createTestExecutor()).andReturn(executor).times(
-                        5);
-                replay(factory);
-                return factory;
             }
         }.performTest();
     }
@@ -115,11 +107,12 @@ public class StressTestRunnerTest extends TestCase {
             }
 
             @Override
-            protected TestListener[] buildTestListeners(TestExecutor executor) {
+            protected TestListener[] buildTestListeners() {
                 TestListener listener = createMock(TestListener.class);
                 listener.testRunStarting(metadata, emptyProperties, 20);
-                listener.testCallExecuted(eq(executor), eq(metadata),
-                        eq(emptyProperties), anyDouble(), eq((Throwable) null));
+                listener.testCallExecuted(isA(TestExecutor.class),
+                        eq(metadata), eq(emptyProperties), anyDouble(),
+                        eq((Throwable) null));
                 expectLastCall().times(20);
                 listener.testRunCompleted(metadata, emptyProperties);
                 replay(listener);
@@ -151,27 +144,30 @@ public class StressTestRunnerTest extends TestCase {
             }
         }.performTest();
     }
-    
+
     public void testRampUp() throws Throwable {
         final Set<Thread> threads = new HashSet<Thread>();
         final long start = System.nanoTime();
         final int numThreads = 50;
         final int rampUp = 2;
         final int requests = 5;
-        new TestRunnerScaffolding() {
+        new TestRunnerScaffolding(numThreads, 1) {
             @Override
             protected TestRunner buildTestRunner() {
                 return new StressTestRunner(requests, numThreads, rampUp);
             }
 
             @Override
-            protected TestListener[] buildTestListeners(TestExecutor executor) {
+            protected TestListener[] buildTestListeners() {
                 TestListener listener = createMock(TestListener.class);
-                listener.testRunStarting(metadata, emptyProperties, requests * numThreads);
-                // make sure we don't get any exception from the runner, since that means
+                listener.testRunStarting(metadata, emptyProperties, requests
+                        * numThreads);
+                // make sure we don't get any exception from the runner, since
+                // that means
                 // the assert failed
-                listener.testCallExecuted(eq(executor), eq(metadata),
-                        eq(emptyProperties), anyDouble(), eq((Throwable) null));
+                listener.testCallExecuted(isA(TestExecutor.class),
+                        eq(metadata), eq(emptyProperties), anyDouble(),
+                        eq((Throwable) null));
                 expectLastCall().times(requests * numThreads);
                 listener.testRunCompleted(metadata, emptyProperties);
                 replay(listener);
@@ -188,32 +184,23 @@ public class StressTestRunnerTest extends TestCase {
                     public Object answer() throws Throwable {
                         threads.add(Thread.currentThread());
                         Thread.sleep(50);
-                        // make sure we're actually ramping up, that is, the elapsed time over the number of
-                        // different threads seen so far is bigger than the ramp up rate (we cannot test equality,
+                        // make sure we're actually ramping up, that is, the
+                        // elapsed time over the number of
+                        // different threads seen so far is bigger than the ramp
+                        // up rate (we cannot test equality,
                         // a well working system will have it slightly bigger)
                         double elapsed = (System.nanoTime() - start) / 1000000.0;
-                        assertTrue(elapsed / threads.size() > (rampUp / numThreads)); 
+                        assertTrue(elapsed / threads.size() > (rampUp / numThreads));
                         return null;
                     }
 
                 });
-                // check it's called requests times by each thread, plus one extra warmup call per thread
-                expectLastCall().times((requests + 1) * numThreads);
+                // check it's called requests times , plus one extra warm up call 
+                expectLastCall().times(requests + 1);
                 executor.check(emptyProperties);
-                expectLastCall().times((requests + 1) * numThreads);
+                expectLastCall().times(requests + 1);
                 replay(executor);
                 return executor;
-            }
-
-            @Override
-            protected TestExecutorFactory buildFactory(TestExecutor executor) {
-                // build a factory and set expectations
-                TestExecutorFactory factory = createMock(TestExecutorFactory.class);
-                expect(factory.createMetadata()).andReturn(metadata);
-                expect(factory.createTestExecutor()).andReturn(executor).times(
-                        numThreads);
-                replay(factory);
-                return factory;
             }
         }.performTest();
         assertEquals(threads.size(), numThreads);

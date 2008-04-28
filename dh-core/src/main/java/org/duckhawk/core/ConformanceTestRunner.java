@@ -54,6 +54,8 @@ public class ConformanceTestRunner implements TestRunner {
             } catch (Throwable t) {
                 exception = t;
             }
+        } else {
+            System.out.println("Exception " + exception);
         }
         time = ((end - start) / 1000000000.0);
         fireCallEvent(time, executor, metadata, runProperties, exception);

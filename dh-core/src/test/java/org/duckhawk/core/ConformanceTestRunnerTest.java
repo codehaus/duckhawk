@@ -16,11 +16,11 @@ public class ConformanceTestRunnerTest extends TestCase {
             Throwable t = new Throwable("I'm the ugly exception");            
         
             @Override
-            protected TestListener[] buildTestListeners(TestExecutor executor) {
+            protected TestListener[] buildTestListeners() {
                 // build a listener that will expect throwables
                 TestListener listener = createMock(TestListener.class);
                 listener.testRunStarting(metadata, emptyProperties, 1);
-                listener.testCallExecuted(same(executor), same(metadata),
+                listener.testCallExecuted(isA(TestExecutor.class), same(metadata),
                         eq(emptyProperties), anyDouble(), eq(t));
                 listener.testRunCompleted(metadata, emptyProperties);
                 replay(listener);
@@ -41,24 +41,13 @@ public class ConformanceTestRunnerTest extends TestCase {
     }
     
     public void testRemoveListeners() throws Throwable {
-        new TestRunnerScaffolding() {
+        new TestRunnerScaffolding(1, 2) {
             
-            protected TestExecutorFactory buildFactory(TestExecutor executor) {
-                // build a factory and set expectations
-                TestExecutorFactory factory = createMock(TestExecutorFactory.class);
-                expect(factory.createMetadata()).andReturn(metadata).times(2);
-                expect(factory.createTestExecutor()).andReturn(executor).times(2);
-                replay(factory);
-                return factory;
-            }
-
             protected TestExecutor buildExecutor() throws Throwable {
                 // build an executor that does nothing (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
                 executor.run(emptyProperties);
-                expectLastCall().times(2);
                 executor.check(emptyProperties);
-                expectLastCall().times(2);
                 replay(executor);
                 return executor;
             }
@@ -88,7 +77,7 @@ public class ConformanceTestRunnerTest extends TestCase {
     public void testNoListeners() throws Throwable {
         new TestRunnerScaffolding() {
             @Override
-            protected TestListener[] buildTestListeners(TestExecutor executor) {
+            protected TestListener[] buildTestListeners() {
                 return new TestListener[] {};
             }
         }.performTest();
@@ -98,7 +87,8 @@ public class ConformanceTestRunnerTest extends TestCase {
         final RuntimeException t = new RuntimeException("I'm the ugly exception");
         try {
             new TestRunnerScaffolding() {
-                protected TestExecutorFactory buildFactory(TestExecutor executor) {
+                @Override
+                protected TestExecutorFactory buildFactory(int numThreads, int numExpectedRun) {
                     // build a factory and set expectations
                     TestExecutorFactory factory = createMock(TestExecutorFactory.class);
                     expect(factory.createMetadata()).andReturn(metadata);
@@ -122,11 +112,11 @@ public class ConformanceTestRunnerTest extends TestCase {
             }
         
             @Override
-            protected TestListener[] buildTestListeners(TestExecutor executor) {
+            protected TestListener[] buildTestListeners() {
                 // build a listener that will expect the properties the runner has set
                 TestListener listener = createMock(TestListener.class);
                 listener.testRunStarting(metadata, emptyProperties, 1);
-                listener.testCallExecuted(same(executor), same(metadata),
+                listener.testCallExecuted(isA(TestExecutor.class), same(metadata),
                         eq(callProperties), anyDouble(), eq((Throwable) null));
                 listener.testRunCompleted(metadata, emptyProperties);
                 replay(listener);
@@ -164,11 +154,11 @@ public class ConformanceTestRunnerTest extends TestCase {
             }
         
             @Override
-            protected TestListener[] buildTestListeners(TestExecutor executor) {
+            protected TestListener[] buildTestListeners() {
                 // build a listener that will add a property
                 TestListener listener1 = createMock(TestListener.class);
                 listener1.testRunStarting(metadata, emptyProperties, 1);
-                listener1.testCallExecuted(same(executor), same(metadata),
+                listener1.testCallExecuted(isA(TestExecutor.class), same(metadata),
                         eq(emptyProperties), anyDouble(), eq((Throwable) null));
                 expectLastCall().andAnswer(new IAnswer<Object>() {
 
@@ -186,7 +176,7 @@ public class ConformanceTestRunnerTest extends TestCase {
                 // listener is visible
                 TestListener listener2 = createMock(TestListener.class);
                 listener2.testRunStarting(metadata, emptyProperties, 1);
-                listener2.testCallExecuted(same(executor), same(metadata),
+                listener2.testCallExecuted(isA(TestExecutor.class), same(metadata),
                         eq(listenerProperties), anyDouble(), eq((Throwable) null));
                 listener2.testRunCompleted(metadata, emptyProperties);
                 replay(listener2);
