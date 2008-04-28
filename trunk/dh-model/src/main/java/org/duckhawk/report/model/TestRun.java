@@ -7,7 +7,7 @@ import java.util.Date;
  * @author   Andrea Aime (TOPP)
  */
 public class TestRun {
-    private static final SimpleDateFormat ISO_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private static final SimpleDateFormat ISO_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
     
     /**
      * @uml.property  name="id"
