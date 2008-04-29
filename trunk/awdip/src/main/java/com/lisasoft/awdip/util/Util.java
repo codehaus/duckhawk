@@ -20,7 +20,7 @@ public class Util {
      * @return An array of NameValuePairs
      */
     public static NameValuePair[] hashMapToNameValuePairArray(
-            HashMap<String,String> hashMap) {
+            Map<String,String> hashMap) {
         NameValuePair[] nameValuePairs = new NameValuePair[hashMap.size()];
         
         int pos = 0;

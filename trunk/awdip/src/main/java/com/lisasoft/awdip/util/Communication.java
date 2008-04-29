@@ -9,6 +9,8 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.duckhawk.core.TestExecutor;
 
 
 
@@ -58,7 +60,7 @@ public class Communication {
     public String sendRequest(Request request)
             throws HttpException, IOException {
         URI uri = new URI("http", null, host, port, request.getPath());
-
+        System.out.println(uri);
         switch (request.getMethod()) {
             case GET:
                 return sendGetRequest(request.getDataAsNameValuePairs(), uri);
@@ -107,6 +109,8 @@ public class Communication {
     /**
      * Send POST request to server
      * 
+     * Data is set as key/value pair.
+     * 
      * @param data Data to send
      * @param uri Adress to send the data
      * @return Response the server made
@@ -122,6 +126,29 @@ public class Communication {
         return reqPost.getResponseBodyAsString();
     }
     
+    
+    /**
+     * Send POST request to server
+     * 
+     * Data is set as key/value pair.
+     * 
+     * @param data Data to send
+     * @param uri Adress to send the data
+     * @return Response the server made
+     * 
+     * @throws HttpException
+     * @throws IOException
+     */
+    private String sendPostRequest(String data, URI uri)
+            throws HttpException, IOException {
+        reqPost.setURI(uri);
+        reqPost.setRequestHeader(
+                "Content-type", "text/xml; charset=ISO-8859-1");
+        reqPost.setRequestEntity(new StringRequestEntity(data));
+                
+        client.executeMethod(reqPost);
+        return reqPost.getResponseBodyAsString();
+    }
     
     
     public static void main(String[] args) throws Exception {
@@ -151,6 +178,15 @@ public class Communication {
         
         
         System.out.println(response);
+    }
+    
+    public static String sendWFSPost(String host, int port, String geoserverLocation, String body) throws IOException {
+    	
+    	Communication comm = new Communication(host, port);
+        URI uri = new URI("http", null, host, port, "/" + geoserverLocation);
+        
+        return comm.sendPostRequest(body, uri);
+        
     }
 }
 
