@@ -1,33 +1,14 @@
 package org.duckhawk.sample;
 
-import java.io.File;
-
 import org.duckhawk.core.TestExecutor;
-import org.duckhawk.core.TestListener;
 import org.duckhawk.junit3.StressTest;
-import org.duckhawk.report.listener.XStreamDumper;
-import org.duckhawk.util.PerformanceSummarizer;
-import org.duckhawk.util.PrintStreamListener;
 
 public class MathStressTest extends StressTest {
-
-    static TestListener[] listeners;
-
-    private static TestListener[] getListeners() {
-        if (listeners == null) {
-            listeners = new TestListener[] {
-                    new PerformanceSummarizer(), //
-                    new PrintStreamListener(false, true), // 
-                    new XStreamDumper(new File("./target/dh-report"))
-            };
-        }
-        return listeners;
-    }
 
     public MathStressTest() {
         // Load test, 5 threads in parallel each doing 10 requests, with a ramp
         // up time of 3 seconds
-        super("Math", "1.0", 10, 5, 2, getListeners());
+        super("Math", "1.0", 10, 5, 2, TestSupport.getListeners());
     }
 
     public void testSqrt() throws Exception {

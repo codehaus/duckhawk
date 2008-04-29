@@ -70,7 +70,7 @@ public class XStreamDumper extends AbstractModelListener {
         xsDetails.registerConverter(new TestPropertiesConverter(xsDetails.getMapper()));
         xsDetails.alias("TestCallDetail", TestCallDetail.class);
         xsDetails.omitField(TestCallDetail.class, "id");
-        xsDetails.omitField(TestCallDetail.class, "testRun");
+        xsDetails.omitField(TestCallDetail.class, "testResult");
     }
 
     /**

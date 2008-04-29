@@ -5,7 +5,6 @@ import junit.textui.TestRunner;
 
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.junit3.PerformanceTest;
-import org.duckhawk.util.PrintStreamListener;
 
 public class MathPerfTest extends PerformanceTest {
     
@@ -13,12 +12,12 @@ public class MathPerfTest extends PerformanceTest {
     
     @Override
     protected void setUp() throws Exception {
-//        // TODO Auto-generated method stub
-//        super.setUp();
+        // Keep this empty method here, a bug occurred that was triggered when setUp() did not
+        // call back the super one
     }
 
     public MathPerfTest() {
-        super("Math", "1.0", 50, new PrintStreamListener(false, true));
+        super("Math", "1.0", 50, TestSupport.getListeners());
     }
 
     public void testSqrt() {
