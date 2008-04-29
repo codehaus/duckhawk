@@ -1,5 +1,6 @@
 package com.lisasoft.awdip.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -32,4 +33,25 @@ public class Util {
         
         return nameValuePairs;
     }
+    
+    /**
+     * Converts an hashMap to a nameValuePair ArrayList
+     * 
+     * @param hashMap HashMap of type <String,String> 
+     * @return An array of NameValuePairs
+     */
+    public static ArrayList<NameValuePair> hashMapToNameValuePairList(
+            HashMap<String,String> hashMap) {
+        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+        
+        int pos = 0;
+        for (Iterator<Map.Entry<String,String>> i=hashMap.entrySet().iterator();
+                i.hasNext(); pos++) {
+            Map.Entry<String,String> pair = i.next();
+            nameValuePairs.add(new NameValuePair(
+                    pair.getKey(), pair.getValue()));
+        }
+        
+        return nameValuePairs;
+    }    
 }

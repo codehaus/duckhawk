@@ -41,8 +41,8 @@ public class WfsPerfTest extends PerformanceTest {
                 + geoserverLocation + "/wfs");
         data.put("body", body);
 
-        Request request = new Request(RequestMethod.POST, data,
-                "/" + geoserverLocation + "/TestWfsPost");
+        Request request = new Request(RequestMethod.POST,
+                "/" + geoserverLocation + "/TestWfsPost", data);
         String response = "";
         try {
             response = comm.sendRequest(request);

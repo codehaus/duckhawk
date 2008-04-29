@@ -52,21 +52,39 @@ public class Communication {
      * 
      * @param request Request to the server
      * @return Response the server made
-     * @throws Exception
+     * @throws IOException 
+     * @throws HttpException 
      */
     public String sendRequest(Request request)
-            throws Exception {
+            throws HttpException, IOException {
         URI uri = new URI("http", null, host, port, request.getPath());
 
         switch (request.getMethod()) {
             case GET:
-                return sendGetRequest(request.getData(), uri);
+                return sendGetRequest(request.getDataAsNameValuePairs(), uri);
             case POST:
-                return sendPostRequest(request.getData(), uri);
+                return sendPostRequest(request.getDataAsNameValuePairs(), uri);
             default:
-                throw new Exception("Request Method not supported");
+                throw new HttpException("Request Method not supported");
         }
     }
+    /**
+     * Send request with specific data to server (previously set data will be
+     * replaced
+     * 
+     * @param request Request to the server
+     * @return Response the server made
+     * @throws IOException 
+     * @throws HttpException 
+     * @throws Exception
+     */
+    public String sendRequest(Request request, HashMap<String, String> data)
+        throws HttpException, IOException  {
+        request.setData(data);
+        return sendRequest(request);
+    }
+
+    
     
     /**
      * Send GET request to server
@@ -127,8 +145,8 @@ public class Communication {
         String body = "<wfs:GetFeature service=\"WFS\" version=\"1.1.0\" xmlns:topp=\"http://www.openplans.org/topp\" xmlns:wfs=\"http://www.opengis.net/wfs\"   xmlns:ogc=\"http://www.opengis.net/ogc\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"   xsi:schemaLocation=\"http://www.opengis.net/wfs                       http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">   <wfs:Query typeName=\"topp:states\">      <ogc:Filter>        <ogc:FeatureId fid=\"states.3\"/>     </ogc:Filter>     </wfs:Query> </wfs:GetFeature>";
         data.put("url", "http://192.168.2.136:8080/geoserver/wfs");
         data.put("body", body);
-        Request request = new Request(RequestMethod.GET, data,
-                "/geoserver/TestWfsPost");        
+        Request request = new Request(RequestMethod.GET,
+                "/geoserver/TestWfsPost", data);        
         String response = com.sendRequest(request);
         
         
