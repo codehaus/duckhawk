@@ -34,29 +34,13 @@ public abstract class AbstractModelListener implements TestListener {
         TestCallDetail detail = new TestCallDetail(time, exception != null,
                 exceptionMessage, result);
         detail.getCallProperties().clear();
-        detail.getCallProperties().putAll(detail.getCallProperties());
+        if(callProperties != null)
+            detail.getCallProperties().putAll(callProperties);
         try {
             handleDetail(detail);
         } catch(Exception e) {
             throw new RuntimeException("Listener bombed out during execution", e);
         }
-    }
-
-    private void fillProperties(TestProperties callProperties,
-            Map<String, String> props) {
-        for (String name : callProperties.keySet()) {
-            Object value = callProperties.get(name);
-            String converted = convert(value);
-            props.put(name, converted);
-        }
-    }
-
-    private String convert(Object value) {
-        // TODO: use a flexible conversion strategy
-        if(value != null)
-            return value.toString();
-        else
-            return null;
     }
 
     public void testRunCompleted(TestMetadata metadata,
@@ -67,6 +51,8 @@ public abstract class AbstractModelListener implements TestListener {
             result.getTestProperties().clear();
             result.getTestProperties().putAll(testProperties);
         }
+        // this result won't be needed anymore, remove from the cache to save memory
+        testResultCache.remove(metadata);
             
         try {
             testEnded(result);
@@ -83,7 +69,8 @@ public abstract class AbstractModelListener implements TestListener {
             result.getTestProperties().clear();
             if(result != null) {
                 result.getTestProperties().clear();
-                result.getTestProperties().putAll(testProperties);
+                if(testProperties != null)
+                    result.getTestProperties().putAll(testProperties);
             }
                 
             testStarting(result);
