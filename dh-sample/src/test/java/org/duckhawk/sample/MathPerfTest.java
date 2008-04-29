@@ -17,7 +17,7 @@ public class MathPerfTest extends PerformanceTest {
     }
 
     public MathPerfTest() {
-        super("Math", "1.0", 50, TestSupport.getListeners());
+        super(TestSupport.getProduct(), TestSupport.getVersion(), 50, TestSupport.getListeners());
     }
 
     public void testSqrt() {
