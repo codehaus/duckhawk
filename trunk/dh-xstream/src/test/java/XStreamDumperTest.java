@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -45,14 +47,14 @@ public class XStreamDumperTest extends TestCase {
         metadata = new TestMetadata("ThisIsTheTest", "Product",
                 "VapourWareEdition");
         metadata2 = new TestMetadata("ThisIsTheSecondTest", "Product",
-        "VapourWareEdition");
+                "VapourWareEdition");
         emptyProperties = new TestPropertiesImpl();
         sampleProperties = new TestPropertiesImpl();
         sampleProperties.put(TestExecutor.KEY_AVG_TIME, new Double(12.5));
         sampleProperties.put("test", "testValue");
+        sampleProperties.put("nullKey", null);
         sampleProperties.put("pversion", new ProductVersion(new Product(
                 "product"), "version"));
-        sampleProperties.put("nullKey", null);
     }
 
     /**
@@ -91,7 +93,7 @@ public class XStreamDumperTest extends TestCase {
         List<File> files = Arrays.asList(root.listFiles());
         assertTrue(files.contains(d.getMainReportFile()));
     }
-    
+
     public void testNoDetailRootThere() throws Exception {
         // make sure we have a new clean directory so that the dumper will be
         // forced to create it
@@ -106,7 +108,7 @@ public class XStreamDumperTest extends TestCase {
             d.testRunCompleted(metadata, sampleProperties);
             d.close();
             fail("Shouldn't have been able to create the root directory");
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             // fine
         }
     }
@@ -157,7 +159,8 @@ public class XStreamDumperTest extends TestCase {
         assertXpathEvaluatesTo("undetermined", "//TestResult/test/@type", doc);
         assertXpathEvaluatesTo("4", "count(//TestResult/testProperties/entry)",
                 doc);
-        // the pversion one should have two elements below, and then check their values
+        // the pversion one should have two elements below, and then check their
+        // values
         // are the one we expect
         assertXpathEvaluatesTo(
                 "2",
@@ -173,12 +176,11 @@ public class XStreamDumperTest extends TestCase {
                 "//TestResult/testProperties/entry[@key=\"pversion\"]/@type",
                 doc);
         // make sure the nullKey entry got an empty entry
-        assertXpathEvaluatesTo(
-                "0",
+        assertXpathEvaluatesTo("0",
                 "count(//TestResult/testProperties/entry[@key=\"nullKey\"]/*)",
                 doc);
     }
-    
+
     public void testTwoTests() throws Exception {
         dumper.testRunStarting(metadata, emptyProperties, 25);
         dumper.testRunCompleted(metadata, sampleProperties);
@@ -200,7 +202,7 @@ public class XStreamDumperTest extends TestCase {
         assertXpathEvaluatesTo("2", "count(//TestResult)", doc);
     }
 
-    public void testDetail() throws Exception {
+    public void testDetailTwoCalls() throws Exception {
         Exception e = new Exception("This is an exception!");
         e.fillInStackTrace();
         dumper.testRunStarting(metadata, emptyProperties, 25);
@@ -240,10 +242,41 @@ public class XStreamDumperTest extends TestCase {
                 "//TestCallDetails/TestCallDetail[2]/failed", doc);
         assertXpathEvaluatesTo(e.getMessage(),
                 "//TestCallDetails/TestCallDetail[2]/failureMessage", doc);
-        
-        // due to a renamed property we had test run get into the xml output of the
+
+        // due to a renamed property we had test run get into the xml output of
+        // the
         // detail, thus the following test
         assertXpathEvaluatesTo("0", "count(//testRun)", doc);
+    }
+    
+    public void testDetailSortingKeys() throws Exception {
+        dumper.testRunStarting(metadata, emptyProperties, 25);
+        dumper.testCallExecuted(executor, metadata, sampleProperties, 2.5,
+                        null);
+        dumper.testRunCompleted(metadata, sampleProperties);
+        dumper.close();
+
+        // make sure the detail dir is there and that we have just one detail
+        // report
+        String mainFilePath = dumper.getMainReportFile().getAbsolutePath();
+        File detailDir = new File(mainFilePath.substring(0, mainFilePath
+                .length() - 3));
+        assertTrue(detailDir.exists());
+        assertEquals(1, detailDir.listFiles().length);
+
+        // open an parse the detail report
+        File detailFile = detailDir.listFiles()[0];
+        print(detailFile);
+        Document doc = XMLUnit.buildControlDocument(new InputSource(
+                new FileInputStream(detailFile)));
+        
+        // now make sure the callProperties keys are sorted in alphabetical order
+        List<String> keys = new ArrayList<String>(sampleProperties.keySet());
+        Collections.sort(keys);
+        assertXpathEvaluatesTo("" + keys.size(), "count(//callProperties/entry)", doc);
+        for (int i = 0; i < keys.size(); i++) {
+            assertXpathEvaluatesTo(keys.get(i), "//callProperties/entry[" + (i + 1) + "]/@key", doc);
+        }
     }
 
 }
