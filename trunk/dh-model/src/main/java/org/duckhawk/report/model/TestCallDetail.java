@@ -28,7 +28,7 @@ public class TestCallDetail {
      */
     String failureMessage;
 
-    TestResult testRun;
+    TestResult testResult;
     
     /**
      * @uml.property  name="callProperties"
@@ -41,7 +41,7 @@ public class TestCallDetail {
         this.time = time;
         this.failed = failed;
         this.failureMessage = failureMessage;
-        this.testRun = testRun;
+        this.testResult = testRun;
     }
 
     /**
@@ -96,16 +96,16 @@ public class TestCallDetail {
      * @return
      * @uml.property  name="testRun"
      */
-    public TestResult getTestRun() {
-        return testRun;
+    public TestResult getTestResult() {
+        return testResult;
     }
 
     /**
-     * @param testRun
+     * @param testResult
      * @uml.property  name="testRun"
      */
-    public void setTestRun(TestResult testRun) {
-        this.testRun = testRun;
+    public void setTestResult(TestResult testResult) {
+        this.testResult = testResult;
     }
 
     /**
