@@ -8,10 +8,14 @@ public class MathStressTest extends StressTest {
     public MathStressTest() {
         // Load test, 5 threads in parallel each doing 10 requests, with a ramp
         // up time of 3 seconds
-        super("Math", "1.0", 10, 5, 2, TestSupport.getListeners());
+        super(TestSupport.getProduct(), TestSupport.getVersion(), 10, 5, 2, TestSupport.getListeners());
     }
 
     public void testSqrt() throws Exception {
+        // make this test blow up 10% of the times
+        if(Math.random() < 0.1)
+            throw new Exception("This is a random failure in testSqrt");
+        
         properties.put(TestExecutor.KEY_REQUEST, "sqrt(12.5)");
         double result = Math.sqrt(12.5);
         Thread.sleep(50);

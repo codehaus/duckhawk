@@ -9,9 +9,12 @@ import org.duckhawk.core.TestPropertiesImpl;
 import org.easymock.EasyMock;
 
 /**
- * @author   Andrea Aime (TOPP)
+ * A helper class to run the same kind of test against the performance
+ * summarizer using different input sequences
+ * 
+ * @author Andrea Aime (TOPP)
  */
-public class SummarizerTestScaffolding {
+public class PerformanceSummarizerTestScaffolding {
     double[] times;
 
     private PerformanceSummarizer summarizer;
@@ -33,17 +36,18 @@ public class SummarizerTestScaffolding {
     private double total;
 
     private int expectedCallCount;
-    
-    public SummarizerTestScaffolding(double[] times,
-            PerformanceSummarizer summarizer, double min,
-            double max, double average, double median, double total) {
+
+    public PerformanceSummarizerTestScaffolding(double[] times,
+            PerformanceSummarizer summarizer, double min, double max,
+            double average, double median, double total) {
         this(times, summarizer, min, max, average, median, total, times.length);
     }
 
-    public SummarizerTestScaffolding(double[] times,
-            PerformanceSummarizer summarizer, double min,
-            double max, double average, double median, double total, int expectedCallCount) {
+    public PerformanceSummarizerTestScaffolding(double[] times,
+            PerformanceSummarizer summarizer, double min, double max,
+            double average, double median, double total, int expectedCallCount) {
         this.metadata = new TestMetadata("test", "whosGonnaTestTheTests", "0.1");
+        this.executor = EasyMock.createNiceMock(TestExecutor.class);
         this.times = times;
         this.summarizer = summarizer;
         this.expectedCallCount = expectedCallCount;
@@ -53,7 +57,6 @@ public class SummarizerTestScaffolding {
         this.average = average;
         this.median = median;
         this.total = total;
-        this.executor = EasyMock.createNiceMock(TestExecutor.class);
     }
 
     public void runTest() throws AssertionError {
@@ -63,7 +66,8 @@ public class SummarizerTestScaffolding {
         performChecks(props);
     }
 
-    protected void performChecks(TestProperties properties) throws AssertionError {
+    protected void performChecks(TestProperties properties)
+            throws AssertionError {
         Assert.assertEquals(callCount, summarizer.getCallCount());
         Assert.assertEquals(min, summarizer.getMin());
         Assert.assertEquals(max, summarizer.getMax());

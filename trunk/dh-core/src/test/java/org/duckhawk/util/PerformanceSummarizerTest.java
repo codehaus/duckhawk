@@ -14,23 +14,23 @@ public class PerformanceSummarizerTest extends TestCase {
     }
 
     public void testNoTimes() {
-        new SummarizerTestScaffolding(new double[0], summarizer,
+        new PerformanceSummarizerTestScaffolding(new double[0], summarizer,
                 Double.MAX_VALUE, Double.MIN_VALUE, Double.NaN, Double.NaN, 0.0)
                 .runTest();
     }
 
     public void testOneTime() {
-        new SummarizerTestScaffolding(new double[] { 152.0 }, summarizer,
+        new PerformanceSummarizerTestScaffolding(new double[] { 152.0 }, summarizer,
                 152.0, 152.0, 152.0, 152.0, 152.0).runTest();
     }
 
     public void testTwoTimes() {
-        new SummarizerTestScaffolding(new double[] { 1, 3 }, summarizer, 1.0,
+        new PerformanceSummarizerTestScaffolding(new double[] { 1, 3 }, summarizer, 1.0,
                 3.0, 2.0, 2.0, 4.0).runTest();
     }
 
     public void testThreeTimes() {
-        new SummarizerTestScaffolding(new double[] { 1, 6, 4 }, summarizer,
+        new PerformanceSummarizerTestScaffolding(new double[] { 1, 6, 4 }, summarizer,
                 1.0, 6.0, 11.0 / 3.0, 4.0, 11.0).runTest();
     }
 
@@ -38,7 +38,7 @@ public class PerformanceSummarizerTest extends TestCase {
      * Checks summarizer still works even when fed with a wrong expected size
      */
     public void testExpandArray() {
-        new SummarizerTestScaffolding(new double[] { 1, 6, 4 }, summarizer,
+        new PerformanceSummarizerTestScaffolding(new double[] { 1, 6, 4 }, summarizer,
                 1.0, 6.0, 11.0 / 3.0, 4.0, 11.0, 1).runTest();
     }
 
@@ -47,7 +47,7 @@ public class PerformanceSummarizerTest extends TestCase {
      * (zero, in this case)
      */
     public void testExpandZeroSize() {
-        new SummarizerTestScaffolding(new double[] { 1, 6, 4 }, summarizer,
+        new PerformanceSummarizerTestScaffolding(new double[] { 1, 6, 4 }, summarizer,
                 1.0, 6.0, 11.0 / 3.0, 4.0, 11.0, 0).runTest();
     }
     
@@ -56,7 +56,7 @@ public class PerformanceSummarizerTest extends TestCase {
      * (negative, in this case)
      */
     public void testExpandNegativeSize() {
-        new SummarizerTestScaffolding(new double[] { 1, 6, 4 }, summarizer,
+        new PerformanceSummarizerTestScaffolding(new double[] { 1, 6, 4 }, summarizer,
                 1.0, 6.0, 11.0 / 3.0, 4.0, 11.0, -10).runTest();
     }
 }

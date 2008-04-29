@@ -29,7 +29,7 @@ public interface TestExecutor {
      * If the test is doing any post processing, this item can store the actual
      * request time (key should be a Double)
      */
-    public static final String KEY_CALL_COUNT = "perf.callCount";
+    public static final String KEY_CALL_COUNT = "test.callCount";
 
     /**
      * The minimum run time for any of the calls to the same
@@ -60,6 +60,23 @@ public interface TestExecutor {
      * {@link TestExecutor} during a test run
      */
     public static final String KEY_TOTAL_TIME = "perf.totalTime";
+    
+    /**
+     * A summary of the error messages collected during the
+     * {@link TestExecutor} test run
+     */
+    public static final String KEY_ERROR_SUMMARY = "conf.errorSummary";
+    
+    /**
+     * The number of errors occurred during the {@link TestExecutor} test run
+     */
+    public static final String KEY_ERROR_COUNT = "conf.errorCount";
+    
+    /**
+     * The percentage of test calls that resulted in an error during the 
+     * {@link TestExecutor} test run
+     */
+    public static final String KEY_ERROR_PERCENTAGE = "conf.errorPercentage";
 
     /**
      * Executes the test and fills in the eventual test properties for this test
