@@ -240,6 +240,10 @@ public class XStreamDumperTest extends TestCase {
                 "//TestCallDetails/TestCallDetail[2]/failed", doc);
         assertXpathEvaluatesTo(e.getMessage(),
                 "//TestCallDetails/TestCallDetail[2]/failureMessage", doc);
+        
+        // due to a renamed property we had test run get into the xml output of the
+        // detail, thus the following test
+        assertXpathEvaluatesTo("0", "count(//testRun)", doc);
     }
 
 }
