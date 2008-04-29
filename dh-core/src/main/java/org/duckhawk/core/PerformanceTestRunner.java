@@ -23,17 +23,17 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
     /**
      * The number of repetitions for this performance test
      */
-    public static final String KEY_REPETITIONS = "testRepetitions";
+    public static final String KEY_REPETITIONS = "test.repetitions";
     
     /**
      * Number of seconds in which the test is run (for randomly distributed tests)
      */
-    public static final String KEY_TIME = "testDistributionTime";
+    public static final String KEY_TIME = "test.distributionTime";
     
     /**
      * The distribution generator for the random distributed test
      */
-    public static final String KEY_DISTRIBUTION = "testDistributionGenerator";
+    public static final String KEY_DISTRIBUTION = "test.distributionGenerator";
     
     /**
      * How many times the test must be run (besides the warm up run)

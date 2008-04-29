@@ -13,59 +13,53 @@ public interface TestExecutor {
     /**
      * The request being made during the test, if any.
      */
-    public static final String KEY_REQUEST = "request";
+    public static final String KEY_REQUEST = "test.request";
 
     /**
      * The full response got back after the request was performed, if any
      */
-    public static final String KEY_RESPONSE = "response";
+    public static final String KEY_RESPONSE = "test.response";
+    
+    /**
+     * The kind of test being run
+     */
+    public static final String KEY_TEST_TYPE = "test.testType";
 
     /**
      * If the test is doing any post processing, this item can store the actual
      * request time (key should be a Double)
      */
-    public static final String KEY_REQUEST_TIME = "requestTime";
-    
-    /**
-     * If the test is doing any post processing, this item can store the actual
-     * request time (key should be a Double)
-     */
-    public static final String KEY_CALL_COUNT = "callCount";
+    public static final String KEY_CALL_COUNT = "perf.callCount";
 
     /**
      * The minimum run time for any of the calls to the same
      * {@link TestExecutor} during a test run
      */
-    public static final String KEY_MIN_TIME = "minTime";
+    public static final String KEY_MIN_TIME = "perf.minTime";
 
     /**
      * The maximum run time for any of the calls to the same
      * {@link TestExecutor} during a test run
      */
-    public static final String KEY_MAX_TIME = "maxTime";
+    public static final String KEY_MAX_TIME = "perf.maxTime";
 
     /**
      * The average run time for any of the calls to the same
      * {@link TestExecutor} during a test run
      */
-    public static final String KEY_AVG_TIME = "averageTime";
+    public static final String KEY_AVG_TIME = "perf.averageTime";
 
     /**
      * The median run time for any of the calls to the same {@link TestExecutor}
      * during a test run
      */
-    public static final String KEY_MED_TIME = "medianTime";
+    public static final String KEY_MED_TIME = "perf.medianTime";
 
     /**
      * The sum of all times for any of the calls to the same
      * {@link TestExecutor} during a test run
      */
-    public static final String KEY_TOTAL_TIME = "totalTime";
-    
-    /**
-     * The kind of test being run
-     */
-    public static final String KEY_TEST_TYPE = "testType";
+    public static final String KEY_TOTAL_TIME = "perf.totalTime";
 
     /**
      * Executes the test and fills in the eventual test properties for this test

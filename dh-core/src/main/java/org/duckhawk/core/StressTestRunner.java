@@ -5,12 +5,12 @@ public class StressTestRunner extends PerformanceTestRunner {
     /**
      * The number of threads used to run the stress test
      */
-    public static final String KEY_NUMTHREADS = "testThreadNumber";
+    public static final String KEY_NUMTHREADS = "stress.threadNumber";
     
     /**
      * The ramp up time in seconds, if any
      */
-    public static final String KEY_RAMPUP = "testRampUpTime";
+    public static final String KEY_RAMPUP = "stress.rampUpTime";
 
     /**
      * Number of concurrent threads running the TestExecutor
