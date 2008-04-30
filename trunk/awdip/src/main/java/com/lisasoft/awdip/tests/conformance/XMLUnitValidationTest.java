@@ -42,6 +42,11 @@ public class XMLUnitValidationTest  extends ConformanceTest {
 	}
 
 	private String sendRequest() throws IOException {
+		
+		String replacement = "xsi:schemaLocation=\"http://www.water.gov.au/awdip https://www.seegrid.csiro.au/subversion/xmml/" +
+				"AWDIP/trunk/geoserver_conf/commonSchemas/awdip.xsd http://www.opengis.net/wfs http://schemas.opengis.net/wfs/" +
+				"1.1.0/wfs.xsd\"";
+		String regex = "xsi:schemaLocation=\".*xsd\"";
 
 		String body = "<wfs:GetFeature service=\"WFS\" version=\"1.1.0\" " +
 		"xmlns:wfs=\"http://www.opengis.net/wfs\"   xmlns:ogc=\"http://www.opengis.net/ogc\" " +
@@ -53,7 +58,11 @@ public class XMLUnitValidationTest  extends ConformanceTest {
 		"http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\" maxFeatures=\"5\"> " +
 		"<wfs:Query typeName=\"aw:SiteLocation\"> </wfs:Query> </wfs:GetFeature>";		
 
-		return Communication.sendWFSPost(host, port, geoserverLocation, body);
+			
+		String response = Communication.sendWFSPost(host, port, geoserverLocation, body);
+		
+		return response.replaceAll(regex, replacement);
+		 
 	}
  
 }
