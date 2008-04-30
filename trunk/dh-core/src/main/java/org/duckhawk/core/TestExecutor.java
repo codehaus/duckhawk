@@ -97,5 +97,10 @@ public interface TestExecutor {
      * @throws Throwable
      */
     public void check(TestProperties callProperties) throws Throwable;
+    
+    /**
+     * Forcefully stops the current thread
+     */
+    public void cancel() throws Throwable;
 
 }
