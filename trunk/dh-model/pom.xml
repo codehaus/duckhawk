@@ -11,7 +11,7 @@
   <groupId>org.duckhawk</groupId>
   <artifactId>dh-model</artifactId>
   <packaging>jar</packaging>
-  <name>DuckHawk Junit3 integration</name>
+  <name>Duckhawk reporting model classes</name>
 
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/duckhawk/trunk/dh-model/</connection>
@@ -19,17 +19,18 @@
   </scm>
 
   <description>
-	Integration between the DH runners and the JUnit3 testing framework, 
-	allows to write unit tests and leverage them as DH tests
+	Model classes representing the standard outcome of a test run. They are
+	used for persistence and in the standard reporting engines (thought anyone
+	is free to develop their own model classes out of the test events)
   </description>
 
   <dependencies>
   	<dependency>
       <groupId>org.duckhawk</groupId>
       <artifactId>dh-core</artifactId>
-	  <version>${project.version}</version>	
+	    <version>${project.version}</version>	
     </dependency>
-    <dependency>
+	<dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
