@@ -14,12 +14,21 @@ import org.duckhawk.util.PerformanceSummarizer;
 import org.duckhawk.util.PrintStreamListener;
 
 import com.lisasoft.awdip.util.Communication;
+import com.lisasoft.awdip.util.Gml;
 import com.lisasoft.awdip.util.Request;
 import com.lisasoft.awdip.util.Communication.RequestMethod;
 
 
-
-public class SiteLocationPerfTest extends PerformanceTest  {
+/**
+ * Test with single property filter and growing bounding box
+ * 
+ * Rational: how big is the performance hit if a property filter is added. The
+ * bounding box grows at in the @see SiteLocationPerTestBoundingBox test.
+ * 
+ * @author vmische
+ *
+ */
+public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest  {
     static Communication comm;
     
     String host = "thor3.adl.ardec.com.au";
@@ -37,8 +46,7 @@ public class SiteLocationPerfTest extends PerformanceTest  {
 
     
     /** Bounding box to start with, and size changes for the tests **/
-    //double[] bbox = new double[]{125.7, -19.3, 128.7, -16.3};
-    double[] bbox;
+    double[] bboxInit;
 
     /**  size changes of the bounding box for the tests
      *  key = ID for test
@@ -48,7 +56,7 @@ public class SiteLocationPerfTest extends PerformanceTest  {
     HashMap<String,double[]> bboxGrow;
     
 
-    public SiteLocationPerfTest() {
+    public SiteLocationPerfTestPropertyAndBoundingBox() {
         super("WfsTest", "1.0", 5, getListeners());
 
     }
@@ -56,9 +64,6 @@ public class SiteLocationPerfTest extends PerformanceTest  {
     
     @Override
     protected void setUp() throws Exception {
-        // TODO vmische when global properties per Testsuite are available,
-        //      put nice descriptions about each test in   
-        
         comm = new Communication(host, port);
 
         request = new Request(RequestMethod.POST,
@@ -67,7 +72,7 @@ public class SiteLocationPerfTest extends PerformanceTest  {
         data.put("url", "http://" + host + ":" + port + "/"
                 + geoserverLocation + "/wfs");
         
-        bbox = new double[]{127.2, -17.9, 127.3, -17.8};
+        bboxInit = new double[]{127.2, -17.9, 127.3, -17.8};
 
         /** size changes of the bounding box for the tests
          * key = ID for test
@@ -106,24 +111,10 @@ public class SiteLocationPerfTest extends PerformanceTest  {
         }
         return listeners;
     }
-    
-    /** Creates the body for a request with a bounding box filter
-     * 
-     * @param bbox the bounding box that should be used
-     * @return
-     */
-    private String createBoundingBoxRequest(double[] bbox) {
-        String request = "<wfs:GetFeature service=\"WFS\" version=\"1.1.0\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:om=\"http://www.opengis.net/om/1.0\" xmlns:wfs=\"http://www.opengis.net/wfs\" xmlns:sa=\"http://www.opengis.net/sampling/1.0\" xmlns:aw=\"http://www.water.gov.au/awdip\"  xmlns:ows=\"http://www.opengis.net/ows\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd\" maxFeatures=\"500\">"
-            +" <wfs:Query typeName=\"aw:SiteLocation\">"
-            + "<ogc:Filter><ogc:BBOX><ogc:PropertyName>sa:position</ogc:PropertyName><gml:Envelope srsName=\"EPSG:4326\">"
-            + "<gml:lowerCorner>"+bbox[0]+" "+bbox[1]+"</gml:lowerCorner>"
-            + "<gml:upperCorner>"+bbox[2]+" "+bbox[3]+"</gml:upperCorner>"
-            + "</gml:Envelope></ogc:BBOX></ogc:Filter>"
-            +"</wfs:Query></wfs:GetFeature>";
-        
-        return request;
-    }
-    
+
+
+
+
     
     /** Creates a new bounding box, based on the given key. The values for the
      * key are retrieved from  @see bbGrow. The base bounding box is @see bbox.
@@ -133,27 +124,38 @@ public class SiteLocationPerfTest extends PerformanceTest  {
     private double[] getGrownBbox(String key) {
         double[] offsets = bboxGrow.get(key);
         return new double[]{
-                (bbox[0]-offsets[0]), (bbox[1]-offsets[1]),   
-                (bbox[2]+offsets[0]), (bbox[3]+offsets[1]),   
+                (bboxInit[0]-offsets[0]), (bboxInit[1]-offsets[1]),   
+                (bboxInit[2]+offsets[0]), (bboxInit[3]+offsets[1]),   
         };
     }
     
-  
+
     public void testSiteLocationBoundingBox100()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(bbox);
+    throws HttpException, IOException {
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bboxInit),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
+
+        properties.put("boundingBox", bboxInit);
+        properties.put("boundingBoxSize", "100");
         
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
-        
+
         response = comm.sendRequest(request, data);
         properties.put(TestExecutor.KEY_RESPONSE, response);            
     }
-   
-    public void testSiteLocationBoundingBox10000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb10000"));
 
+    public void testSiteLocationBoundingBox10000()
+    throws HttpException, IOException {
+        double[] bbox = getGrownBbox("bb10000");        
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));        
+
+        properties.put("boundingBox", bbox);
+        properties.put("boundingBoxSize", "10000");
+        
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
@@ -162,9 +164,15 @@ public class SiteLocationPerfTest extends PerformanceTest  {
     }
 
     public void testSiteLocationBoundingBox40000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb40000"));
+    throws HttpException, IOException {
+        double[] bbox = getGrownBbox("bb40000");                
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
+        properties.put("boundingBox", bbox);
+        properties.put("boundingBoxSize", "40000");
+        
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
@@ -173,9 +181,15 @@ public class SiteLocationPerfTest extends PerformanceTest  {
     }    
 
     public void testSiteLocationBoundingBox90000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb90000"));
+    throws HttpException, IOException {
+        double[] bbox = getGrownBbox("bb90000");                
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
+        properties.put("boundingBox", bbox);
+        properties.put("boundingBoxSize", "90000");
+        
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
@@ -184,9 +198,15 @@ public class SiteLocationPerfTest extends PerformanceTest  {
     } 
 
     public void testSiteLocationBoundingBox160000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb160000"));
+    throws HttpException, IOException {
+        double[] bbox = getGrownBbox("bb160000");                
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
+        properties.put("boundingBox", bbox);
+        properties.put("boundingBoxSize", "160000");
+        
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
@@ -195,9 +215,15 @@ public class SiteLocationPerfTest extends PerformanceTest  {
     } 
 
     public void testSiteLocationBoundingBox250000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb250000"));
+    throws HttpException, IOException {
+       double[] bbox = getGrownBbox("bb250000");                
+       String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
+       properties.put("boundingBox", bbox);
+       properties.put("boundingBoxSize", "250000");
+       
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
@@ -206,9 +232,15 @@ public class SiteLocationPerfTest extends PerformanceTest  {
     } 
 
     public void testSiteLocationBoundingBox360000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb360000"));
+    throws HttpException, IOException {
+        double[] bbox = getGrownBbox("bb360000");                
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
+        properties.put("boundingBox", bbox);
+        properties.put("boundingBoxSize", "360000");
+        
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
@@ -217,9 +249,15 @@ public class SiteLocationPerfTest extends PerformanceTest  {
     } 
 
     public void testSiteLocationBoundingBox490000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb490000"));
+    throws HttpException, IOException {
+        double[] bbox = getGrownBbox("bb490000");                
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
+        properties.put("boundingBox", bbox);
+        properties.put("boundingBoxSize", "490000");
+        
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
@@ -228,9 +266,15 @@ public class SiteLocationPerfTest extends PerformanceTest  {
     } 
 
     public void testSiteLocationBoundingBox640000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb600000"));
+    throws HttpException, IOException {
+        double[] bbox = getGrownBbox("bb640000");                
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
+        properties.put("boundingBox", bbox);
+        properties.put("boundingBoxSize", "640000");
+        
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
@@ -239,9 +283,15 @@ public class SiteLocationPerfTest extends PerformanceTest  {
     } 
 
     public void testSiteLocationBoundingBox810000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb810000"));
+    throws HttpException, IOException {
+        double[] bbox = getGrownBbox("bb810000");                
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
+        properties.put("boundingBox", bbox);
+        properties.put("boundingBoxSize", "810000");
+        
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
@@ -249,10 +299,16 @@ public class SiteLocationPerfTest extends PerformanceTest  {
         properties.put(TestExecutor.KEY_RESPONSE, response);            
     } 
 
-    public void testSiteLocationBoundingBox100000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb100000"));
+    public void testSiteLocationBoundingBox1000000()
+    throws HttpException, IOException {
+        double[] bbox = getGrownBbox("bb1000000");                
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
+        properties.put("boundingBox", bbox);
+        properties.put("boundingBoxSize", "1000000");
+        
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
@@ -261,9 +317,15 @@ public class SiteLocationPerfTest extends PerformanceTest  {
     } 
 
     public void testSiteLocationBoundingBox1440000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb1440000"));
+    throws HttpException, IOException {
+        double[] bbox = getGrownBbox("bb1440000");                
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
+        properties.put("boundingBox", bbox);
+        properties.put("boundingBoxSize", "1440000");
+        
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
@@ -272,42 +334,66 @@ public class SiteLocationPerfTest extends PerformanceTest  {
     } 
 
     public void testSiteLocationBoundingBox1960000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb1960000"));
+    throws HttpException, IOException {
+        double[] bbox = getGrownBbox("bb1960000");                
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
+        properties.put("boundingBox", bbox);
+        properties.put("boundingBoxSize", "1960000");
+        
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
         properties.put(TestExecutor.KEY_RESPONSE, response);            
     } 
-    
+
     public void testSiteLocationBoundingBox2560000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb2560000"));
+    throws HttpException, IOException {
+        double[] bbox = getGrownBbox("bb2560000");                
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
+        properties.put("boundingBox", bbox);
+        properties.put("boundingBoxSize", "2560000");
+        
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
         properties.put(TestExecutor.KEY_RESPONSE, response);            
     }
-    
+
     public void testSiteLocationBoundingBox3240000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb3240000"));
+    throws HttpException, IOException {
+        double[] bbox = getGrownBbox("bb3240000");                
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
+        properties.put("boundingBox", bbox);
+        properties.put("boundingBoxSize", "3240000");
+        
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
         properties.put(TestExecutor.KEY_RESPONSE, response);            
     }
-    
-    public void testSiteLocationBoundingBox4000000()
-            throws HttpException, IOException {
-        String body = createBoundingBoxRequest(getGrownBbox("bb4000000"));
 
+    public void testSiteLocationBoundingBox4000000()
+    throws HttpException, IOException {
+        double[] bbox = getGrownBbox("bb4000000");
+        String body =  Gml.createAndFilterRequest("aw:SiteLocation",
+                Gml.createBoundingBoxFilter(bbox),
+                Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
+
+        properties.put("boundingBox", bbox);
+        properties.put("boundingBoxSize", "4000000");
+                
         data.put("body", body);
         properties.put(TestExecutor.KEY_REQUEST, body);
 
