@@ -50,6 +50,10 @@ public class AbstractModelListenerTest extends TestCase {
         protected void testStarting(TestResult result) throws Exception {
             AbstractModelListenerTest.this.startResult = result;
         }
+
+        public void testSuiteCompleted() {
+            // not used
+        }
     }
     
     @Override

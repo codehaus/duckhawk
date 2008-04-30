@@ -50,8 +50,7 @@ public class XStreamDumper extends AbstractModelListener {
 
         // this shutdown hook is necessary to properly close the files...
         // TODO: try to find a way to specify an event instead of this trick,
-        // which is
-        // specific to the way junit3 integration is working
+        // which is specific to the way junit3 integration is working
         Runtime.getRuntime().addShutdownHook(new Thread() {
 
             @Override
@@ -144,6 +143,10 @@ public class XStreamDumper extends AbstractModelListener {
     protected void handleDetail(TestCallDetail detail) throws Exception {
         detailsOos.writeObject(detail);
     }
+    
+    public void testSuiteCompleted() {
+        close();
+    }
 
     /**
      * Closes the dumper, makes sure xml files are closed
@@ -178,5 +181,4 @@ public class XStreamDumper extends AbstractModelListener {
     public File getMainReportFile() {
         return mainReportFile;
     }
-
 }

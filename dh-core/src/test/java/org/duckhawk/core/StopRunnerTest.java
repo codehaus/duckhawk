@@ -46,6 +46,10 @@ public class StopRunnerTest extends TestCase {
             testStarted = true;
             
         }
+
+        public void testSuiteCompleted() {
+            // do not care
+        }
         
     }
 

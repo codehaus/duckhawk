@@ -63,4 +63,20 @@ public interface TestListener {
      */
     public void testRunCompleted(TestMetadata metadata,
             TestProperties testProperties);
+
+    /**
+     * This event marks the end of the whole test suite run. If a listener is
+     * reused for multiple test runners, this can come in handy to close
+     * persistent resources the listener might hang onto.
+     * <p>
+     * Yet, such listeners must not expect this event to be triggered in all
+     * cases, so they should use a shutdown hooks (see
+     * {@link Runtime#addShutdownHook(Thread)} to make sure resources are closed
+     * for good.
+     * <p>
+     * One exemplar case is using the JUnit3 integration and running the tests
+     * from a build or from an IDE directly (leaving DuckHawk no control over
+     * the set of tests being run), in this case no end event will be fired.
+     */
+    public void testSuiteCompleted();
 }
