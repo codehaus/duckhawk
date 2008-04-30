@@ -18,6 +18,18 @@ public interface TestRunner {
      * @param factory
      */
     public void runTests(TestExecutorFactory factory);
+    
+    /**
+     * Disposes of the runner. This in particular removes all listeners avoiding
+     * issues with possible circular dependencies between the listeners and the
+     * test runners.
+     */
+    public void dispose();
+    
+    /**
+     * Forcefully stops the current test run
+     */
+    public void cancel();
 
     /**
      * Adds a test listener
@@ -32,11 +44,4 @@ public interface TestRunner {
      * @param listener
      */
     public void removeTestRunListener(TestListener listener);
-
-    /**
-     * Disposes of the runner. This in particular removes all listeners avoiding
-     * issues with possible circular dependencies between the listeners and the
-     * test runners.
-     */
-    public void dispose();
 }

@@ -18,7 +18,7 @@ import org.duckhawk.core.TestRunner;
  * @uml.dependency   supplier="org.duckhawk.junit3.JUnitTestExecutor"
  */
 public abstract class AbstractDuckHawkTest extends TestCase implements
-        PropertyTest {
+        PropertyTest, CancellableTest {
 
     /**
      * The product id for this test run
@@ -34,6 +34,11 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
      * The properties for the single test run.
      */
     protected TestProperties properties;
+    
+    /**
+     * If true, this tests has been cancelled
+     */
+    protected boolean cancelled;
 
     /**
      * Creates a new test with the minimum properties needed to identify a test.
@@ -56,6 +61,10 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
     }
 
     protected abstract TestRunner getTestRunner();
+    
+    public void cancel() {
+        this.cancelled = true;
+    }
 
     @Override
     protected void runTest() throws Throwable {

@@ -60,7 +60,11 @@ class JUnitTestExecutor implements TestExecutor {
                 ((PropertyTest) test).fillProperties(callProperties);
             }
         }
+    }
 
+    public void cancel() throws Throwable {
+        if(test instanceof CancellableTest)
+            ((CancellableTest) test).cancel();
     }
 
 }

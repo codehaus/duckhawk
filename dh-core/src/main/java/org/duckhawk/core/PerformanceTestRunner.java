@@ -105,7 +105,7 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
         }
         fireStartEvent(metadata, testProperties, repetitions);
         try {
-            TestExecutor executor = factory.createTestExecutor();
+            executor = factory.createTestExecutor();
             runLinear(executor, metadata);
         } finally {
             fireEndEvent(metadata, testProperties);
@@ -131,8 +131,7 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
         warmup(executor);
 
         // generate the random times distribution (in nanoseconds, since we'll
-        // use
-        // System.nanoTime() to control the advancement
+        // use System.nanoTime() to control the advancement
         long[] targets = new long[repetitions];
         for (int i = 0; i < targets.length; i++) {
             targets[i] = (long) (random.nextDouble() * time * 10e9);
@@ -149,6 +148,12 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
         // make the calls
         TestProperties runProperties = new TestPropertiesImpl();
         for (int i = 0; i < repetitions; i++) {
+            // if canceled bail out
+            if(cancelled)
+                break;
+            
+            // otherwise lcear the properties, sleep up to the next scheduled
+            // call time, and run the single call
             runProperties.clear();
             sleepUpToTarget(start, targets[i]);
             runSingle(executor, metadata, runProperties);
@@ -164,10 +169,18 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
     protected void sleepUpToTarget(long start, long targetTime) {
         long sleepTime = targetTime - (System.nanoTime() - start) / 1000000;
         while (sleepTime > 0) {
+            // first off check the execution has not been canceled
+            if(cancelled)
+                break;
+            
             try {
-                Thread.sleep(sleepTime);
+                // I used to make this sleep for sleepTime, but it would never wake up after
+                // an interrupt, so now I'm making it sleep for a short time, check, sleep again, and so on
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 // forget about it and go back on sleeping if necessary
+                // that is, unless the execution has been canceled
+                System.out.println("Who disturbs my sleep?");
             }
             sleepTime = targetTime - (System.nanoTime() - start) / 1000000;
         }
@@ -185,6 +198,10 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
         // loop and time
         TestProperties runProperties = new TestPropertiesImpl();
         for (int i = 0; i < repetitions; i++) {
+            // if we were asked to stop... do it
+            if(cancelled)
+                break;
+            
             // clean up properties and run test
             runProperties.clear();
             runSingle(executor, metadata, runProperties);
@@ -195,7 +212,8 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
         TestProperties warmupProperties = new TestPropertiesImpl();
         try {
             executor.run(warmupProperties);
-            executor.check(warmupProperties);
+            if(!cancelled)
+                executor.check(warmupProperties);
         } catch (Throwable t) {
             // this was just a warmup, we don't notify the listeners
         }
