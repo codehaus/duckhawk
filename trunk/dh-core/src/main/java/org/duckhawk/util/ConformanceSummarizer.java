@@ -109,4 +109,8 @@ public class ConformanceSummarizer implements TestListener {
                 getErrorPercentage());
     }
 
+    public void testSuiteCompleted() {
+        // nothing to do here, this listener does not need to close up anything 
+    }
+
 }

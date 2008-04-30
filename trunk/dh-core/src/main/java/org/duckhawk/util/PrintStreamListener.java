@@ -22,6 +22,7 @@ import org.duckhawk.core.TestProperties;
  */
 public class PrintStreamListener implements TestListener {
     protected static final NumberFormat format = new DecimalFormat("0.######");
+
     protected static final NumberFormat formatTime = new DecimalFormat("0.###");
 
     protected boolean dumpSingleCalls;
@@ -29,7 +30,7 @@ public class PrintStreamListener implements TestListener {
     protected boolean dumpStackTraces;
 
     protected PrintStream out;
-    
+
     protected long startTime;
 
     /**
@@ -62,6 +63,15 @@ public class PrintStreamListener implements TestListener {
         this.dumpSingleCalls = dumpSingleCalls;
         this.dumpStackTraces = dumpStackTraces;
         this.out = out;
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+
+            @Override
+            public void run() {
+                close();
+            }
+
+        });
     }
 
     public void testCallExecuted(TestExecutor executor, TestMetadata metadata,
@@ -74,7 +84,8 @@ public class PrintStreamListener implements TestListener {
         sb.append(metadata.getProductId()).append(" ").append(
                 metadata.getProductVersion());
         sb.append(" - ").append(metadata.getTestId()).append(" ");
-        sb.append("(").append(Thread.currentThread().getName()).append("), time ");
+        sb.append("(").append(Thread.currentThread().getName()).append(
+                "), time ");
         sb.append(format.format(time)).append("s");
         sb.append("\n  Properties: ").append(properties);
         if (exception != null) {
@@ -92,12 +103,13 @@ public class PrintStreamListener implements TestListener {
     }
 
     private String time() {
-        return formatTime.format((System.nanoTime() - startTime) / 1000000000.0);
+        return formatTime
+                .format((System.nanoTime() - startTime) / 1000000000.0);
     }
 
     public void testRunCompleted(TestMetadata metadata,
             TestProperties properties) {
-        String msg = time() + ") " +  metadata.getProductId() + " "
+        String msg = time() + ") " + metadata.getProductId() + " "
                 + metadata.getProductVersion() + " - " + metadata.getTestId()
                 + ": completed!\n  Properties " + properties;
         out.println(msg);
@@ -111,5 +123,21 @@ public class PrintStreamListener implements TestListener {
                 + metadata.getProductVersion() + " - " + metadata.getTestId()
                 + ": started!";
         out.println(msg);
+    }
+
+    public void testSuiteCompleted() {
+        close();
+    }
+
+    /**
+     * Closes up the listener along with the print stream provided as a
+     * parameter
+     */
+    public void close() {
+        if (out != null) {
+            out.flush();
+            out.close();
+            out = null;
+        }
     }
 }

@@ -168,4 +168,8 @@ public class PerformanceSummarizer implements TestListener {
             TestProperties testProperties, int callNumber) {
         start(callNumber);
     }
+    
+    public void testSuiteCompleted() {
+        // nothing to do here, this listener does not need to close up anything 
+    }
 }
