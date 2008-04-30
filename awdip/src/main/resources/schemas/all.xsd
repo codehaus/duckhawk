@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.opengis.net/wfs" xmlns:aw="http://www.water.gov.au/awdip" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml"
+        xmlns:xlink="http://www.w3.org/1999/xlink" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.1.1">
+	<annotation>
+		<documentation>Top level schema
+    	</documentation>
+	</annotation>
+	<!-- ====================================================================== -->
+	<xsd:import namespace="http://www.water.gov.au/awdip" schemaLocation="src/main/resources/schemas/community/awdip.xsd"/>
+	<include schemaLocation="http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"/>
+	<!-- ====================================================================== -->
+</schema>
