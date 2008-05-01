@@ -21,6 +21,21 @@ public interface TestExecutor {
     public static final String KEY_RESPONSE = "test.response";
     
     /**
+     * The name of the thread running the current request
+     */
+    public static final String KEY_THREAD_ID = "test.threadName";
+
+    /**
+     * The full response got back after the request was performed, if any
+     */
+    public static final String KEY_CALL_NUMBER = "test.callNumber";
+    
+    /**
+     * The time when the call was executed, relative to the start of the test suite
+     */
+    public static final String KEY_CALL_TIME = "test.callTimeMs";
+    
+    /**
      * The kind of test being run
      */
     public static final String KEY_TEST_TYPE = "test.testType";

@@ -167,11 +167,13 @@ public class PerformanceTestRunner extends ConformanceTestRunner {
 
             // otherwise lcear the properties, sleep up to the next scheduled
             // call time, and run the single call
-            runProperties.clear();
+            prepareCallProperties(runProperties, i);
             sleepUpToTarget(start, targets[i]);
             runSingle(executor, runProperties);
         }
     }
+
+    
 
     /**
      * Warms up the test once and then repeats the test over and over
@@ -189,8 +191,7 @@ public class PerformanceTestRunner extends ConformanceTestRunner {
             if (cancelled)
                 break;
 
-            // clean up properties and run test
-            runProperties.clear();
+            prepareCallProperties(runProperties, i);
             runSingle(executor, runProperties);
         }
     }
