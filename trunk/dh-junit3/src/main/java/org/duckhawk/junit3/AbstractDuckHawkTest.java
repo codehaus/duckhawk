@@ -5,36 +5,32 @@ import java.lang.reflect.Modifier;
 
 import junit.framework.TestCase;
 
+import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestExecutor;
-import org.duckhawk.core.TestExecutorFactory;
-import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestPropertiesImpl;
 import org.duckhawk.core.TestRunner;
 
 /**
- * The abstract integration between JUnit3 and DuckHawk. Subclasses specializes it for conformance and performance tests
- * @author     Andrea Aime (TOPP)
- * @uml.dependency   supplier="org.duckhawk.junit3.JUnitTestExecutor"
+ * The abstract integration between JUnit3 and DuckHawk. Subclasses specializes
+ * it for conformance and performance tests
+ * 
+ * @author Andrea Aime (TOPP)
+ * @uml.dependency supplier="org.duckhawk.junit3.JUnitTestExecutor"
  */
 public abstract class AbstractDuckHawkTest extends TestCase implements
         PropertyTest, CancellableTest {
 
     /**
-     * The product id for this test run
+     * The test context in which we're running
      */
-    protected String productId;
-
-    /**
-     * The product version for this test run
-     */
-    protected String productVersion;
+    protected TestContext context;
 
     /**
      * The properties for the single test run.
      */
     protected TestProperties properties;
-    
+
     /**
      * If true, this tests has been cancelled
      */
@@ -46,14 +42,19 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
      * @param productId
      * @param productVersion
      */
-    public AbstractDuckHawkTest(String productId, String productVersion) {
-        if (productId == null)
-            throw new IllegalArgumentException("ProductId not specified");
-        if (productVersion == null)
-            throw new IllegalArgumentException("VersionId not specified");
-        this.productId = productId;
-        this.productVersion = productVersion;
+    public AbstractDuckHawkTest(TestContext context) {
+        this.context = context;
         this.properties = new TestPropertiesImpl();
+    }
+
+    /**
+     * Returns the environment in which the current test is running, that is,
+     * the set of properties contained in the test context
+     * 
+     * @return
+     */
+    public Object getEnvironment(String key) {
+        return context.getEnvironment().get(key);
     }
 
     public void fillProperties(TestProperties callProperties) {
@@ -61,15 +62,18 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
     }
 
     protected abstract TestRunner getTestRunner();
-    
+
     public void cancel() {
         this.cancelled = true;
     }
 
     @Override
     protected void runTest() throws Throwable {
-        TestRunner runner = getTestRunner();
-        runner.runTests(new JUnitTestExecutorFactory(getRunMethod()));
+        getTestRunner().runTests();
+    }
+
+    protected TestExecutor buildTestExecutor() {
+        return new JUnitTestExecutor(AbstractDuckHawkTest.this, getRunMethod());
     }
 
     private Method getRunMethod() {
@@ -89,35 +93,4 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
         }
         return runMethod;
     }
-
-    /**
-     * @author   Andrea Aime (TOPP)
-     */
-    private class JUnitTestExecutorFactory implements TestExecutorFactory {
-        private Method runMethod;
-
-        private TestMetadata metadata;
-
-        public JUnitTestExecutorFactory(Method runMethod) {
-            this.runMethod = runMethod;
-            String id = runMethod.getDeclaringClass().getName() + "."
-                    + runMethod.getName();
-            this.metadata = new TestMetadata(id, productId, productVersion);
-        }
-
-        /**
-         * Grabs the test method to be run and packs it into a TestExecutor
-         * 
-         * @return
-         */
-        public TestExecutor createTestExecutor() {
-            return new JUnitTestExecutor(AbstractDuckHawkTest.this, runMethod);
-        }
-
-        public TestMetadata createMetadata() {
-            return metadata;
-        }
-
-    }
-
 }

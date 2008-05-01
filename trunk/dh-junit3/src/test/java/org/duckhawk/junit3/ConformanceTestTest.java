@@ -3,6 +3,7 @@ package org.duckhawk.junit3;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 
+import org.duckhawk.core.TestContext;
 import org.duckhawk.util.PerformanceSummarizer;
 
 public class ConformanceTestTest extends TestCase {
@@ -11,7 +12,8 @@ public class ConformanceTestTest extends TestCase {
 
     public void testRunOneTest() {
         PerformanceSummarizer summarizer = new PerformanceSummarizer();
-        ConformanceTest test = new ConformanceTest("product", "0.1", summarizer) {
+        TestContext context = new TestContext("product", "0.1", null, summarizer);
+        ConformanceTest test = new ConformanceTest(context) {
             public void testStuff() {
                 countCalls++;
             };

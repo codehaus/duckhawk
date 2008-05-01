@@ -19,22 +19,23 @@ import java.util.Random;
  * @author Andrea Aime (TOPP)
  * 
  */
-public class PerformanceTestRunner extends ConformanceTestRunner  {
+public class PerformanceTestRunner extends ConformanceTestRunner {
     /**
      * The number of repetitions for this performance test
      */
     public static final String KEY_REPETITIONS = "test.repetitions";
-    
+
     /**
-     * Number of seconds in which the test is run (for randomly distributed tests)
+     * Number of seconds in which the test is run (for randomly distributed
+     * tests)
      */
     public static final String KEY_TIME = "test.distributionTime";
-    
+
     /**
      * The distribution generator for the random distributed test
      */
     public static final String KEY_DISTRIBUTION = "test.distributionGenerator";
-    
+
     /**
      * How many times the test must be run (besides the warm up run)
      */
@@ -50,7 +51,9 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
      * <code>repetitions<code> requests a warm up call will be made. 
      * @param repetitions
      */
-    public PerformanceTestRunner(int repetitions) {
+    public PerformanceTestRunner(TestContext context, TestExecutor executor,
+            int repetitions) {
+        super(context, executor);
         this.repetitions = repetitions;
         ensurePositive(repetitions, "repetitions", true);
     }
@@ -69,7 +72,9 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
      * @param time Total time in seconds
      * @param random The random generator
      */
-    public PerformanceTestRunner(int repetitions, double time, Random random) {
+    public PerformanceTestRunner(TestContext context, TestExecutor executor,
+            int repetitions, double time, Random random) {
+        super(context, executor);
         this.repetitions = repetitions;
         this.time = time;
         this.random = random;
@@ -78,6 +83,16 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
         if (random == null)
             throw new InvalidParameterException(
                     "Parameter 'random' cannot be null");
+    }
+    
+    /**
+     * Returns the type of this test according to the {@link TestType}
+     * classification
+     * 
+     * @return
+     */
+    public TestType getTestType() {
+        return TestType.performance;
     }
 
     /**
@@ -94,21 +109,20 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
     }
 
     @Override
-    public void runTests(TestExecutorFactory factory) {
-        TestMetadata metadata = factory.createMetadata();
+    public void runTests() {
+        // reset cancellation state and setup the test properties
+        cancelled = false;
         TestProperties testProperties = new TestPropertiesImpl();
-        testProperties.put(TestExecutor.KEY_TEST_TYPE, TestType.performance.toString());
-        testProperties.put(KEY_REPETITIONS, TestType.performance.toString());
-        if(random != null) {
-            testProperties.put(KEY_TIME, time);
-            testProperties.put(KEY_DISTRIBUTION, random);
-        }
-        fireStartEvent(metadata, testProperties, repetitions);
+        testProperties.put(TestExecutor.KEY_TEST_TYPE, TestType.performance
+                .toString());
+        testProperties.put(KEY_REPETITIONS, repetitions);
+        fireStartEvent(testProperties, repetitions);
         try {
-            executor = factory.createTestExecutor();
-            runLinear(executor, metadata);
+            runLinear(executor);
         } finally {
-            fireEndEvent(metadata, testProperties);
+            // free up the executor and report back that we're done
+            executor = null;
+            fireEndEvent(testProperties);
         }
     }
 
@@ -119,15 +133,14 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
      * @param executor
      * @param metadata
      */
-    protected void runLinear(TestExecutor executor, TestMetadata metadata) {
+    protected void runLinear(TestExecutor executor) {
         if (random != null)
-            runDistributedDelay(executor, metadata);
+            runDistributedDelay(executor);
         else
-            runRepeated(executor, metadata);
+            runRepeated(executor);
     }
 
-    protected void runDistributedDelay(TestExecutor executor,
-            TestMetadata metadata) {
+    protected void runDistributedDelay(TestExecutor executor) {
         warmup(executor);
 
         // generate the random times distribution (in nanoseconds, since we'll
@@ -149,14 +162,36 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
         TestProperties runProperties = new TestPropertiesImpl();
         for (int i = 0; i < repetitions; i++) {
             // if canceled bail out
-            if(cancelled)
+            if (cancelled)
                 break;
-            
+
             // otherwise lcear the properties, sleep up to the next scheduled
             // call time, and run the single call
             runProperties.clear();
             sleepUpToTarget(start, targets[i]);
-            runSingle(executor, metadata, runProperties);
+            runSingle(executor, runProperties);
+        }
+    }
+
+    /**
+     * Warms up the test once and then repeats the test over and over
+     * 
+     * @param executor
+     * @param metadata
+     */
+    protected void runRepeated(TestExecutor executor) {
+        warmup(executor);
+
+        // loop and time
+        TestProperties runProperties = new TestPropertiesImpl();
+        for (int i = 0; i < repetitions; i++) {
+            // if we were asked to stop... do it
+            if (cancelled)
+                break;
+
+            // clean up properties and run test
+            runProperties.clear();
+            runSingle(executor, runProperties);
         }
     }
 
@@ -170,12 +205,14 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
         long sleepTime = targetTime - (System.nanoTime() - start) / 1000000;
         while (sleepTime > 0) {
             // first off check the execution has not been canceled
-            if(cancelled)
+            if (cancelled)
                 break;
-            
+
             try {
-                // I used to make this sleep for sleepTime, but it would never wake up after
-                // an interrupt, so now I'm making it sleep for a short time, check, sleep again, and so on
+                // I used to make this sleep for sleepTime, but it would never
+                // wake up after
+                // an interrupt, so now I'm making it sleep for a short time,
+                // check, sleep again, and so on
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 // forget about it and go back on sleeping if necessary
@@ -186,33 +223,11 @@ public class PerformanceTestRunner extends ConformanceTestRunner  {
         }
     }
 
-    /**
-     * Warms up the test once and then repeats the test over and over
-     * 
-     * @param executor
-     * @param metadata
-     */
-    protected void runRepeated(TestExecutor executor, TestMetadata metadata) {
-        warmup(executor);
-
-        // loop and time
-        TestProperties runProperties = new TestPropertiesImpl();
-        for (int i = 0; i < repetitions; i++) {
-            // if we were asked to stop... do it
-            if(cancelled)
-                break;
-            
-            // clean up properties and run test
-            runProperties.clear();
-            runSingle(executor, metadata, runProperties);
-        }
-    }
-
     private void warmup(TestExecutor executor) {
         TestProperties warmupProperties = new TestPropertiesImpl();
         try {
             executor.run(warmupProperties);
-            if(!cancelled)
+            if (!cancelled)
                 executor.check(warmupProperties);
         } catch (Throwable t) {
             // this was just a warmup, we don't notify the listeners

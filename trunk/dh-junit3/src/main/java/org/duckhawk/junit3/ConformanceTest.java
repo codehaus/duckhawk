@@ -1,7 +1,7 @@
 package org.duckhawk.junit3;
 
 import org.duckhawk.core.ConformanceTestRunner;
-import org.duckhawk.core.TestListener;
+import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestRunner;
 
@@ -11,23 +11,11 @@ import org.duckhawk.core.TestRunner;
  */
 public abstract class ConformanceTest extends AbstractDuckHawkTest {
 
-    /**
-     * @uml.property  name="listeners"
-     * @uml.associationEnd  multiplicity="(0 -1)"
-     */
-    private TestListener[] listeners;
-    
-
-    public ConformanceTest(String productId, String productVersion, TestListener... listeners) {
-        super(productId, productVersion);
-        this.listeners = listeners;
+    public ConformanceTest(TestContext context) {
+        super(context);
     }
 
     protected TestRunner getTestRunner() {
-        TestRunner runner = new ConformanceTestRunner();
-        for (TestListener listener : listeners) {
-            runner.addTestRunListener(listener);
-        }
-        return runner;
+        return new ConformanceTestRunner(context, buildTestExecutor());
     }
 }

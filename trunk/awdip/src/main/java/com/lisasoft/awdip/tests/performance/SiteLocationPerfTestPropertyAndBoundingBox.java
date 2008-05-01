@@ -1,9 +1,10 @@
 package com.lisasoft.awdip.tests.performance;
 
+import static com.lisasoft.awdip.AWDIPTestSupport.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-
 
 import org.apache.commons.httpclient.HttpException;
 import org.duckhawk.core.TestExecutor;
@@ -13,6 +14,7 @@ import org.duckhawk.report.listener.XStreamDumper;
 import org.duckhawk.util.PerformanceSummarizer;
 import org.duckhawk.util.PrintStreamListener;
 
+import com.lisasoft.awdip.AWDIPTestSupport;
 import com.lisasoft.awdip.util.Communication;
 import com.lisasoft.awdip.util.Gml;
 import com.lisasoft.awdip.util.Request;
@@ -31,11 +33,6 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
 public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest  {
     static Communication comm;
     
-    String host = "thor3.adl.ardec.com.au";
-    int port = 5580;
-    String geoserverLocation = "geoserver";
-    
-
     /** data sent to the server (path and body of the POST message) */
     HashMap<String, String> data = new HashMap<String, String>();
 
@@ -57,20 +54,23 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
     
 
     public SiteLocationPerfTestPropertyAndBoundingBox() {
-        super("WfsTest", "1.0", 5, getListeners());
+        super(AWDIPTestSupport.getAwdipContext(), 5);
 
     }
     
     
     @Override
     protected void setUp() throws Exception {
+        String host = (String) getEnvironment(KEY_HOST);
+        int port = (Integer) getEnvironment(KEY_PORT);
+        String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
         comm = new Communication(host, port);
 
         request = new Request(RequestMethod.POST,
-                "/" + geoserverLocation + "/TestWfsPost");
+                "/" + path + "/TestWfsPost");
 
         data.put("url", "http://" + host + ":" + port + "/"
-                + geoserverLocation + "/wfs");
+                + path + "/wfs");
         
         bboxInit = new double[]{127.2, -17.9, 127.3, -17.8};
 

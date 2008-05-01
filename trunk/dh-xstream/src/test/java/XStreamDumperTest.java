@@ -16,6 +16,7 @@ import org.custommonkey.xmlunit.XMLUnit;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestPropertiesImpl;
+import org.duckhawk.core.TestType;
 import org.duckhawk.report.listener.XStreamDumper;
 import org.duckhawk.report.model.Product;
 import org.duckhawk.report.model.ProductVersion;
@@ -44,10 +45,10 @@ public class XStreamDumperTest extends TestCase {
         root = new File("./target");
         dumper = new XStreamDumper(root);
         executor = EasyMock.createNiceMock(TestExecutor.class);
-        metadata = new TestMetadata("ThisIsTheTest", "Product",
-                "VapourWareEdition");
+        metadata = new TestMetadata("Product",
+                "VapourWareEdition", "ThisIsTheTest", TestType.undetermined);
         metadata2 = new TestMetadata("ThisIsTheSecondTest", "Product",
-                "VapourWareEdition");
+                "VapourWareEdition", TestType.undetermined);
         emptyProperties = new TestPropertiesImpl();
         sampleProperties = new TestPropertiesImpl();
         sampleProperties.put(TestExecutor.KEY_AVG_TIME, new Double(12.5));

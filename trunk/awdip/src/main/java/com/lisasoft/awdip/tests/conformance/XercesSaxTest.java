@@ -1,31 +1,24 @@
 package com.lisasoft.awdip.tests.conformance;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 
 import org.apache.xerces.parsers.SAXParser;
 import org.duckhawk.junit3.ConformanceTest;
-import org.duckhawk.util.PrintStreamListener;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import static com.lisasoft.awdip.AWDIPTestSupport.*;
 
 import com.lisasoft.awdip.util.Communication;
 
 
 public class XercesSaxTest extends ConformanceTest {
 
-	final String host = "thor3.adl.ardec.com.au";
-	final int port = 5580;
-	final String geoserverLocation = "geoserver/wfs";
-	//final static String SCHEMA_URL = "file:///C:/stuff/DuckHawk/duckhawk/duckhawk/trunk/awdip/src/main/resources/schemas/all.xsd";
-	final static String SCHEMA_RPATH = "src/main/resources/schemas/all.xsd";
-
 	public XercesSaxTest() {
-		super("XercesSaxTest", "0.1", new PrintStreamListener(true, false));
+		super(getAwdipContext());
 	}
 
 	protected void setUp() {
@@ -45,7 +38,7 @@ public class XercesSaxTest extends ConformanceTest {
 				true); 
 		parser.setProperty(
 				"http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
-				SCHEMA_RPATH);
+				getEnvironment(KEY_SCHEMA_RPATH));
 
 		Validator handler = new Validator();
 		parser.setErrorHandler(handler);
@@ -104,8 +97,10 @@ public class XercesSaxTest extends ConformanceTest {
 		"http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\" maxFeatures=\"5\"> " +
 		"<wfs:Query typeName=\"aw:SiteLocation\"> </wfs:Query> </wfs:GetFeature>";		
 
-			
-		String response = Communication.sendWFSPost(host, port, geoserverLocation, body);
+		String host = (String) getEnvironment(KEY_HOST);
+                int port = (Integer) getEnvironment(KEY_PORT);
+                String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
+		String response = Communication.sendWFSPost(host, port, path, body);
 		
 		return response.replaceAll(regex, replacement);
 		 

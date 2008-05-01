@@ -6,6 +6,7 @@ import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestPropertiesImpl;
+import org.duckhawk.core.TestType;
 import org.easymock.EasyMock;
 
 /**
@@ -46,7 +47,7 @@ public class PerformanceSummarizerTestScaffolding {
     public PerformanceSummarizerTestScaffolding(double[] times,
             PerformanceSummarizer summarizer, double min, double max,
             double average, double median, double total, int expectedCallCount) {
-        this.metadata = new TestMetadata("test", "whosGonnaTestTheTests", "0.1");
+        this.metadata = new TestMetadata("whosGonnaTestTheTests", "0.1", "test", TestType.undetermined);
         this.executor = EasyMock.createNiceMock(TestExecutor.class);
         this.times = times;
         this.summarizer = summarizer;

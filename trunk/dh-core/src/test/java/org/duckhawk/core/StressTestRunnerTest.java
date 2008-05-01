@@ -8,50 +8,53 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
+import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 
 public class StressTestRunnerTest extends TestCase {
 
     public void testBuilExceptions() {
+        TestContext context = new TestContext("test", "0.1", new TestPropertiesImpl());
+        TestExecutor executor = EasyMock.createNiceMock(TestExecutor.class);
         try {
-            new StressTestRunner(-10, 10);
+            new StressTestRunner(context, executor, -10, 10);
             fail("This should have failed!");
         } catch (Exception e) {
             // fine, it's what I expect
         }
 
         try {
-            new StressTestRunner(0, 10);
+            new StressTestRunner(context, executor, 0, 10);
             fail("This should have failed!");
         } catch (Exception e) {
             // fine, it's what I expect
         }
 
         try {
-            new StressTestRunner(10, -10);
+            new StressTestRunner(context, executor, 10, -10);
             fail("This should have failed!");
         } catch (Exception e) {
             // fine, it's what I expect
         }
 
         try {
-            new StressTestRunner(10, 0);
+            new StressTestRunner(context, executor, 10, 0);
             fail("This should have failed!");
         } catch (Exception e) {
             // fine, it's what I expect
         }
 
         // this one should work
-        new StressTestRunner(1, 1);
+        new StressTestRunner(context, executor, 1, 1);
     }
-
+    
     public void testRunRepeatedMultiThread() throws Throwable {
         final Set<Thread> threads = Collections
                 .synchronizedSet(new HashSet<Thread>());
-        new TestRunnerScaffolding(5, 1) {
+        new TestRunnerScaffolding(TestType.stress, 5, 1) {
             @Override
-            protected TestRunner buildTestRunner() {
-                return new StressTestRunner(5, 5);
+            protected TestRunner buildTestRunner(TestContext context, TestExecutor executor) {
+                return new StressTestRunner(context, executor, 5, 5);
             }
 
             @Override
@@ -71,21 +74,30 @@ public class StressTestRunnerTest extends TestCase {
             protected TestExecutor buildExecutor() throws Throwable {
                 // build an executor that does nothing (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
-                executor.run(emptyProperties);
-                // check the thread running this thing is just one
-                expectLastCall().andAnswer(new IAnswer<Object>() {
-                    public Object answer() throws Throwable {
-                        threads.add(Thread.currentThread());
-                        return null;
+                expect(executor.cloneExecutor()).andAnswer(new IAnswer<TestExecutor>() {
+                
+                    public TestExecutor answer() throws Throwable {
+                        return buildClonedExecutor();
                     }
-
-                });
-                // check it's called (5 times (timed runs) + 1 (warmup))
-                // threads
+                
+                }).times(5);
+                expect(executor.getTestId()).andReturn("test").anyTimes();
+                replay(executor);
+                return executor;
+            }
+            
+            protected TestExecutor buildClonedExecutor() throws Throwable {
+                // build an executor that does nothing (and set expectations)
+                TestExecutor executor = createMock(TestExecutor.class);
+                executor.run(emptyProperties);
+                // check it's called 5 timed (timed runs) + 1 (warmup)
                 expectLastCall().times(5 + 1);
                 executor.check(emptyProperties);
                 expectLastCall().times(5 + 1);
                 replay(executor);
+                
+                cloneExecutors.add(executor);
+                
                 return executor;
             }
         }.performTest();
@@ -98,12 +110,12 @@ public class StressTestRunnerTest extends TestCase {
      * @throws Throwable
      */
     public void testRunRepeatedSingleThread() throws Throwable {
-        new TestRunnerScaffolding() {
+        new TestRunnerScaffolding(TestType.stress) {
             private Object thread;
 
             @Override
-            protected TestRunner buildTestRunner() {
-                return new StressTestRunner(20, 1);
+            protected TestRunner buildTestRunner(TestContext context, TestExecutor executor) {
+                return new StressTestRunner(context, executor, 20, 1);
             }
 
             @Override
@@ -119,7 +131,6 @@ public class StressTestRunnerTest extends TestCase {
                 return new TestListener[] { listener };
             }
 
-            @Override
             protected TestExecutor buildExecutor() throws Throwable {
                 // build an executor that does nothing (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
@@ -139,9 +150,11 @@ public class StressTestRunnerTest extends TestCase {
                 expectLastCall().times(20 + 1);
                 executor.check(emptyProperties);
                 expectLastCall().times(20 + 1);
+                expect(executor.getTestId()).andReturn("test").anyTimes();
                 replay(executor);
                 return executor;
             }
+            
         }.performTest();
     }
 
@@ -151,10 +164,10 @@ public class StressTestRunnerTest extends TestCase {
         final int numThreads = 10;
         final int rampUp = 2;
         final int requests = 5;
-        new TestRunnerScaffolding(numThreads, 1) {
+        new TestRunnerScaffolding(TestType.stress, numThreads, 1) {
             @Override
-            protected TestRunner buildTestRunner() {
-                return new StressTestRunner(requests, numThreads, rampUp);
+            protected TestRunner buildTestRunner(TestContext context, TestExecutor executor) {
+                return new StressTestRunner(context, executor, requests, numThreads, rampUp);
             }
 
             @Override
@@ -173,9 +186,25 @@ public class StressTestRunnerTest extends TestCase {
                 replay(listener);
                 return new TestListener[] { listener };
             }
-
+            
             @Override
             protected TestExecutor buildExecutor() throws Throwable {
+                // build an executor that does nothing (and set expectations)
+                TestExecutor executor = createMock(TestExecutor.class);
+                expect(executor.cloneExecutor()).andAnswer(new IAnswer<TestExecutor>() {
+                
+                    public TestExecutor answer() throws Throwable {
+                        return buildClonedExecutor();
+                    }
+                
+                }).times(numThreads);
+                expect(executor.getTestId()).andReturn("test").anyTimes();
+                replay(executor);
+                return executor;
+            }
+            
+            
+            protected TestExecutor buildClonedExecutor() throws Throwable {
                 // build an executor that does nothing (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
                 executor.run(emptyProperties);
@@ -200,6 +229,9 @@ public class StressTestRunnerTest extends TestCase {
                 executor.check(emptyProperties);
                 expectLastCall().times(requests + 1);
                 replay(executor);
+                
+                cloneExecutors.add(executor);
+                
                 return executor;
             }
         }.performTest();

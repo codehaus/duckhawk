@@ -2,36 +2,39 @@ package org.duckhawk.core;
 import static org.easymock.EasyMock.*;
 import junit.framework.TestCase;
 
+import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 
 public class PerformanceTestRunnerTest extends TestCase {
     
     public void testBuilExceptions() {
+        TestContext context = new TestContext("test", "0.1", new TestPropertiesImpl());
+        TestExecutor executor = EasyMock.createNiceMock(TestExecutor.class);
         try {
-            new PerformanceTestRunner(-10);
+            new PerformanceTestRunner(context, executor, -10);
             fail("This should have failed!");
         } catch(Exception e) {
             // fine, it's what I expect
         }
         
         try {
-            new PerformanceTestRunner(0);
+            new PerformanceTestRunner(context, executor, 0);
             fail("This should have failed!");
         } catch(Exception e) {
             // fine, it's what I expect
         }
         
         // this one should work
-        new PerformanceTestRunner(1);
+        new PerformanceTestRunner(context, executor, 1);
     }
 
     public void testRunRepeatedSingleThread() throws Throwable {
-        new TestRunnerScaffolding() {
+        new TestRunnerScaffolding(TestType.performance) {
             private Object thread;
             
             @Override
-            protected TestRunner buildTestRunner() {
-                return new PerformanceTestRunner(20);
+            protected TestRunner buildTestRunner(TestContext context, TestExecutor executor) {
+                return new PerformanceTestRunner(context, executor, 20);
             }
 
             @Override
@@ -66,6 +69,7 @@ public class PerformanceTestRunnerTest extends TestCase {
                 expectLastCall().times(20 + 1);
                 executor.check(emptyProperties);
                 expectLastCall().times(20 + 1);
+                expect(executor.getTestId()).andReturn("test").anyTimes();
                 replay(executor);
                 return executor;
             }
@@ -73,12 +77,12 @@ public class PerformanceTestRunnerTest extends TestCase {
     }
     
     public void testAccumulateProperties() throws Throwable {
-        new TestRunnerScaffolding() {
+        new TestRunnerScaffolding(TestType.performance) {
             int count;
             
             @Override
-            protected TestRunner buildTestRunner() {
-                return new PerformanceTestRunner(20);
+            protected TestRunner buildTestRunner(TestContext context, TestExecutor executor) {
+                return new PerformanceTestRunner(context, executor, 20);
             }
 
             @Override
@@ -114,6 +118,7 @@ public class PerformanceTestRunnerTest extends TestCase {
                 expectLastCall().times(20 + 1);
                 executor.check(emptyProperties);
                 expectLastCall().times(20 + 1);
+                expect(executor.getTestId()).andReturn("test").anyTimes();
                 replay(executor);
                 return executor;
             }

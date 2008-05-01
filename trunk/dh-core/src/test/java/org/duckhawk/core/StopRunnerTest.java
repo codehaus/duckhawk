@@ -6,13 +6,20 @@ import junit.framework.TestCase;
 
 public class StopRunnerTest extends TestCase {
 
-    private StoppableTestExecutorFactory factory;
+    private StoppableTestExecutor executor;
+
+    private TestContext context;
+
     private boolean testCompleted;
+
     private boolean testStarted;
 
     @Override
     protected void setUp() throws Exception {
-        factory = new StoppableTestExecutorFactory();
+        context = new TestContext("Product", "0.1", new TestPropertiesImpl(),
+                new StartEndTestListener());
+
+        executor = new StoppableTestExecutor();
     }
 
     private class TestRunnerLauncher implements Runnable {
@@ -23,82 +30,88 @@ public class StopRunnerTest extends TestCase {
         }
 
         public void run() {
-            runner.runTests(factory);
+            runner.runTests();
         }
     }
-    
+
     private class StartEndTestListener implements TestListener {
 
         public void testCallExecuted(TestExecutor executor,
                 TestMetadata metadata, TestProperties callProperties,
                 double time, Throwable exception) {
-            // do not care            
+            // do not care
         }
 
         public void testRunCompleted(TestMetadata metadata,
                 TestProperties testProperties) {
             testCompleted = true;
-            
+
         }
 
         public void testRunStarting(TestMetadata metadata,
                 TestProperties testProperties, int callNumber) {
             testStarted = true;
-            
+
         }
 
         public void testSuiteCompleted() {
             // do not care
         }
-        
+
     }
 
     public void testStopConformanceTest() throws Throwable {
-        TestRunner runner = new ConformanceTestRunner();
+        TestRunner runner = new ConformanceTestRunner(context, executor);
         checkRunnerCanceling(runner, 1);
     }
-    
+
     public void testStopPerformanceTest() throws Throwable {
-        TestRunner runner = new PerformanceTestRunner(10);
+        TestRunner runner = new PerformanceTestRunner(context, executor, 10);
         checkRunnerCanceling(runner, 1);
     }
-    
+
     public void testStopDistributedPerformanceTest() throws Throwable {
-        // let's try to use a very long distribution time, like one hour, and see if it actually stops
-        TestRunner runner = new PerformanceTestRunner(10, 3600, new Random());
+        // let's try to use a very long distribution time, like one hour, and
+        // see if it actually stops
+        TestRunner runner = new PerformanceTestRunner(context, executor, 10,
+                3600, new Random());
         checkRunnerCanceling(runner, 1);
     }
-    
+
     public void testStopStressTest() throws Throwable {
-        // let's try to use a very long distribution time, like one hour, and see if it actually stops
-        TestRunner runner = new StressTestRunner(10, 10);
+        // let's try to use a very long distribution time, like one hour, and
+        // see if it actually stops
+        TestRunner runner = new StressTestRunner(context, executor, 10, 10);
         checkRunnerCanceling(runner, 10);
     }
-    
+
     public void testStopStressTestRampUp() throws Throwable {
-        // let's try to use a very long distribution time, like one hour, and see if it actually stops
-        TestRunner runner = new StressTestRunner(10, 10, 3600.0);
+        // let's try to use a very long distribution time, like one hour, and
+        // see if it actually stops
+        TestRunner runner = new StressTestRunner(context, executor, 10, 10,
+                3600.0);
         checkRunnerCanceling(runner, -1);
     }
 
     /**
-     * Checks that the provided runner actually supports cancelling the intended way
+     * Checks that the provided runner actually supports cancelling the intended
+     * way
+     * 
      * @param runner
      * @throws InterruptedException
      */
     void checkRunnerCanceling(TestRunner runner, int expectedExecutors)
             throws InterruptedException {
-        runner.addTestRunListener(new StartEndTestListener());
         Thread t = new Thread(new TestRunnerLauncher(runner));
         t.start();
 
         // give it the time to start
-        // (up to 20 seconds, should not take even a small fraction 
+        // (up to 20 seconds, should not take even a small fraction
         // of that thought)
         for (int i = 0; i < 200; i++) {
-            if(testStarted)
+            if (testStarted)
                 break;
-            
+
             Thread.sleep(200);
         }
 
@@ -106,26 +119,36 @@ public class StopRunnerTest extends TestCase {
         runner.cancel();
 
         // stop and let it another bit for stopping down
-        // (up to 20 seconds, should not take even a small fraction 
+        // (up to 20 seconds, should not take even a small fraction
         // of that thought)
         for (int i = 0; i < 200; i++) {
-            if(!t.isAlive())
+            if (!t.isAlive())
                 break;
             try {
                 Thread.sleep(100);
-            } catch(InterruptedException ie) {
+            } catch (InterruptedException ie) {
             }
         }
 
         // now check everything went by the plans, that is, everything stopped
         assertFalse(t.isAlive());
         assertTrue(testCompleted);
-        if(expectedExecutors > 0)
-            assertEquals(expectedExecutors, factory.executors.size());
-        for (StoppableTestExecutor executor : factory.executors) {
+        // if we are in a stress test the first executor just plays the role of
+        // the prototype
+        if (expectedExecutors > 1) {
+            assertEquals(expectedExecutors, executor.clonedExecutors.size());
+            for (StoppableTestExecutor clone : executor.clonedExecutors) {
+                assertTrue(clone.canceled);
+                assertFalse(clone.timedOut);
+                assertFalse(clone.checkPerformed);
+                assertEquals(0, clone.clonedExecutors.size());
+            }
+            // if we're just using one, then it's used directly
+        } else if (expectedExecutors == 1) {
             assertTrue(executor.canceled);
             assertFalse(executor.timedOut);
             assertFalse(executor.checkPerformed);
+            assertEquals(0, executor.clonedExecutors.size());
         }
     }
 }

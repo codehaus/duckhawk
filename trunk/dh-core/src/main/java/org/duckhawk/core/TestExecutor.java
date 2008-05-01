@@ -102,5 +102,18 @@ public interface TestExecutor {
      * Forcefully stops the current thread
      */
     public void cancel() throws Throwable;
+    
+    /**
+     * Returns a deep copy of the executor, should be each bit equal to the original one,
+     * but completely independent of it
+     * @return
+     */
+    public TestExecutor cloneExecutor();
+    
+    /**
+     * Provides an identification for this test
+     * @return
+     */
+    public String getTestId();
 
 }
