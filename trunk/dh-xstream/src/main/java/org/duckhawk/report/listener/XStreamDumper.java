@@ -50,17 +50,17 @@ public class XStreamDumper extends AbstractModelListener implements
         xsDetails = new XStream();
         customizeDetailsXStream();
 
-        // this shutdown hook is necessary to properly close the files...
-        // TODO: try to find a way to specify an event instead of this trick,
-        // which is specific to the way junit3 integration is working
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-
-            @Override
-            public void run() {
-                close();
-            }
-
-        });
+//        // this shutdown hook is necessary to properly close the files...
+//        // TODO: try to find a way to specify an event instead of this trick,
+//        // which is specific to the way junit3 integration is working
+//        Runtime.getRuntime().addShutdownHook(new Thread() {
+//
+//            @Override
+//            public void run() {
+//                close();
+//            }
+//
+//        });
     }
 
     /**

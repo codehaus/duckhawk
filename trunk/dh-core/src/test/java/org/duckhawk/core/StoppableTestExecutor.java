@@ -26,7 +26,7 @@ public class StoppableTestExecutor implements TestExecutor {
         while(true) {
             // sleep a very little while
             try {
-                Thread.sleep(100);
+                Thread.sleep(50);
             } catch(Exception e) {
                 System.out.println("Stoppable test executor: " + e);
             }

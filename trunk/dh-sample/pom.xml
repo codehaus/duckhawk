@@ -11,17 +11,14 @@
   <groupId>org.duckhawk</groupId>
   <artifactId>dh-sample</artifactId>
   <packaging>jar</packaging>
-  <name>A sampler of junit3 based performance/stress tests</name>
+  <name>DuckHawk samples</name>
 
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/duckhawk/trunk/dh-junit3/</connection>
     <url>http://svn.codehaus.org/duckhawk/trunk/dh-junit3/</url>
   </scm>
 
-  <description>
-	Integration between the DH runners and the JUnit3 testing framework, 
-	allows to write unit tests and leverage them as DH tests
-  </description>
+  <description>A sampler of junit3 based performance/stress tests</description>
 
   <dependencies>
   	<dependency>

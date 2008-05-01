@@ -213,7 +213,7 @@ public class PerformanceTestRunner extends ConformanceTestRunner {
                 // wake up after
                 // an interrupt, so now I'm making it sleep for a short time,
                 // check, sleep again, and so on
-                Thread.sleep(100);
+                Thread.sleep(20);
             } catch (InterruptedException e) {
                 // forget about it and go back on sleeping if necessary
                 // that is, unless the execution has been canceled

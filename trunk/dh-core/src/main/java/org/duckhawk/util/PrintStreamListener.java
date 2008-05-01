@@ -8,10 +8,12 @@ import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestListener;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
+import org.duckhawk.core.TestSuiteListener;
 
 /**
  * A simple listener dumping to the specified print stream (or System.out, if
@@ -20,7 +22,7 @@ import org.duckhawk.core.TestProperties;
  * @author Andrea Aime (TOPP)
  * 
  */
-public class PrintStreamListener implements TestListener {
+public class PrintStreamListener implements TestSuiteListener {
     protected static final NumberFormat format = new DecimalFormat("0.######");
 
     protected static final NumberFormat formatTime = new DecimalFormat("0.###");
@@ -32,6 +34,8 @@ public class PrintStreamListener implements TestListener {
     protected PrintStream out;
 
     protected long startTime;
+
+    private long start;
 
     /**
      * Shortcut for the other constructor, uses {@link System#out} by default
@@ -63,15 +67,6 @@ public class PrintStreamListener implements TestListener {
         this.dumpSingleCalls = dumpSingleCalls;
         this.dumpStackTraces = dumpStackTraces;
         this.out = out;
-
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-
-            @Override
-            public void run() {
-                close();
-            }
-
-        });
     }
 
     public void testCallExecuted(TestExecutor executor, TestMetadata metadata,
@@ -125,13 +120,9 @@ public class PrintStreamListener implements TestListener {
         out.println(msg);
     }
 
-    public void testSuiteCompleted() {
-        close();
-    }
-
     /**
      * Closes up the listener along with the print stream provided as a
-     * parameter
+     * parameter (after closing this listener stops working properly)
      */
     public void close() {
         if (out != null) {
@@ -140,4 +131,19 @@ public class PrintStreamListener implements TestListener {
             out = null;
         }
     }
+
+    public void testSuiteStarting(TestContext context) {
+        start = System.nanoTime();
+        out.println("Test suite for " + context.getProductId() + " version "
+                + context.getProductVersion() + " starting");
+    }
+
+    public void testSuiteCompleted(TestContext context) {
+        long elapsed = System.nanoTime() - start;
+        out.println("Test suite for " + context.getProductId() + " version "
+                + context.getProductVersion() + " completed, wall time "
+                + formatTime.format(elapsed / 1e9) + "s");
+        close();
+    }
+
 }

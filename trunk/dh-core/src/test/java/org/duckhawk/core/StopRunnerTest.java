@@ -151,4 +151,12 @@ public class StopRunnerTest extends TestCase {
             assertEquals(0, executor.clonedExecutors.size());
         }
     }
+    
+    public static void main(String[] args) {
+        for (int i = 0; i < 100; i++) {
+            StopRunnerTest test = new StopRunnerTest();
+            test.setName("testStopStressTestRampUp");
+            junit.textui.TestRunner.run(test);
+        }
+    }
 }

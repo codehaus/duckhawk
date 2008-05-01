@@ -10,6 +10,7 @@ import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestPropertiesImpl;
 import org.duckhawk.core.TestRunner;
+import org.duckhawk.core.TestContext.TestSuiteState;
 
 /**
  * The abstract integration between JUnit3 and DuckHawk. Subclasses specializes
@@ -69,6 +70,24 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
 
     @Override
     protected void runTest() throws Throwable {
+        // if the context events have not been initialized by anything else, do
+        // so and install a hook so that we can notify test listeners about test
+        // end before the test suite dies (supposedly we're being run by an IDE
+        // or by a build system such as Ant or Maven)
+        if (context.getState() == TestSuiteState.ready) {
+            context.fireTestSuiteStarting();
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+            
+                @Override
+                public void run() {
+                    if(context.getState() == TestSuiteState.running)
+                        context.fireTestSuiteEnding();
+                }
+            
+            });
+        }
+        
+        // now run the test as requested
         getTestRunner().runTests();
     }
 
