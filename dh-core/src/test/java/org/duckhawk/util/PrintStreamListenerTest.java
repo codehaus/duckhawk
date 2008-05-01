@@ -8,6 +8,7 @@ import junit.framework.TestCase;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestPropertiesImpl;
+import org.duckhawk.core.TestType;
 import org.easymock.EasyMock;
 
 /**
@@ -24,7 +25,7 @@ public class PrintStreamListenerTest extends TestCase {
     public void setUp() {
         bos = new ByteArrayOutputStream();
         ps = new PrintStream(bos);
-        metadata = new TestMetadata("test", "product", "0.1");
+        metadata = new TestMetadata("product", "0.1", "test", TestType.undetermined);
     }
 
     public void testStartup() {

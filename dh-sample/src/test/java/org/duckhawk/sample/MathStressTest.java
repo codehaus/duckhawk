@@ -8,7 +8,7 @@ public class MathStressTest extends StressTest {
     public MathStressTest() {
         // Load test, 5 threads in parallel each doing 10 requests, with a ramp
         // up time of 3 seconds
-        super(TestSupport.getProduct(), TestSupport.getVersion(), 10, 5, 2, TestSupport.getListeners());
+        super(TestSupport.getContext(), 10, 5, 2);
     }
 
     public void testSqrt() throws Exception {

@@ -8,6 +8,7 @@ import org.duckhawk.core.TestType;
 import org.duckhawk.report.listener.AbstractModelListener;
 import org.duckhawk.report.model.TestCallDetail;
 import org.duckhawk.report.model.TestResult;
+import org.duckhawk.report.model.TestRun;
 import org.easymock.EasyMock;
 
 /**
@@ -51,7 +52,12 @@ public class AbstractModelListenerTest extends TestCase {
             AbstractModelListenerTest.this.startResult = result;
         }
 
-        public void testSuiteCompleted() {
+        public void testSuiteCompleted(TestRun run) {
+            // not used
+        }
+
+        @Override
+        protected void testSuiteStarting(TestRun run) throws Exception {
             // not used
         }
     }
@@ -59,8 +65,8 @@ public class AbstractModelListenerTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         listener = new TestModelLister();
-        metadata = new TestMetadata("ThisIsTheTest", "Product", "VapourWareEdition");
-        metadata2 = new TestMetadata("ThisIsTheSecondTest", "Product", "VapourWareEdition");
+        metadata = new TestMetadata("Product", "VapourWareEdition", "ThisIsTheTest", TestType.undetermined);
+        metadata2 = new TestMetadata("Product", "VapourWareEdition", "ThisIsTheSecondTest", TestType.undetermined);
         emptyProperties = new TestPropertiesImpl();
         executor = EasyMock.createNiceMock(TestExecutor.class);
     }

@@ -1,23 +1,19 @@
 package com.lisasoft.awdip.tests.performance;
 
-import java.io.File;
+import static com.lisasoft.awdip.AWDIPTestSupport.*;
+
 import java.io.IOException;
 import java.util.HashMap;
 
-
 import org.apache.commons.httpclient.HttpException;
 import org.duckhawk.core.TestExecutor;
-import org.duckhawk.core.TestListener;
 import org.duckhawk.junit3.PerformanceTest;
-import org.duckhawk.report.listener.XStreamDumper;
-import org.duckhawk.util.PerformanceSummarizer;
-import org.duckhawk.util.PrintStreamListener;
 
+import com.lisasoft.awdip.AWDIPTestSupport;
 import com.lisasoft.awdip.util.Communication;
+import com.lisasoft.awdip.util.Gml;
 import com.lisasoft.awdip.util.Request;
 import com.lisasoft.awdip.util.Communication.RequestMethod;
-
-import com.lisasoft.awdip.util.Gml;
 
 /**
  * Test with bounding box around the whole data, increasing maxmimumFeatures.
@@ -32,11 +28,6 @@ import com.lisasoft.awdip.util.Gml;
 public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
     static Communication comm;
     
-    String host = "thor3.adl.ardec.com.au";
-    int port = 5580;
-    String geoserverLocation = "geoserver";
-    
-
     /** data sent to the server (path and body of the POST message) */
     HashMap<String, String> data = new HashMap<String, String>();
 
@@ -58,42 +49,27 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
     
 
     public SiteLocationPerfTestMaximumFeatures() {
-        super("WfsTest", "1.0", 5, getListeners());
+        super(AWDIPTestSupport.getAwdipContext(), 5);
 
     }
     
     
     @Override
     protected void setUp() throws Exception {
+        String host = (String) getEnvironment(KEY_HOST);
+        int port = (Integer) getEnvironment(KEY_PORT);
+        String path = (String) getEnvironment(KEY_GS_PATH);
         comm = new Communication(host, port);
 
         request = new Request(RequestMethod.POST,
-                "/" + geoserverLocation + "/TestWfsPost");
+                "/" + path + "/TestWfsPost");
 
         data.put("url", "http://" + host + ":" + port + "/"
-                + geoserverLocation + "/wfs");
+                + path + "/wfs");
         
         bboxAll = new double[]{52.0, -81.0, 1-149.0, 8.0};
     }
 
-    
-    
-    static TestListener[] listeners;
-    
-    private static TestListener[] getListeners() {
-        if (listeners == null) {
-            listeners = new TestListener[] {
-                    new PerformanceSummarizer(), //
-                    new PrintStreamListener(true, true), // 
-                    new XStreamDumper(new File("./target/dh-report"))
-            };
-        }
-        return listeners;
-    }
-    
-    
-
-    
     public String createMaxFeaturesRequest(String typeName, int maxFeatures) {
         StringBuffer request = new StringBuffer();
         request.append("<wfs:GetFeature service=\"WFS\" version=\"1.1.0\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:om=\"http://www.opengis.net/om/1.0\" xmlns:wfs=\"http://www.opengis.net/wfs\" xmlns:sa=\"http://www.opengis.net/sampling/1.0\" xmlns:aw=\"http://www.water.gov.au/awdip\"  xmlns:ows=\"http://www.opengis.net/ows\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd\"");

@@ -1,6 +1,5 @@
 package org.duckhawk.core;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -13,58 +12,102 @@ public class ConformanceTestRunner implements TestRunner {
     protected static Log LOGGER = LogFactory.getLog(TestRunner.class);
 
     /**
-     * The test listeners
-     */
-    protected List<TestListener> listeners = new ArrayList<TestListener>();
-
-    /**
      * Flag is raised when cancelling occurrs
      */
     protected boolean cancelled;
 
     /**
-     * The current executor (provided the test needs just one)
+     * The prototype executor (used directly if the test needs just one)
      */
     protected TestExecutor executor;
 
-    public void runTests(TestExecutorFactory factory) {
+    /**
+     * The test context, contains environment and listeners
+     */
+    protected TestContext context;
+
+    /**
+     * The metadata reported in test events
+     */
+    private TestMetadata metadata;
+
+    /**
+     * Prepares the test runner to run the {@link TestExecutor} object generated
+     * by the factory
+     */
+    public ConformanceTestRunner(TestContext context, TestExecutor executor) {
+        this.context = context;
+        this.executor = executor;
+    }
+    
+    public TestExecutor getTestExecutor() {
+        return executor;
+    }
+
+    public TestContext getContext() {
+        return context;
+    }
+
+    public void runTests() {
+        // reset cancellation state and setup the test properties
         cancelled = false;
-        TestMetadata metadata = factory.createMetadata();
         TestProperties testProperties = new TestPropertiesImpl();
         testProperties.put(TestExecutor.KEY_TEST_TYPE, TestType.conformance
                 .toString());
-        fireStartEvent(metadata, testProperties, 1);
+        fireStartEvent(testProperties, 1);
         try {
-            executor = factory.createTestExecutor();
-            runSingle(executor, metadata, new TestPropertiesImpl());
+            runSingle(executor, new TestPropertiesImpl());
         } finally {
-            // free up the executor and report back that we're done
-            executor = null;
-            fireEndEvent(metadata, testProperties);
+            // report back that we're done
+            fireEndEvent(testProperties);
         }
     }
 
+    /**
+     * Returns the type of this test according to the {@link TestType}
+     * classification
+     * 
+     * @return
+     */
+    public TestType getTestType() {
+        return TestType.conformance;
+    }
+
+    /**
+     * Returns the {@link TestMetadata} for this runner
+     * @return
+     */
+    protected TestMetadata getMetadata() {
+        if(metadata == null) {
+            metadata = new TestMetadata(context.getProductId(), context.getProductVersion(),
+                executor.getTestId(), getTestType());
+        }
+        return metadata;
+    }
+
     public void dispose() {
-        listeners.clear();
+        // nothing to do
     }
 
-    public void addTestRunListener(TestListener listener) {
-        listeners.add(listener);
-    }
+    // protected void addTestRunListener(TestListener listener) {
+    // listeners.add(listener);
+    // }
+    //
+    // protected void removeTestRunListener(TestListener listener) {
+    // listeners.remove(listener);
+    // }
 
-    public void removeTestRunListener(TestListener listener) {
-        listeners.remove(listener);
-    }
-    
     public void cancel() {
         cancelled = true;
         try {
             // if we have an active executor, notify cancel to it
-            if(executor != null)
+            if (executor != null)
                 executor.cancel();
-        } catch(Throwable t) {
-            LOGGER.warn("Exception occurred while cancelling the execution ", t);
-        } 
+        } catch (Throwable t) {
+            LOGGER
+                    .warn("Exception occurred while cancelling the execution ",
+                            t);
+        }
     }
 
     /**
@@ -76,17 +119,17 @@ public class ConformanceTestRunner implements TestRunner {
      * @param runProperties
      * @return
      */
-    protected double runSingle(TestExecutor executor, TestMetadata metadata,
+    protected double runSingle(TestExecutor executor,
             TestProperties runProperties) {
         // default values
         double time = 0d;
         long start = 0l;
         long end;
-        
+
         // make sure we don't even start if this has been cancelled
-        if(cancelled)
+        if (cancelled)
             return 0d;
-        
+
         Throwable exception = null;
         // run the timed part and time it no matter what happens
         try {
@@ -97,19 +140,19 @@ public class ConformanceTestRunner implements TestRunner {
         } finally {
             end = System.nanoTime();
         }
-        
+
         // if not cancelled run the check part
-        if(!cancelled && exception == null) {
+        if (!cancelled && exception == null) {
             try {
                 executor.check(runProperties);
             } catch (Throwable t) {
                 exception = t;
             }
         }
-        
+
         // compute time and fire events
         time = ((end - start) / 1000000000.0);
-        fireCallEvent(time, executor, metadata, runProperties, exception);
+        fireCallEvent(time, executor, runProperties, exception);
         return time;
     }
 
@@ -122,8 +165,8 @@ public class ConformanceTestRunner implements TestRunner {
      * @param throwable
      */
     protected void fireCallEvent(double time, TestExecutor executor,
-            TestMetadata metadata, TestProperties properties,
-            Throwable throwable) {
+            TestProperties properties, Throwable throwable) {
+        List<TestListener> listeners = context.getListeners();
         if (listeners.size() == 0)
             return;
 
@@ -132,7 +175,7 @@ public class ConformanceTestRunner implements TestRunner {
             // This part is synchronized so that the listeners do not have to
             // deal with concurrency issues
             synchronized (listeners) {
-                listener.testCallExecuted(executor, metadata, properties, time,
+                listener.testCallExecuted(executor, getMetadata(), properties, time,
                         throwable);
             }
         }
@@ -143,17 +186,19 @@ public class ConformanceTestRunner implements TestRunner {
      * 
      * @param testProperties
      * 
-     * @param executor
+     * @param baseExecutor
      * @param callCount
      */
-    protected synchronized void fireStartEvent(TestMetadata metadata,
-            TestProperties testProperties, int callCount) {
+    protected void fireStartEvent(TestProperties testProperties, int callCount) {
+        List<TestListener> listeners = context.getListeners();
         if (listeners.size() == 0)
             return;
 
         // notify listeners
         for (TestListener listener : listeners) {
-            listener.testRunStarting(metadata, testProperties, callCount);
+            synchronized (listener) {
+                listener.testRunStarting(getMetadata(), testProperties, callCount);
+            }
         }
     }
 
@@ -162,11 +207,11 @@ public class ConformanceTestRunner implements TestRunner {
      * 
      * @param testProperties
      * 
-     * @param executor
+     * @param baseExecutor
      * @param callCount
      */
-    protected synchronized void fireEndEvent(TestMetadata metadata,
-            TestProperties testProperties) {
+    protected synchronized void fireEndEvent(TestProperties testProperties) {
+        List<TestListener> listeners = context.getListeners();
         if (listeners.size() == 0)
             return;
 

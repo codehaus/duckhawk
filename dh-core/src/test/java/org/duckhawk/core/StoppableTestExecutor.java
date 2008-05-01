@@ -3,11 +3,15 @@
  */
 package org.duckhawk.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StoppableTestExecutor implements TestExecutor {
 
     boolean canceled;
     boolean checkPerformed;
     boolean timedOut;
+    List<StoppableTestExecutor> clonedExecutors = new ArrayList<StoppableTestExecutor>();
 
     public void cancel() throws Throwable {
         this.canceled = true;
@@ -36,5 +40,15 @@ public class StoppableTestExecutor implements TestExecutor {
             if((System.currentTimeMillis() - start) > 30000)
                 timedOut = true;
         }
+    }
+
+    public TestExecutor cloneExecutor() {
+        StoppableTestExecutor executor = new StoppableTestExecutor();
+        clonedExecutors.add(executor);
+        return executor;
+    }
+
+    public String getTestId() {
+        return "ThisIsTheStoppableTest";
     }
 }

@@ -1,12 +1,25 @@
 package org.duckhawk.junit3;
+import org.duckhawk.core.TestContext;
+import org.duckhawk.util.PerformanceSummarizer;
+
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 
 public class StressTestTest extends TestCase {
+    
+    private PerformanceSummarizer summarizer;
+    private TestContext context;
+
+    @Override
+    protected void setUp() throws Exception {
+        summarizer = new PerformanceSummarizer();
+        context = new TestContext("product", "0.1", null, summarizer);
+    }
 
     // test for DH-6
     public void testMissingSetup() {
-        StressTest test = new StressTest("product", "0.1", 10, 2, 0) {
+        
+        StressTest test = new StressTest(context, 10, 2, 0) {
             protected void setUp() throws Exception {
                 // we don't call back setup
             }
@@ -25,5 +38,6 @@ public class StressTestTest extends TestCase {
         TestResult result = test.run();
         assertEquals(0, result.errorCount());
         assertEquals(0, result.failureCount());
+        assertEquals(20, summarizer.getCallCount());
     }
 }

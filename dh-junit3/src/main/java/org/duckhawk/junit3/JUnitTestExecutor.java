@@ -63,8 +63,20 @@ class JUnitTestExecutor implements TestExecutor {
     }
 
     public void cancel() throws Throwable {
-        if(test instanceof CancellableTest)
+        if (test instanceof CancellableTest)
             ((CancellableTest) test).cancel();
+    }
+
+    public TestExecutor cloneExecutor() {
+        return new JUnitTestExecutor(test, runMethod);
+    }
+
+    /**
+     * Test id is the class name plus method name
+     */
+    public String getTestId() {
+        return runMethod.getDeclaringClass().getName() + "#"
+                + runMethod.getName();
     }
 
 }

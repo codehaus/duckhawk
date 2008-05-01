@@ -3,6 +3,7 @@ package org.duckhawk.junit3;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 
+import org.duckhawk.core.TestContext;
 import org.duckhawk.junit3.PerformanceTest;
 import org.duckhawk.util.PerformanceSummarizer;
 
@@ -10,16 +11,20 @@ public class PerformanceTestTest extends TestCase {
     
     int countCalls;
     int countChecks;
+    TestContext context;
+    PerformanceSummarizer summarizer;
     
     @Override
     protected void setUp() throws Exception {
         countCalls = 0;
         countChecks = 0;
+        summarizer = new PerformanceSummarizer();
+        context = new TestContext("product", "0.1", null, summarizer);
     }
 
     // test for DH-6
     public void testMissingSetup() {
-        PerformanceTest test = new PerformanceTest("product", "0.1", 10) {
+        PerformanceTest test = new PerformanceTest(context, 10) {
             protected void setUp() throws Exception {
                 // we don't call back setup
             }
@@ -41,8 +46,7 @@ public class PerformanceTestTest extends TestCase {
     }
     
     public void testRunOneTest() {
-        PerformanceSummarizer summarizer = new PerformanceSummarizer();
-        PerformanceTest test = new PerformanceTest("product", "0.1", 10, summarizer) {
+        PerformanceTest test = new PerformanceTest(context, 10) {
             public void testStuff() {
                 countCalls++;
             };
@@ -58,8 +62,7 @@ public class PerformanceTestTest extends TestCase {
     }
     
     public void testRunTwoTest() {
-        PerformanceSummarizer summarizer = new PerformanceSummarizer();
-        PerformanceTest test = new PerformanceTest("product", "0.1", 10, summarizer) {
+        PerformanceTest test = new PerformanceTest(context, 10) {
             public void testStuff1() {
                 countCalls++;
             };
@@ -87,8 +90,7 @@ public class PerformanceTestTest extends TestCase {
     }
     
     public void testRunWithChecks() {
-        PerformanceSummarizer summarizer = new PerformanceSummarizer();
-        PerformanceTest test = new PerformanceTest("product", "0.1", 1, summarizer) {
+        PerformanceTest test = new PerformanceTest(context, 1) {
             public void testStuff() throws InterruptedException {
                 Thread.sleep(200);
                 countCalls++;

@@ -4,10 +4,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestListener;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
+import org.duckhawk.core.TestSuiteListener;
 import org.duckhawk.core.TestType;
 import org.duckhawk.report.model.Product;
 import org.duckhawk.report.model.ProductVersion;
@@ -16,30 +18,54 @@ import org.duckhawk.report.model.TestCallDetail;
 import org.duckhawk.report.model.TestResult;
 import org.duckhawk.report.model.TestRun;
 
-public abstract class AbstractModelListener implements TestListener {
+public abstract class AbstractModelListener implements TestListener,
+        TestSuiteListener {
 
     /**
      * TODO: replace these with a GT2 SoftValueHashMap or anything else that
      * ensures these maps won't grow too much *
      */
 
-    private Map<String, Map<String, TestRun>> testRunCache = new HashMap<String, Map<String,TestRun>>();
+    private Map<String, Map<String, TestRun>> testRunCache = new HashMap<String, Map<String, TestRun>>();
 
     private Map<TestMetadata, TestResult> testResultCache = new HashMap<TestMetadata, TestResult>();
+
+    public void testSuiteStarting(TestContext context) {
+        try {
+            testSuiteStarting(getTestRun(context.getProductId(), context
+                    .getProductVersion()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * This event marks the end of the whole test suite run
+     */
+    public void testSuiteCompleted(TestContext context) {
+        try {
+            testSuiteCompleted(getTestRun(context.getProductId(), context
+                    .getProductVersion()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void testCallExecuted(TestExecutor executor, TestMetadata metadata,
             TestProperties callProperties, double time, Throwable exception) {
         TestResult result = getTestResult(metadata);
-        String exceptionMessage = exception != null ? exception.getMessage() : null; 
+        String exceptionMessage = exception != null ? exception.getMessage()
+                : null;
         TestCallDetail detail = new TestCallDetail(time, exception != null,
                 exceptionMessage, result);
         detail.getCallProperties().clear();
-        if(callProperties != null)
+        if (callProperties != null)
             detail.getCallProperties().putAll(callProperties);
         try {
             handleDetail(detail);
-        } catch(Exception e) {
-            throw new RuntimeException("Listener bombed out during execution", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Listener bombed out during execution",
+                    e);
         }
     }
 
@@ -47,17 +73,19 @@ public abstract class AbstractModelListener implements TestListener {
             TestProperties testProperties) {
         TestResult result = getTestResult(metadata);
         result.getTestProperties().clear();
-        if(testProperties != null) {
+        if (testProperties != null) {
             result.getTestProperties().clear();
             result.getTestProperties().putAll(testProperties);
         }
-        // this result won't be needed anymore, remove from the cache to save memory
+        // this result won't be needed anymore, remove from the cache to save
+        // memory
         testResultCache.remove(metadata);
-            
+
         try {
             testEnded(result);
-        } catch(Exception e) {
-            throw new RuntimeException("Listener bombed out during execution", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Listener bombed out during execution",
+                    e);
         }
     }
 
@@ -67,39 +95,39 @@ public abstract class AbstractModelListener implements TestListener {
         try {
             TestResult result = getTestResult(metadata);
             result.getTestProperties().clear();
-            if(result != null) {
+            if (result != null) {
                 result.getTestProperties().clear();
-                if(testProperties != null)
+                if (testProperties != null)
                     result.getTestProperties().putAll(testProperties);
             }
-                
+
             testStarting(result);
-        } catch(Exception e) {
-            throw new RuntimeException("Listener bombed out during execution", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Listener bombed out during execution",
+                    e);
         }
     }
 
-    protected TestRun getTestRun(TestMetadata metadata) {
+    protected TestRun getTestRun(String productId, String versionId) {
         TestRun run = null;
         Product product = null;
         ProductVersion productVersion = null;
-        Map<String, TestRun> runs = testRunCache.get(metadata.getProductId());
+        Map<String, TestRun> runs = testRunCache.get(productId);
         if (runs != null && runs.size() > 0) {
-            run = runs.get(metadata.getProductVersion());
+            run = runs.get(versionId);
             if (run == null) {
                 productVersion = runs.values().iterator().next()
                         .getProductVersion();
                 run = new TestRun(new Date(), false, productVersion);
-                runs.put(metadata.getProductVersion(), run);
+                runs.put(versionId, run);
             }
         } else {
-            product = new Product(metadata.getProductId());
-            productVersion = new ProductVersion(product, metadata
-                    .getProductVersion());
+            product = new Product(productId);
+            productVersion = new ProductVersion(product, versionId);
             run = new TestRun(new Date(), false, productVersion);
             runs = new HashMap<String, TestRun>();
-            runs.put(metadata.getProductVersion(), run);
-            testRunCache.put(metadata.getProductId(), runs);
+            runs.put(versionId, run);
+            testRunCache.put(productId, runs);
         }
         return run;
     }
@@ -107,7 +135,8 @@ public abstract class AbstractModelListener implements TestListener {
     protected TestResult getTestResult(TestMetadata metadata) {
         TestResult result = testResultCache.get(metadata);
         if (result == null) {
-            TestRun testRun = getTestRun(metadata);
+            TestRun testRun = getTestRun(metadata.getProductId(), metadata
+                    .getProductVersion());
             Test test = new Test(metadata.getTestId(), TestType.undetermined,
                     testRun.getProductVersion().getProduct());
             result = new TestResult(test, testRun);
@@ -115,11 +144,16 @@ public abstract class AbstractModelListener implements TestListener {
         }
         return result;
     }
-    
+
     protected abstract void testStarting(TestResult result) throws Exception;
 
     protected abstract void testEnded(TestResult result) throws Exception;
 
-    protected abstract void handleDetail(TestCallDetail detail) throws Exception;
+    protected abstract void handleDetail(TestCallDetail detail)
+            throws Exception;
+
+    protected abstract void testSuiteStarting(TestRun run) throws Exception;
+    
+    protected abstract void testSuiteCompleted(TestRun run) throws Exception;
 
 }

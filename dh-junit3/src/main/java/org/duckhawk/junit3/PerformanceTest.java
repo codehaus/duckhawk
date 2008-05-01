@@ -3,7 +3,7 @@ package org.duckhawk.junit3;
 import java.util.Random;
 
 import org.duckhawk.core.PerformanceTestRunner;
-import org.duckhawk.core.TestListener;
+import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestRunner;
 
@@ -32,42 +32,31 @@ public abstract class PerformanceTest extends AbstractDuckHawkTest {
 
     protected int times;
 
-    /**
-     * @uml.property name="listeners"
-     * @uml.associationEnd multiplicity="(0 -1)"
-     */
-    private TestListener[] listeners;
-
     private double time;
 
     private Random random;
 
-    public PerformanceTest(String productId, String productVersion, int times,
-            TestListener... listeners) {
-        super(productId, productVersion);
+    public PerformanceTest(TestContext context, int times) {
+        super(context);
         this.times = times;
-        this.listeners = listeners;
     }
 
-    public PerformanceTest(String productId, String productVersion, int times,
-            double time, Random random, TestListener... listeners) {
-        super(productId, productVersion);
+    public PerformanceTest(TestContext context, int times, double time,
+            Random random) {
+        super(context);
         this.times = times;
         this.time = time;
         this.random = random;
-        this.listeners = listeners;
     }
 
     protected TestRunner getTestRunner() {
         TestRunner runner;
-        if(random != null)
-            runner = new PerformanceTestRunner(times, time, random);
+        if (random != null)
+            runner = new PerformanceTestRunner(context, buildTestExecutor(),
+                    times, time, random);
         else
-            runner = new PerformanceTestRunner(times);
-        if (listeners != null)
-            for (TestListener listener : listeners) {
-                runner.addTestRunListener(listener);
-            }
+            runner = new PerformanceTestRunner(context, buildTestExecutor(),
+                    times);
         return runner;
     }
 }

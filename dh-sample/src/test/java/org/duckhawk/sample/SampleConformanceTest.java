@@ -5,7 +5,7 @@ import org.duckhawk.junit3.ConformanceTest;
 public class SampleConformanceTest extends ConformanceTest {
     
     public SampleConformanceTest() {
-        super(TestSupport.getProduct(), TestSupport.getVersion(), TestSupport.getListeners());
+        super(TestSupport.getContext());
     }
 
     public void testSumFloats() {

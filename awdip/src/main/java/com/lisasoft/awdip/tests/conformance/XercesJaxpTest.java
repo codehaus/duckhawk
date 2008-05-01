@@ -1,5 +1,7 @@
 package com.lisasoft.awdip.tests.conformance;
 
+import static com.lisasoft.awdip.AWDIPTestSupport.*;
+
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -8,7 +10,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.duckhawk.junit3.ConformanceTest;
-import org.duckhawk.util.PrintStreamListener;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -18,14 +19,9 @@ import com.lisasoft.awdip.util.Communication;
 
 public class XercesJaxpTest extends ConformanceTest {
 	
-	final String host = "thor3.adl.ardec.com.au";
-	final int port = 5580;
-	final String geoserverLocation = "geoserver/wfs";
-	final static String SCHEMA_URL = "file:///C:/stuff/DuckHawk/duckhawk/duckhawk/trunk/awdip/src/main/resources/schemas/all.xsd";
-	final static String SCHEMA_RPATH = "src/main/resources/schemas/all.xsd";
-	
+
     public XercesJaxpTest() {
-        super("XercesJaxpTest", "0.1", new PrintStreamListener(true, false));
+        super(getAwdipContext());
     }
     
     protected void setUp() {
@@ -48,7 +44,7 @@ public class XercesJaxpTest extends ConformanceTest {
     		    "http://www.w3.org/2001/XMLSchema");
     	factory.setAttribute(
     		    "http://java.sun.com/xml/jaxp/properties/schemaSource",
-    		    SCHEMA_URL);
+    		    getEnvironment(KEY_SCHEMA_RPATH));
    		
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Validator handler=new Validator();
@@ -91,7 +87,6 @@ public class XercesJaxpTest extends ConformanceTest {
 	}
     
 	private String sendRequest() throws IOException {
-		
 		String replacement = "xsi:schemaLocation=\"http://www.water.gov.au/awdip https://www.seegrid.csiro.au/subversion/xmml/" +
 				"AWDIP/trunk/geoserver_conf/commonSchemas/awdip.xsd http://www.opengis.net/wfs http://schemas.opengis.net/wfs/" +
 				"1.1.0/wfs.xsd\"";
@@ -107,10 +102,11 @@ public class XercesJaxpTest extends ConformanceTest {
 		"http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\" maxFeatures=\"5\"> " +
 		"<wfs:Query typeName=\"aw:SiteLocation\"> </wfs:Query> </wfs:GetFeature>";		
 
-			
-		String response = Communication.sendWFSPost(host, port, geoserverLocation, body);
+		String host = (String) getEnvironment(KEY_HOST);
+		int port = (Integer) getEnvironment(KEY_PORT);
+		String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
+		String response = Communication.sendWFSPost(host, port, path, body);
 		
 		return response.replaceAll(regex, replacement);
-		 
 	}
 }

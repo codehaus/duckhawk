@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+import org.duckhawk.core.TestSuiteListener;
 import org.duckhawk.report.model.Product;
 import org.duckhawk.report.model.ProductVersion;
 import org.duckhawk.report.model.Test;
@@ -15,7 +16,8 @@ import org.duckhawk.report.model.TestRun;
 
 import com.thoughtworks.xstream.XStream;
 
-public class XStreamDumper extends AbstractModelListener {
+public class XStreamDumper extends AbstractModelListener implements
+        TestSuiteListener {
 
     ObjectOutputStream resultsOos;
 
@@ -66,7 +68,8 @@ public class XStreamDumper extends AbstractModelListener {
      */
     protected void customizeDetailsXStream() {
         xsDetails.setMode(XStream.NO_REFERENCES);
-        xsDetails.registerConverter(new TestPropertiesConverter(xsDetails.getMapper()));
+        xsDetails.registerConverter(new TestPropertiesConverter(xsDetails
+                .getMapper()));
         xsDetails.alias("TestCallDetail", TestCallDetail.class);
         xsDetails.omitField(TestCallDetail.class, "id");
         xsDetails.omitField(TestCallDetail.class, "testResult");
@@ -78,7 +81,8 @@ public class XStreamDumper extends AbstractModelListener {
      */
     protected void customizeResultsXStream() {
         xsResults.setMode(XStream.NO_REFERENCES);
-        xsResults.registerConverter(new TestPropertiesConverter(xsResults.getMapper()));
+        xsResults.registerConverter(new TestPropertiesConverter(xsResults
+                .getMapper()));
         xsResults.registerConverter(new ProductVersionConverter());
         xsResults.alias("TestResult", TestResult.class);
         xsResults.alias("TestInformation", TestRun.class);
@@ -97,26 +101,8 @@ public class XStreamDumper extends AbstractModelListener {
 
     @Override
     protected void testStarting(TestResult result) throws Exception {
-        // if it's the first call, we need to create the general report
-        // file and resource
-        if (resultsOos == null) {
-            String testRunId = result.getTestRun().getIdentifier();
-            String name = sanitizeFileName(testRunId);
-
-            // build the report object output stream
-            mainReportFile = new File(root, name + ".xml");
-            BufferedOutputStream os = new BufferedOutputStream(
-                    new FileOutputStream(mainReportFile));
-            resultsOos = xsResults.createObjectOutputStream(os, "TestSummary");
-            resultsOos.writeObject(result.getTestRun());
-
-            // prepare the directory to keep all detail files
-            detailsRoot = new File(root, name);
-            if (!detailsRoot.mkdir())
-                throw new IOException(
-                        "Could not create the detail reports directory "
-                                + detailsRoot.getAbsolutePath());
-        }
+        // make sure we prepare if the suite events weren't triggered
+        prepareTestSuite(result.getTestRun());
 
         // let's create the detail report file
         File callReport = new File(detailsRoot, sanitizeFileName(result
@@ -142,10 +128,6 @@ public class XStreamDumper extends AbstractModelListener {
     @Override
     protected void handleDetail(TestCallDetail detail) throws Exception {
         detailsOos.writeObject(detail);
-    }
-    
-    public void testSuiteCompleted() {
-        close();
     }
 
     /**
@@ -181,4 +163,38 @@ public class XStreamDumper extends AbstractModelListener {
     public File getMainReportFile() {
         return mainReportFile;
     }
+
+    protected void prepareTestSuite(TestRun testRun) throws IOException {
+        // if it's the first call, we need to create the general report
+        // file and resource
+        if (resultsOos == null) {
+            String testRunId = testRun.getIdentifier();
+            String name = sanitizeFileName(testRunId);
+
+            // build the report object output stream
+            mainReportFile = new File(root, name + ".xml");
+            BufferedOutputStream os = new BufferedOutputStream(
+                    new FileOutputStream(mainReportFile));
+            resultsOos = xsResults.createObjectOutputStream(os, "TestSummary");
+            resultsOos.writeObject(testRun);
+
+            // prepare the directory to keep all detail files
+            detailsRoot = new File(root, name);
+            if (!detailsRoot.mkdir())
+                throw new IOException(
+                        "Could not create the detail reports directory "
+                                + detailsRoot.getAbsolutePath());
+        }
+    }
+
+    @Override
+    protected void testSuiteCompleted(TestRun run) throws Exception {
+        close();
+    }
+
+    @Override
+    protected void testSuiteStarting(TestRun run) throws Exception {
+        prepareTestSuite(run);
+    }
+
 }

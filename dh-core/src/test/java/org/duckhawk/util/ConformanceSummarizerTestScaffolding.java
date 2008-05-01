@@ -8,6 +8,7 @@ import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestPropertiesImpl;
+import org.duckhawk.core.TestType;
 import org.easymock.EasyMock;
 
 /**
@@ -30,7 +31,7 @@ public class ConformanceSummarizerTestScaffolding {
     public ConformanceSummarizerTestScaffolding(Throwable... exceptions) {
         this.summarizer = new ConformanceSummarizer();
         this.exceptions = exceptions;
-        this.metadata = new TestMetadata("test", "whosGonnaTestTheTests", "0.1");
+        this.metadata = new TestMetadata("whosGonnaTestTheTests", "0.1", "test", TestType.conformance);
         this.executor = EasyMock.createNiceMock(TestExecutor.class);
     }
 

@@ -7,23 +7,17 @@ import java.io.StringReader;
 import org.custommonkey.xmlunit.Validator;
 import org.custommonkey.xmlunit.exceptions.ConfigurationException;
 import org.duckhawk.junit3.ConformanceTest;
-import org.duckhawk.util.PrintStreamListener;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import static com.lisasoft.awdip.AWDIPTestSupport.*;
 
 import com.lisasoft.awdip.util.Communication;
 
 public class XMLUnitValidationTest  extends ConformanceTest {
-
-	final String host = "thor3.adl.ardec.com.au";
-	final int port = 5580;
-	final String geoserverLocation = "geoserver/wfs";
-	//final static String SCHEMA_URL = "file:///C:/stuff/DuckHawk/duckhawk/duckhawk/trunk/awdip/src/main/resources/schemas/all.xsd";
-	final static String SCHEMA_RPATH = "src/main/resources/schemas/all.xsd";
-
 	
 	public XMLUnitValidationTest() {
-		super("XMLUnitValidationTest", "0.1", new PrintStreamListener(true, false));
+		super(getAwdipContext());
 	}
 
 	protected void setUp() {
@@ -36,7 +30,7 @@ public class XMLUnitValidationTest  extends ConformanceTest {
 		InputSource is = new InputSource(new StringReader(response));
 		Validator v = new Validator(is);
 		v.useXMLSchema(true);
-		v.setJAXP12SchemaSource(new File(SCHEMA_RPATH));
+		v.setJAXP12SchemaSource(new File((String) getEnvironment(KEY_SCHEMA_RPATH)));
 		
 		assertTrue(v.toString(), v.isValid());
 	}
@@ -58,8 +52,10 @@ public class XMLUnitValidationTest  extends ConformanceTest {
 		"http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\" maxFeatures=\"5\"> " +
 		"<wfs:Query typeName=\"aw:SiteLocation\"> </wfs:Query> </wfs:GetFeature>";		
 
-			
-		String response = Communication.sendWFSPost(host, port, geoserverLocation, body);
+		String host = (String) getEnvironment(KEY_HOST);
+                int port = (Integer) getEnvironment(KEY_PORT);
+                String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
+		String response = Communication.sendWFSPost(host, port, path, body);
 		
 		return response.replaceAll(regex, replacement);
 		 

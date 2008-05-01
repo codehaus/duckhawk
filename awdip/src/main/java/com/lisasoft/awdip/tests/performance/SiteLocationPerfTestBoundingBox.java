@@ -1,17 +1,13 @@
 package com.lisasoft.awdip.tests.performance;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-
 import org.apache.commons.httpclient.HttpException;
 import org.duckhawk.core.TestExecutor;
-import org.duckhawk.core.TestListener;
 import org.duckhawk.junit3.PerformanceTest;
-import org.duckhawk.report.listener.XStreamDumper;
-import org.duckhawk.util.PerformanceSummarizer;
-import org.duckhawk.util.PrintStreamListener;
+
+import static com.lisasoft.awdip.AWDIPTestSupport.*;
 
 import com.lisasoft.awdip.util.Communication;
 import com.lisasoft.awdip.util.Gml;
@@ -29,11 +25,6 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
  */
 public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
     static Communication comm;
-    
-    String host = "thor3.adl.ardec.com.au";
-    int port = 5580;
-    String geoserverLocation = "geoserver";
-    
 
     /** data sent to the server (path and body of the POST message) */
     HashMap<String, String> data = new HashMap<String, String>();
@@ -56,20 +47,23 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
     
 
     public SiteLocationPerfTestBoundingBox() {
-        super("WfsTest", "1.0", 5, getListeners());
+        super(getAwdipContext(), 5);
 
     }
     
     
     @Override
     protected void setUp() throws Exception {
+        String host = (String) getEnvironment(KEY_HOST);
+        int port = (Integer) getEnvironment(KEY_PORT);
+        String path = (String) getEnvironment(KEY_GS_PATH);
         comm = new Communication(host, port);
 
         request = new Request(RequestMethod.POST,
-                "/" + geoserverLocation + "/TestWfsPost");
+                "/" + getEnvironment(KEY_HOST) + "/TestWfsPost");
 
         data.put("url", "http://" + host + ":" + port + "/"
-                + geoserverLocation + "/wfs");
+                + path + "/wfs");
         
         bboxInit = new double[]{127.2, -17.9, 127.3, -17.8};
 
@@ -96,20 +90,6 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         bboxGrow.put("bb4000000", new double[]{10.0, 10.0});
     }
 
-    
-    
-    static TestListener[] listeners;
-    
-    private static TestListener[] getListeners() {
-        if (listeners == null) {
-            listeners = new TestListener[] {
-                    new PerformanceSummarizer(), //
-                    new PrintStreamListener(true, true), // 
-                    new XStreamDumper(new File("./target/dh-report"))
-            };
-        }
-        return listeners;
-    }
     
     /** Creates the body for a request with a bounding box filter
      * 
