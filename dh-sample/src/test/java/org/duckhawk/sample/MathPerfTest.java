@@ -21,9 +21,9 @@ public class MathPerfTest extends PerformanceTest {
     }
 
     public void testSqrt() {
-        properties.put(TestExecutor.KEY_REQUEST, "sqrt(12.5)");
+        putCallProperty(TestExecutor.KEY_REQUEST, "sqrt(12.5)");
         result = Math.sqrt(4);
-        properties.put(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
+        putCallProperty(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
     }
     
     public void checkSqrt() {
@@ -32,15 +32,15 @@ public class MathPerfTest extends PerformanceTest {
     }
 
     public void testSin() {
-        properties.put(TestExecutor.KEY_REQUEST, "sin(12.5)");
+        putCallProperty(TestExecutor.KEY_REQUEST, "sin(12.5)");
         result = Math.sin(12.5);
-        properties.put(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
+        putCallProperty(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
     }
 
     public void testLog() {
-        properties.put(TestExecutor.KEY_REQUEST, "log(12.5)");
+        putCallProperty(TestExecutor.KEY_REQUEST, "log(12.5)");
         result = Math.log(12.5);
-        properties.put(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
+        putCallProperty(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
     }
     
     public static void main(String[] args) {

@@ -56,9 +56,9 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
     
     @Override
     protected void setUp() throws Exception {
-        String host = (String) getEnvironment(KEY_HOST);
-        int port = (Integer) getEnvironment(KEY_PORT);
-        String path = (String) getEnvironment(KEY_GS_PATH);
+        String host = (String) getTestProperty(KEY_HOST);
+        int port = (Integer) getTestProperty(KEY_PORT);
+        String path = (String) getTestProperty(KEY_GS_PATH);
         comm = new Communication(host, port);
 
         request = new Request(RequestMethod.POST,
@@ -87,10 +87,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 1);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationMaxFeatures10()
@@ -98,10 +98,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body = createMaxFeaturesRequest("aw:SiteLocation", 10);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationMaxFeatures100()
@@ -109,10 +109,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 100);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationMaxFeatures200()
@@ -120,10 +120,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 200);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationMaxFeatures300()
@@ -131,10 +131,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 300);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationMaxFeatures400()
@@ -142,10 +142,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 400);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationMaxFeatures500()
@@ -153,10 +153,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 500);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationMaxFeatures600()
@@ -164,10 +164,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 600);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationMaxFeatures700()
@@ -175,10 +175,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 700);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures800()
@@ -186,10 +186,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 800);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures900()
@@ -197,10 +197,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 900);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures1000()
@@ -208,10 +208,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 1000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures1500()
@@ -219,10 +219,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 1500);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures2000()
@@ -230,10 +230,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 2000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures2500()
@@ -241,10 +241,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 2500);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures3000()
@@ -252,10 +252,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 3000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures3500()
@@ -263,10 +263,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 3500);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures4000()
@@ -274,10 +274,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 4000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures4500()
@@ -285,10 +285,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 4500);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures5000()
@@ -296,10 +296,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 5000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures6000()
@@ -307,10 +307,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 6000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures7000()
@@ -318,10 +318,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 7000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures8000()
@@ -329,10 +329,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 8000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures9000()
@@ -340,10 +340,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 9000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures10000()
@@ -351,10 +351,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 10000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures11000()
@@ -362,10 +362,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 11000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
 
@@ -374,10 +374,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 12000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures13000()
@@ -385,10 +385,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 13000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures14000()
@@ -396,10 +396,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 14000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures15000()
@@ -407,10 +407,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 15000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures16000()
@@ -418,10 +418,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 16000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures17000()
@@ -429,10 +429,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 17000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures18000()
@@ -440,10 +440,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 18000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures19000()
@@ -451,10 +451,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 19000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
 
     public void testSiteLocationMaxFeatures20000()
@@ -462,10 +462,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 20000);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);         
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);         
     }    
 }
 

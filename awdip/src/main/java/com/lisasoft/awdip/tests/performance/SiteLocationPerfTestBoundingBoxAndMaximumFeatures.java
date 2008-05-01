@@ -62,9 +62,9 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
     
     @Override
     protected void setUp() throws Exception {
-        String host = (String) getEnvironment(KEY_HOST);
-        int port = (Integer) getEnvironment(KEY_PORT);
-        String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
+        String host = (String) getTestProperty(KEY_HOST);
+        int port = (Integer) getTestProperty(KEY_PORT);
+        String path = (String) getTestProperty(KEY_GS_PATH) + "/wfs";
         comm = new Communication(host, port);
 
         request = new Request(RequestMethod.POST,
@@ -130,14 +130,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb640000");
         String body = createBoundingBoxRequest(bbox, 50);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "640000");        
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "640000");        
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox810000maxFeatures50()
@@ -145,14 +145,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb810000");
         String body = createBoundingBoxRequest(bbox, 50);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "810000");        
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "810000");        
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox100000maxFeatures50()
@@ -160,14 +160,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1000000");
         String body = createBoundingBoxRequest(bbox, 50);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1000000");        
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1000000");        
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox1440000maxFeatures50()
@@ -175,14 +175,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1440000");
         String body = createBoundingBoxRequest(bbox, 50);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1440000");        
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1440000");        
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox1960000maxFeatures50()
@@ -190,14 +190,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1960000");
         String body = createBoundingBoxRequest(bbox, 50);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1960000");        
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1960000");        
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox2560000maxFeatures50()
@@ -205,14 +205,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb2560000");
         String body = createBoundingBoxRequest(bbox, 50);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "2560000");        
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "2560000");        
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationBoundingBox3240000maxFeatures50()
@@ -220,14 +220,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb3240000");
         String body = createBoundingBoxRequest(bbox, 50);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "3240000");        
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "3240000");        
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationBoundingBox4000000maxFeatures50()
@@ -235,14 +235,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb4000000");
         String body = createBoundingBoxRequest(bbox, 50);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "4000000");        
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "4000000");        
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
 
@@ -252,14 +252,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb640000");
         String body = createBoundingBoxRequest(bbox, 100);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "6400000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "6400000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox810000maxFeatures100()
@@ -267,14 +267,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb810000");
         String body = createBoundingBoxRequest(bbox, 100);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "8100000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "8100000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox100000maxFeatures100()
@@ -282,14 +282,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1000000");
         String body = createBoundingBoxRequest(bbox, 100);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1000000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1000000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox1440000maxFeatures100()
@@ -297,14 +297,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1440000");
         String body = createBoundingBoxRequest(bbox, 100);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1440000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1440000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox1960000maxFeatures100()
@@ -312,14 +312,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1960000");
         String body = createBoundingBoxRequest(bbox, 100);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1960000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1960000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox2560000maxFeatures100()
@@ -327,14 +327,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb2560000");
         String body = createBoundingBoxRequest(bbox, 100);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "2560000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "2560000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationBoundingBox3240000maxFeatures100()
@@ -342,14 +342,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb3240000");
         String body = createBoundingBoxRequest(bbox, 100);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "3240000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "3240000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationBoundingBox4000000maxFeatures100()
@@ -357,14 +357,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb4000000");
         String body = createBoundingBoxRequest(bbox, 100);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "4000000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "4000000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
 
@@ -375,14 +375,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb640000");
         String body = createBoundingBoxRequest(bbox, 150);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "6400000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "6400000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox810000maxFeatures150()
@@ -390,14 +390,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb810000");
         String body = createBoundingBoxRequest(bbox, 150);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "8100000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "8100000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox1000000maxFeatures150()
@@ -405,14 +405,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1000000");
         String body = createBoundingBoxRequest(bbox, 150);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1000000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1000000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox1440000maxFeatures150()
@@ -420,14 +420,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1440000");
         String body = createBoundingBoxRequest(bbox, 150);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1440000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1440000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox1960000maxFeatures150()
@@ -435,14 +435,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1960000");
         String body = createBoundingBoxRequest(bbox, 150);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1960000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1960000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox2560000maxFeatures150()
@@ -450,14 +450,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb2560000");
         String body = createBoundingBoxRequest(bbox, 150);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "2560000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "2560000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationBoundingBox3240000maxFeatures150()
@@ -465,14 +465,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb3240000");
         String body = createBoundingBoxRequest(bbox, 150);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "3240000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "3240000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationBoundingBox4000000maxFeatures150()
@@ -480,14 +480,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb4000000");
         String body = createBoundingBoxRequest(bbox, 150);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "4000000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "4000000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
 
@@ -496,14 +496,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb640000");
         String body = createBoundingBoxRequest(bbox, 200);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "6400000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "6400000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox810000maxFeatures200()
@@ -511,14 +511,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb810000");
         String body = createBoundingBoxRequest(bbox, 200);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "810000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "810000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox1000000maxFeatures200()
@@ -526,14 +526,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1000000");
         String body = createBoundingBoxRequest(bbox, 200);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1000000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1000000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox1440000maxFeatures200()
@@ -541,14 +541,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1440000");
         String body = createBoundingBoxRequest(bbox, 200);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1440000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1440000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox1960000maxFeatures200()
@@ -556,14 +556,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1960000");
         String body = createBoundingBoxRequest(bbox, 200);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1960000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1960000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox2560000maxFeatures200()
@@ -571,14 +571,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb2560000");
         String body = createBoundingBoxRequest(bbox, 200);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "2560000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "2560000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationBoundingBox3240000maxFeatures200()
@@ -586,14 +586,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb3240000");
         String body = createBoundingBoxRequest(bbox, 200);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "3240000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "3240000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationBoundingBox4000000maxFeatures200()
@@ -601,14 +601,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb4000000");
         String body = createBoundingBoxRequest(bbox, 200);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "4000000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "4000000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
 
@@ -618,14 +618,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb640000");
         String body = createBoundingBoxRequest(bbox, 250);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "6400000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "6400000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox810000maxFeatures250()
@@ -633,14 +633,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb810000");
         String body = createBoundingBoxRequest(bbox, 250);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "8100000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "8100000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox1000000maxFeatures250()
@@ -648,14 +648,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1000000");
         String body = createBoundingBoxRequest(bbox, 250);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1000000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1000000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox1440000maxFeatures250()
@@ -663,14 +663,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1440000");
         String body = createBoundingBoxRequest(bbox, 250);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1440000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1440000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox1960000maxFeatures250()
@@ -678,14 +678,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb1960000");
         String body = createBoundingBoxRequest(bbox, 250);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "1960000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "1960000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
 
     public void testSiteLocationBoundingBox2560000maxFeatures250()
@@ -693,14 +693,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb2560000");
         String body = createBoundingBoxRequest(bbox, 250);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "2560000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "2560000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationBoundingBox3240000maxFeatures250()
@@ -708,14 +708,14 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb3240000");
         String body = createBoundingBoxRequest(bbox, 250);
 
-        properties.put("boundingBox", bbox);
-        properties.put("boundingBoxSize", "3240000");
+        putCallProperty("boundingBox", bbox);
+        putCallProperty("boundingBoxSize", "3240000");
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
     public void testSiteLocationBoundingBox4000000maxFeatures250()
@@ -723,13 +723,13 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
         double[] bbox = getGrownBbox("bb4000000");
         String body = createBoundingBoxRequest(bbox, 250);
 
-        properties.put("boundingBox", bbox);
+        putCallProperty("boundingBox", bbox);
 
         data.put("body", body);
-        properties.put(TestExecutor.KEY_REQUEST, body);
+        putCallProperty(TestExecutor.KEY_REQUEST, body);
 
         response = comm.sendRequest(request, data);
-        properties.put(TestExecutor.KEY_RESPONSE, response);            
+        putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
 
 }

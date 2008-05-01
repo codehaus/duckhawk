@@ -16,23 +16,23 @@ public class MathStressTest extends StressTest {
         if(Math.random() < 0.1)
             throw new Exception("This is a random failure in testSqrt");
         
-        properties.put(TestExecutor.KEY_REQUEST, "sqrt(12.5)");
+        putCallProperty(TestExecutor.KEY_REQUEST, "sqrt(12.5)");
         double result = Math.sqrt(12.5);
         Thread.sleep(50);
-        properties.put(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
+        putCallProperty(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
     }
 
     public void testSin() throws Exception {
-        properties.put(TestExecutor.KEY_REQUEST, "sin(12.5)");
+        putCallProperty(TestExecutor.KEY_REQUEST, "sin(12.5)");
         double result = Math.sin(12.5);
         Thread.sleep(50);
-        properties.put(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
+        putCallProperty(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
     }
 
     public void testLog() throws Exception {
-        properties.put(TestExecutor.KEY_REQUEST, "log(12.5)");
+        putCallProperty(TestExecutor.KEY_REQUEST, "log(12.5)");
         double result = Math.log(12.5);
         Thread.sleep(50);
-        properties.put(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
+        putCallProperty(TestExecutor.KEY_RESPONSE, Double.valueOf(result));
     }
 }

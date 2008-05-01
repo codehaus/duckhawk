@@ -30,7 +30,7 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
     /**
      * The properties for the single test run.
      */
-    protected TestProperties properties;
+    private TestProperties properties;
 
     /**
      * If true, this tests has been cancelled
@@ -54,8 +54,19 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
      * 
      * @return
      */
-    public Object getEnvironment(String key) {
+    public Object getTestProperty(String key) {
         return context.getEnvironment().get(key);
+    }
+
+    /**
+     * Allows to store a per call property so that listeners will see it in the
+     * single call execution event
+     * 
+     * @param key
+     * @param value
+     */
+    public void putCallProperty(String key, Object value) {
+        properties.put(key, value);
     }
 
     public void fillProperties(TestProperties callProperties) {
@@ -77,16 +88,16 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
         if (context.getState() == TestSuiteState.ready) {
             context.fireTestSuiteStarting();
             Runtime.getRuntime().addShutdownHook(new Thread() {
-            
+
                 @Override
                 public void run() {
-                    if(context.getState() == TestSuiteState.running)
+                    if (context.getState() == TestSuiteState.running)
                         context.fireTestSuiteEnding();
                 }
-            
+
             });
         }
-        
+
         // now run the test as requested
         getTestRunner().runTests();
     }
