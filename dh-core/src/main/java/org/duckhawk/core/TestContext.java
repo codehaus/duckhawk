@@ -33,6 +33,10 @@ public class TestContext {
 
     TestSuiteState state;
 
+    private long start;
+
+    private long end;
+
     public TestContext(String productId, String productVersion,
             TestProperties environment, TestListener... listeners) {
         if (productId == null)
@@ -68,6 +72,7 @@ public class TestContext {
      * Notifies all test suite listeners that the test suite is about to start
      */
     public synchronized void fireTestSuiteStarting() {
+        start = System.currentTimeMillis();
         try {
             for (TestListener listener : listeners) {
                 if (listener instanceof TestSuiteListener)
@@ -82,6 +87,7 @@ public class TestContext {
      * Notifies all test suite listeners that the test suite is ending
      */
     public synchronized void fireTestSuiteEnding() {
+        end = System.currentTimeMillis();
         try {
             for (TestListener listener : listeners) {
                 if (listener instanceof TestSuiteListener)
@@ -107,5 +113,25 @@ public class TestContext {
      */
     public void reset() {
         this.state = TestSuiteState.ready;
+    }
+
+    /**
+     * Returns the time when the test suite started (according to
+     * {@link System#currentTimeMillis()} when the start suite event was fired)
+     * 
+     * @return
+     */
+    public long getStart() {
+        return start;
+    }
+    
+    /**
+     * Returns the time when the test suite ended (according to
+     * {@link System#currentTimeMillis()} when the end suite event was fired)
+     * 
+     * @return
+     */
+    public long getEnd() {
+        return end;
     }
 }

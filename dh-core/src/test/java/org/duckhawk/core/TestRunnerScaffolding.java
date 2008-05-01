@@ -3,7 +3,11 @@ package org.duckhawk.core;
 import static org.easymock.EasyMock.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import org.easymock.EasyMock;
+import org.easymock.IArgumentMatcher;
 
 /**
  * A little scaffolding to avoid repeating over and over the same code (but
@@ -91,38 +95,59 @@ public class TestRunnerScaffolding {
         listener
                 .testRunStarting(eq(metadata), isA(TestProperties.class), eq(1));
         listener.testCallExecuted(isA(TestExecutor.class), eq(metadata),
-                eq(emptyProperties), anyDouble(), eq((Throwable) null));
+                isA(TestProperties.class), anyDouble(), eq((Throwable) null));
         listener.testRunCompleted(eq(metadata), isA(TestProperties.class));
         replay(listener);
         return new TestListener[] { listener };
     }
 
-    // protected TestExecutorFactory buildFactory(int expectedTestExecutors, int
-    // expectedRunCount) throws Throwable {
-    // // build a factory and set expectations
-    // TestExecutorFactory factory = createMock(TestExecutorFactory.class);
-    // expect(factory.createMetadata()).andReturn(metadata).times(expectedRunCount);
-    // expect(factory.createTestExecutor()).andAnswer(new
-    // IAnswer<TestExecutor>() {
-    //            
-    // public TestExecutor answer() throws Throwable {
-    // TestExecutor executor = buildExecutor();
-    // cloneExecutors.add(executor);
-    // return executor;
-    // }
-    //        
-    // }).times(expectedTestExecutors * expectedRunCount);
-    // replay(factory);
-    // return factory;
-    // }
-
     protected TestExecutor buildExecutor() throws Throwable {
         // build an executor that does nothing (and set expectations)
         TestExecutor executor = createMock(TestExecutor.class);
-        executor.run(emptyProperties);
-        executor.check(emptyProperties);
+        executor.run(isA(TestProperties.class));
+        executor.check(isA(TestProperties.class));
         expect(executor.getTestId()).andReturn("test").anyTimes();
         replay(executor);
         return executor;
+    }
+    
+    /**
+     * A Matcher used to check a certain set of properties contains at least the expected ones
+     * @author Andrea Aime (TOPP)
+     *
+     */
+    class PropertiesMatcher implements IArgumentMatcher {
+        TestProperties expected;
+        
+        public PropertiesMatcher(TestProperties expected) {
+            this.expected = expected;
+        }
+        
+
+        public void appendTo(StringBuffer sb) {
+            sb.append("includeProperties(Test properties did not contain the expected values)");
+        }
+
+        public boolean matches(Object argument) {
+            if(!(argument instanceof TestProperties))
+                return false;
+            TestProperties props = (TestProperties) argument;
+            for (String key : expected.keySet()) {
+                if(!props.containsKey(key) || !expected.get(key).equals(props.get(key)))
+                    return false;
+            }
+            return true;
+        }
+        
+    }
+    
+    /**
+     * Matches the argument if it's a {@link TestProperties} and contains at least the specified properties
+     * @param expected
+     * @return
+     */
+    TestProperties includeProperties(TestProperties expected) {
+        EasyMock.reportMatcher(new PropertiesMatcher(expected));
+        return expected;
     }
 }

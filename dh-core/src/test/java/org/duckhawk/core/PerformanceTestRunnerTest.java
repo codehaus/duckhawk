@@ -42,7 +42,7 @@ public class PerformanceTestRunnerTest extends TestCase {
                 TestListener listener = createMock(TestListener.class);
                 listener.testRunStarting(eq(metadata), isA(TestProperties.class), eq(20));
                 listener.testCallExecuted(isA(TestExecutor.class), eq(metadata),
-                        eq(emptyProperties), anyDouble(), eq((Throwable) null));
+                        isA(TestProperties.class), anyDouble(), eq((Throwable) null));
                 expectLastCall().times(20);
                 listener.testRunCompleted(eq(metadata), isA(TestProperties.class));
                 replay(listener);
@@ -53,7 +53,7 @@ public class PerformanceTestRunnerTest extends TestCase {
             protected TestExecutor buildExecutor() throws Throwable {
                 // build an executor that does nothing (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
-                executor.run(emptyProperties);
+                executor.run(isA(TestProperties.class));
                 // check the thread running this thing is just one
                 expectLastCall().andAnswer(new IAnswer<Object>() {
                     public Object answer() throws Throwable {
@@ -67,7 +67,7 @@ public class PerformanceTestRunnerTest extends TestCase {
                 });
                 // check it's called 20 timed (timed runs) + 1 (warmup)
                 expectLastCall().times(20 + 1);
-                executor.check(emptyProperties);
+                executor.check(isA(TestProperties.class));
                 expectLastCall().times(20 + 1);
                 expect(executor.getTestId()).andReturn("test").anyTimes();
                 replay(executor);
@@ -95,8 +95,9 @@ public class PerformanceTestRunnerTest extends TestCase {
                 
                     public Object answer() throws Throwable {
                         TestProperties props = (TestProperties) getCurrentArguments()[2];
-                        // make sure properties do not accumulate during runs
-                        assertEquals("expected proprerty count", 0, props.size());
+                        // make sure properties do not accumulate during runs 
+                        // (the test runner will start with 2 props anyways)
+                        assertEquals("expected proprerty count", 2, props.size());
                         props.put("property" + count, "");
                         count++;
                         return null;
@@ -113,10 +114,10 @@ public class PerformanceTestRunnerTest extends TestCase {
             protected TestExecutor buildExecutor() throws Throwable {
                 // build an executor that does nothing (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
-                executor.run(emptyProperties);
+                executor.run(isA(TestProperties.class));
                 // check it's called 20 timed (timed runs) + 1 (warmup)
                 expectLastCall().times(20 + 1);
-                executor.check(emptyProperties);
+                executor.check(isA(TestProperties.class));
                 expectLastCall().times(20 + 1);
                 expect(executor.getTestId()).andReturn("test").anyTimes();
                 replay(executor);

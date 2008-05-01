@@ -167,6 +167,13 @@ public class StressTestRunner extends PerformanceTestRunner {
             }
         }
     }
+    
+    @Override
+    protected void prepareCallProperties(TestProperties properties,
+            int callIndex) {
+        super.prepareCallProperties(properties, callIndex);
+        properties.put(TestExecutor.KEY_THREAD_ID, Thread.currentThread().getName());
+    }
 
     private synchronized void testEnded(LinearRunThread thread) {
         runningThreads.remove(thread);

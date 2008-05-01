@@ -39,7 +39,7 @@ public class ConformanceTestRunner implements TestRunner {
         this.context = context;
         this.executor = executor;
     }
-    
+
     public TestExecutor getTestExecutor() {
         return executor;
     }
@@ -56,11 +56,27 @@ public class ConformanceTestRunner implements TestRunner {
                 .toString());
         fireStartEvent(testProperties, 1);
         try {
-            runSingle(executor, new TestPropertiesImpl());
+            TestProperties callProperties = new TestPropertiesImpl();
+            prepareCallProperties(callProperties, 0);
+            runSingle(executor, callProperties);
         } finally {
             // report back that we're done
             fireEndEvent(testProperties);
         }
+    }
+
+    /**
+     * Clears the call properties and sets up the standard call properties
+     * (thread id and call number)
+     * 
+     * @param properties
+     * @param callIndex
+     */
+    protected void prepareCallProperties(TestProperties properties,
+            int callIndex) {
+        properties.clear();
+        properties.put(TestExecutor.KEY_CALL_NUMBER, callIndex + 1);
+        properties.put(TestExecutor.KEY_CALL_TIME, System.currentTimeMillis() - context.getStart());
     }
 
     /**
@@ -75,12 +91,13 @@ public class ConformanceTestRunner implements TestRunner {
 
     /**
      * Returns the {@link TestMetadata} for this runner
+     * 
      * @return
      */
     protected TestMetadata getMetadata() {
-        if(metadata == null) {
-            metadata = new TestMetadata(context.getProductId(), context.getProductVersion(),
-                executor.getTestId(), getTestType());
+        if (metadata == null) {
+            metadata = new TestMetadata(context.getProductId(), context
+                    .getProductVersion(), executor.getTestId(), getTestType());
         }
         return metadata;
     }
@@ -175,8 +192,8 @@ public class ConformanceTestRunner implements TestRunner {
             // This part is synchronized so that the listeners do not have to
             // deal with concurrency issues
             synchronized (listeners) {
-                listener.testCallExecuted(executor, getMetadata(), properties, time,
-                        throwable);
+                listener.testCallExecuted(executor, getMetadata(), properties,
+                        time, throwable);
             }
         }
     }
@@ -197,7 +214,8 @@ public class ConformanceTestRunner implements TestRunner {
         // notify listeners
         for (TestListener listener : listeners) {
             synchronized (listener) {
-                listener.testRunStarting(getMetadata(), testProperties, callCount);
+                listener.testRunStarting(getMetadata(), testProperties,
+                        callCount);
             }
         }
     }

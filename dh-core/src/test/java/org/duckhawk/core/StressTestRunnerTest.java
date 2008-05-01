@@ -62,7 +62,7 @@ public class StressTestRunnerTest extends TestCase {
                 TestListener listener = createMock(TestListener.class);
                 listener.testRunStarting(eq(metadata), isA(TestProperties.class), eq(25));
                 listener.testCallExecuted(isA(TestExecutor.class),
-                        eq(metadata), eq(emptyProperties), anyDouble(),
+                        eq(metadata), isA(TestProperties.class), anyDouble(),
                         eq((Throwable) null));
                 expectLastCall().times(25);
                 listener.testRunCompleted(eq(metadata), isA(TestProperties.class));
@@ -89,10 +89,10 @@ public class StressTestRunnerTest extends TestCase {
             protected TestExecutor buildClonedExecutor() throws Throwable {
                 // build an executor that does nothing (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
-                executor.run(emptyProperties);
+                executor.run(isA(TestProperties.class));
                 // check it's called 5 timed (timed runs) + 1 (warmup)
                 expectLastCall().times(5 + 1);
-                executor.check(emptyProperties);
+                executor.check(isA(TestProperties.class));
                 expectLastCall().times(5 + 1);
                 replay(executor);
                 
@@ -123,7 +123,7 @@ public class StressTestRunnerTest extends TestCase {
                 TestListener listener = createMock(TestListener.class);
                 listener.testRunStarting(eq(metadata), isA(TestProperties.class), eq(20));
                 listener.testCallExecuted(isA(TestExecutor.class),
-                        eq(metadata), eq(emptyProperties), anyDouble(),
+                        eq(metadata), isA(TestProperties.class), anyDouble(),
                         eq((Throwable) null));
                 expectLastCall().times(20);
                 listener.testRunCompleted(eq(metadata), isA(TestProperties.class));
@@ -134,7 +134,7 @@ public class StressTestRunnerTest extends TestCase {
             protected TestExecutor buildExecutor() throws Throwable {
                 // build an executor that does nothing (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
-                executor.run(emptyProperties);
+                executor.run(isA(TestProperties.class));
                 // check the thread running this thing is just one
                 expectLastCall().andAnswer(new IAnswer<Object>() {
                     public Object answer() throws Throwable {
@@ -148,7 +148,7 @@ public class StressTestRunnerTest extends TestCase {
                 });
                 // check it's called 20 timed (timed runs) + 1 (warmup)
                 expectLastCall().times(20 + 1);
-                executor.check(emptyProperties);
+                executor.check(isA(TestProperties.class));
                 expectLastCall().times(20 + 1);
                 expect(executor.getTestId()).andReturn("test").anyTimes();
                 replay(executor);
@@ -179,7 +179,7 @@ public class StressTestRunnerTest extends TestCase {
                 // that means
                 // the assert failed
                 listener.testCallExecuted(isA(TestExecutor.class),
-                        eq(metadata), eq(emptyProperties), anyDouble(),
+                        eq(metadata), isA(TestProperties.class), anyDouble(),
                         eq((Throwable) null));
                 expectLastCall().times(requests * numThreads);
                 listener.testRunCompleted(eq(metadata), isA(TestProperties.class));
@@ -207,7 +207,7 @@ public class StressTestRunnerTest extends TestCase {
             protected TestExecutor buildClonedExecutor() throws Throwable {
                 // build an executor that does nothing (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
-                executor.run(emptyProperties);
+                executor.run(isA(TestProperties.class));
                 // check the thread running this thing is just one
                 expectLastCall().andAnswer(new IAnswer<Object>() {
                     public Object answer() throws Throwable {
@@ -226,7 +226,7 @@ public class StressTestRunnerTest extends TestCase {
                 });
                 // check it's called requests times , plus one extra warm up call 
                 expectLastCall().times(requests + 1);
-                executor.check(emptyProperties);
+                executor.check(isA(TestProperties.class));
                 expectLastCall().times(requests + 1);
                 replay(executor);
                 
