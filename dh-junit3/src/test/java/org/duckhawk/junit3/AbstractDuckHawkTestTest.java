@@ -5,7 +5,6 @@ import junit.framework.TestCase;
 import org.duckhawk.core.ConformanceTestRunner;
 import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestRunner;
-import org.easymock.EasyMock;
 
 public class AbstractDuckHawkTestTest extends TestCase {
     
