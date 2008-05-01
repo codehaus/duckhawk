@@ -44,7 +44,7 @@ public class XercesJaxpTest extends ConformanceTest {
     		    "http://www.w3.org/2001/XMLSchema");
     	factory.setAttribute(
     		    "http://java.sun.com/xml/jaxp/properties/schemaSource",
-    		    getEnvironment(KEY_SCHEMA_RPATH));
+    		    getTestProperty(KEY_SCHEMA_RPATH));
    		
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Validator handler=new Validator();
@@ -102,9 +102,9 @@ public class XercesJaxpTest extends ConformanceTest {
 		"http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\" maxFeatures=\"5\"> " +
 		"<wfs:Query typeName=\"aw:SiteLocation\"> </wfs:Query> </wfs:GetFeature>";		
 
-		String host = (String) getEnvironment(KEY_HOST);
-		int port = (Integer) getEnvironment(KEY_PORT);
-		String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
+		String host = (String) getTestProperty(KEY_HOST);
+		int port = (Integer) getTestProperty(KEY_PORT);
+		String path = (String) getTestProperty(KEY_GS_PATH) + "/wfs";
 		String response = Communication.sendWFSPost(host, port, path, body);
 		
 		return response.replaceAll(regex, replacement);
