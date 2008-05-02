@@ -17,7 +17,7 @@ public class AbstractDuckHawkTestTest extends TestCase {
 
     public void testMissingMethod() {
         AbstractDuckHawkTest test = new AbstractDuckHawkTest(context) {
-            protected TestRunner getTestRunner() {
+            protected TestRunner getTestRunner(TestContext context) {
                 return new ConformanceTestRunner(context, buildTestExecutor());
             }
         };
@@ -27,7 +27,7 @@ public class AbstractDuckHawkTestTest extends TestCase {
     
     public void testPrivateMethod() {
         AbstractDuckHawkTest test = new AbstractDuckHawkTest(context) {
-            protected TestRunner getTestRunner() {
+            protected TestRunner getTestRunner(TestContext context) {
                 return new ConformanceTestRunner(context, buildTestExecutor());
             }
             
@@ -39,7 +39,7 @@ public class AbstractDuckHawkTestTest extends TestCase {
     
     public void testMinimal() {
         AbstractDuckHawkTest test = new AbstractDuckHawkTest(context) {
-            protected TestRunner getTestRunner() {
+            protected TestRunner getTestRunner(TestContext context) {
                 return new ConformanceTestRunner(context, buildTestExecutor());
             }
             

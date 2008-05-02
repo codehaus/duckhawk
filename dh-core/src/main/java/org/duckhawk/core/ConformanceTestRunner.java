@@ -52,6 +52,7 @@ public class ConformanceTestRunner implements TestRunner {
         // reset cancellation state and setup the test properties
         cancelled = false;
         TestProperties testProperties = new TestPropertiesImpl();
+        executor.init(context.getEnvironment(), testProperties);
         testProperties.put(TestExecutor.KEY_TEST_TYPE, TestType.conformance
                 .toString());
         fireStartEvent(testProperties, 1);

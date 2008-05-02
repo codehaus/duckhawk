@@ -10,6 +10,12 @@ package org.duckhawk.core;
  * 
  */
 public interface TestExecutor {
+    
+    /**
+     * The request being made during the test, if any.
+     */
+    public static final String KEY_DESCRIPTION = "test.description";
+    
     /**
      * The request being made during the test, if any.
      */
@@ -19,7 +25,7 @@ public interface TestExecutor {
      * The full response got back after the request was performed, if any
      */
     public static final String KEY_RESPONSE = "test.response";
-    
+
     /**
      * The name of the thread running the current request
      */
@@ -29,12 +35,13 @@ public interface TestExecutor {
      * The full response got back after the request was performed, if any
      */
     public static final String KEY_CALL_NUMBER = "test.callNumber";
-    
+
     /**
-     * The time when the call was executed, relative to the start of the test suite
+     * The time when the call was executed, relative to the start of the test
+     * suite
      */
     public static final String KEY_CALL_TIME = "test.callTimeMs";
-    
+
     /**
      * The kind of test being run
      */
@@ -75,23 +82,35 @@ public interface TestExecutor {
      * {@link TestExecutor} during a test run
      */
     public static final String KEY_TOTAL_TIME = "perf.totalTime";
-    
+
     /**
-     * A summary of the error messages collected during the
-     * {@link TestExecutor} test run
+     * A summary of the error messages collected during the {@link TestExecutor}
+     * test run
      */
     public static final String KEY_ERROR_SUMMARY = "conf.errorSummary";
-    
+
     /**
      * The number of errors occurred during the {@link TestExecutor} test run
      */
     public static final String KEY_ERROR_COUNT = "conf.errorCount";
-    
+
     /**
-     * The percentage of test calls that resulted in an error during the 
+     * The percentage of test calls that resulted in an error during the
      * {@link TestExecutor} test run
      */
     public static final String KEY_ERROR_PERCENTAGE = "conf.errorPercentage";
+
+    /**
+     * Gives the test an occasion to initialize itself by:
+     * <ul>
+     * <li>Reading properties from the test environment (the provided
+     * environment variable is to be assumed read only)</li>
+     * <li>Fill in the test properties for the whole run (they will be reported
+     * along with the test starting events)</li>
+     * 
+     * @param testProperties
+     */
+    public void init(TestProperties environment, TestProperties testProperties);
 
     /**
      * Executes the test and fills in the eventual test properties for this test
@@ -102,31 +121,34 @@ public interface TestExecutor {
      * @returns
      */
     public void run(TestProperties callProperties) throws Throwable;
-    
+
     /**
      * This method is called after run. Run is the timed part of the execution,
-     * check can take as much time as it sees fit to perform validity checks
-     * on the result without affecting the timing, but only the conformance
-     * of this test run
+     * check can take as much time as it sees fit to perform validity checks on
+     * the result without affecting the timing, but only the conformance of this
+     * test run
+     * 
      * @param callProperties
      * @throws Throwable
      */
     public void check(TestProperties callProperties) throws Throwable;
-    
+
     /**
      * Forcefully stops the current thread
      */
     public void cancel() throws Throwable;
-    
+
     /**
-     * Returns a deep copy of the executor, should be each bit equal to the original one,
-     * but completely independent of it
+     * Returns a deep copy of the executor, should be each bit equal to the
+     * original one, but completely independent of it
+     * 
      * @return
      */
     public TestExecutor cloneExecutor();
-    
+
     /**
      * Provides an identification for this test
+     * 
      * @return
      */
     public String getTestId();

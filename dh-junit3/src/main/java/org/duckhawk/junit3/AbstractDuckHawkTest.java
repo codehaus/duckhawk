@@ -23,14 +23,22 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
         PropertyTest, CancellableTest {
 
     /**
-     * The test context in which we're running
+     * The test context in which we're running (to be used only in order to
+     * create a runner)
      */
-    protected TestContext context;
+    private TestContext context;
 
     /**
      * The properties for the single test run.
      */
     private TestProperties properties;
+
+    /**
+     * The properties we got during the init phase (which should be the same as
+     * the ones in the context, but you never know what a custom runner might
+     * do)
+     */
+    private TestProperties enviroment;
 
     /**
      * If true, this tests has been cancelled
@@ -48,32 +56,11 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
         this.properties = new TestPropertiesImpl();
     }
 
-    /**
-     * Returns the environment in which the current test is running, that is,
-     * the set of properties contained in the test context
-     * 
-     * @return
-     */
-    public Object getTestProperty(String key) {
-        return context.getEnvironment().get(key);
-    }
+    protected abstract TestRunner getTestRunner(TestContext context);
 
-    /**
-     * Allows to store a per call property so that listeners will see it in the
-     * single call execution event
-     * 
-     * @param key
-     * @param value
-     */
-    public void putCallProperty(String key, Object value) {
-        properties.put(key, value);
-    }
-
-    public void fillProperties(TestProperties callProperties) {
-        callProperties.putAll(properties);
-    }
-
-    protected abstract TestRunner getTestRunner();
+    // //////////////////////////////////////////////////////////////////////////
+    // Execution management methods
+    // //////////////////////////////////////////////////////////////////////////
 
     public void cancel() {
         this.cancelled = true;
@@ -99,7 +86,7 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
         }
 
         // now run the test as requested
-        getTestRunner().runTests();
+        getTestRunner(context).runTests();
     }
 
     protected TestExecutor buildTestExecutor() {
@@ -122,5 +109,42 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
             fail("Method \"" + getName() + "\" should be public");
         }
         return runMethod;
+    }
+
+    // //////////////////////////////////////////////////////////////////////////
+    // Execution management methods
+    // //////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Returns the environment in which the current test is running, that is,
+     * the set of properties contained in the test context
+     * 
+     * @return
+     */
+    public Object getTestProperty(String key) {
+        return enviroment.get(key);
+    }
+
+    /**
+     * Allows to store a per call property so that listeners will see it in the
+     * single call execution event
+     * 
+     * @param key
+     * @param value
+     */
+    public void putCallProperty(String key, Object value) {
+        properties.put(key, value);
+    }
+
+    /**
+     * Used by the JUnit3 integration to provide back the call properties
+     * collected by the test during its execution. Tests should not use it, if you need to add a property to the call 
+     */
+    public void fillCallProperties(TestProperties callProperties) {
+        callProperties.putAll(properties);
+    }
+    
+    public void initEnviroment(TestProperties environment) {
+        this.enviroment = environment;
     }
 }

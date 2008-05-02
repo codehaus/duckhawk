@@ -14,12 +14,26 @@ class JUnitTestExecutor implements TestExecutor {
 
     protected Method checkMethod;
 
+    private Method initMethod;
+
     protected TestCase test;
 
     public JUnitTestExecutor(TestCase test, Method method) {
         this.test = test;
         this.runMethod = method;
         this.runMethod.setAccessible(true);
+        
+        // look up for the method that will be used for performing test property initialization
+        try {
+            String initMethodName = "init" + method.getName().substring(4);
+            initMethod = test.getClass().getDeclaredMethod(initMethodName,
+                    new Class[] { TestProperties.class });
+            initMethod.setAccessible(true);
+        } catch (NoSuchMethodException e) {
+            // ok, fine, no test properties init
+        }
+        
+        // look up for the method that will be used for performing un-timed checks
         try {
             String checkMethodName = "check" + method.getName().substring(4);
             checkMethod = test.getClass().getDeclaredMethod(checkMethodName,
@@ -41,7 +55,7 @@ class JUnitTestExecutor implements TestExecutor {
         } finally {
             if (test instanceof PropertyTest
                     && (currentException != null || checkMethod == null)) {
-                ((PropertyTest) test).fillProperties(callProperties);
+                ((PropertyTest) test).fillCallProperties(callProperties);
             }
         }
     }
@@ -57,7 +71,7 @@ class JUnitTestExecutor implements TestExecutor {
             throw e.getTargetException();
         } finally {
             if (test instanceof PropertyTest) {
-                ((PropertyTest) test).fillProperties(callProperties);
+                ((PropertyTest) test).fillCallProperties(callProperties);
             }
         }
     }
@@ -77,6 +91,24 @@ class JUnitTestExecutor implements TestExecutor {
     public String getTestId() {
         return runMethod.getDeclaringClass().getName() + "#"
                 + runMethod.getName();
+    }
+
+    public void init(TestProperties environment, TestProperties testProperties) {
+        if(test instanceof PropertyTest)
+            ((PropertyTest) test).initEnviroment(environment);
+        
+        if (initMethod == null)
+            return;
+
+        try {
+            initMethod.invoke(test, testProperties);
+        } catch (InvocationTargetException e) {
+            e.fillInStackTrace();
+            throw new RuntimeException(e.getTargetException());
+        } catch (Throwable t) {
+            throw new RuntimeException("Unexpected exception occurred "
+                    + "during executor initialization", t);
+        }
     }
 
 }

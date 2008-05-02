@@ -49,7 +49,7 @@ public abstract class PerformanceTest extends AbstractDuckHawkTest {
         this.random = random;
     }
 
-    protected TestRunner getTestRunner() {
+    protected TestRunner getTestRunner(TestContext context) {
         TestRunner runner;
         if (random != null)
             runner = new PerformanceTestRunner(context, buildTestExecutor(),

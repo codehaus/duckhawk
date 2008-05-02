@@ -4,6 +4,7 @@ package org.duckhawk.sample;
 import junit.textui.TestRunner;
 
 import org.duckhawk.core.TestExecutor;
+import org.duckhawk.core.TestProperties;
 import org.duckhawk.junit3.PerformanceTest;
 
 public class MathPerfTest extends PerformanceTest {
@@ -20,6 +21,11 @@ public class MathPerfTest extends PerformanceTest {
         super(TestSupport.getContext(), 50);
     }
 
+    public void initSqrt(TestProperties props) {
+        props.put(TestExecutor.KEY_DESCRIPTION, "This test just extracts the square root of 12.5, " +
+        		"but it's designed to fail in the check phase");
+    }
+    
     public void testSqrt() {
         putCallProperty(TestExecutor.KEY_REQUEST, "sqrt(12.5)");
         result = Math.sqrt(4);

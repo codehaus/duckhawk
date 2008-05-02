@@ -9,8 +9,11 @@ import java.util.List;
 public class StoppableTestExecutor implements TestExecutor {
 
     boolean canceled;
+
     boolean checkPerformed;
+
     boolean timedOut;
+
     List<StoppableTestExecutor> clonedExecutors = new ArrayList<StoppableTestExecutor>();
 
     public void cancel() throws Throwable {
@@ -23,21 +26,21 @@ public class StoppableTestExecutor implements TestExecutor {
 
     public void run(TestProperties callProperties) throws Throwable {
         long start = System.currentTimeMillis();
-        while(true) {
+        while (true) {
             // sleep a very little while
             try {
                 Thread.sleep(50);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 System.out.println("Stoppable test executor: " + e);
             }
-            
-            // check if cancelled 
-            if(canceled)
+
+            // check if cancelled
+            if (canceled)
                 break;
-            
+
             // make sure we don't stay here forever, the test should
             // not take more than 30 seconds
-            if((System.currentTimeMillis() - start) > 30000)
+            if ((System.currentTimeMillis() - start) > 30000)
                 timedOut = true;
         }
     }
@@ -50,5 +53,9 @@ public class StoppableTestExecutor implements TestExecutor {
 
     public String getTestId() {
         return "ThisIsTheStoppableTest";
+    }
+
+    public void init(TestProperties enviroment, TestProperties testProperties) {
+        // nothing to do here
     }
 }

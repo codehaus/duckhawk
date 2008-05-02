@@ -152,11 +152,11 @@ public class StopRunnerTest extends TestCase {
         }
     }
     
-    public static void main(String[] args) {
-        for (int i = 0; i < 100; i++) {
-            StopRunnerTest test = new StopRunnerTest();
-            test.setName("testStopStressTestRampUp");
-            junit.textui.TestRunner.run(test);
-        }
-    }
+//    public static void main(String[] args) {
+//        for (int i = 0; i < 100; i++) {
+//            StopRunnerTest test = new StopRunnerTest();
+//            test.setName("testStopStressTest");
+//            junit.textui.TestRunner.run(test);
+//        }
+//    }
 }

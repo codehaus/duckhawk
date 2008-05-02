@@ -103,6 +103,7 @@ public class TestRunnerScaffolding {
     protected TestExecutor buildExecutor() throws Throwable {
         // build an executor that does nothing (and set expectations)
         TestExecutor executor = createMock(TestExecutor.class);
+        executor.init(isA(TestProperties.class), isA(TestProperties.class));
         executor.run(isA(TestProperties.class));
         executor.check(isA(TestProperties.class));
         expect(executor.getTestId()).andReturn("test").anyTimes();

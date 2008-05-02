@@ -22,7 +22,7 @@ public abstract class StressTest extends AbstractDuckHawkTest {
         this.rampUp = rampUp;
     }
 
-    protected TestRunner getTestRunner() {
+    protected TestRunner getTestRunner(TestContext context) {
         return new StressTestRunner(context, buildTestExecutor(), times,
                 numThreads, rampUp);
     }

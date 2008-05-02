@@ -15,7 +15,7 @@ public abstract class ConformanceTest extends AbstractDuckHawkTest {
         super(context);
     }
 
-    protected TestRunner getTestRunner() {
+    protected TestRunner getTestRunner(TestContext context) {
         return new ConformanceTestRunner(context, buildTestExecutor());
     }
 }
