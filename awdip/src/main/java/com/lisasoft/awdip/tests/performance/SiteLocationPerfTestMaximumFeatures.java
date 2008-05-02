@@ -56,9 +56,9 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
     
     @Override
     protected void setUp() throws Exception {
-        String host = (String) getTestProperty(KEY_HOST);
-        int port = (Integer) getTestProperty(KEY_PORT);
-        String path = (String) getTestProperty(KEY_GS_PATH);
+        String host = (String) getEnvironment(KEY_HOST);
+        int port = (Integer) getEnvironment(KEY_PORT);
+        String path = (String) getEnvironment(KEY_GS_PATH);
         comm = new Communication(host, port);
 
         request = new Request(RequestMethod.POST,

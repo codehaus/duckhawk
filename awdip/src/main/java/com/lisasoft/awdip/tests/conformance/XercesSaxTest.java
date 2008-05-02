@@ -38,7 +38,7 @@ public class XercesSaxTest extends ConformanceTest {
 				true); 
 		parser.setProperty(
 				"http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
-				getTestProperty(KEY_SCHEMA_RPATH));
+				getEnvironment(KEY_SCHEMA_RPATH));
 
 		Validator handler = new Validator();
 		parser.setErrorHandler(handler);
@@ -97,9 +97,9 @@ public class XercesSaxTest extends ConformanceTest {
 		"http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\" maxFeatures=\"5\"> " +
 		"<wfs:Query typeName=\"aw:SiteLocation\"> </wfs:Query> </wfs:GetFeature>";		
 
-		String host = (String) getTestProperty(KEY_HOST);
-                int port = (Integer) getTestProperty(KEY_PORT);
-                String path = (String) getTestProperty(KEY_GS_PATH) + "/wfs";
+		String host = (String) getEnvironment(KEY_HOST);
+                int port = (Integer) getEnvironment(KEY_PORT);
+                String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
 		String response = Communication.sendWFSPost(host, port, path, body);
 		
 		return response.replaceAll(regex, replacement);
