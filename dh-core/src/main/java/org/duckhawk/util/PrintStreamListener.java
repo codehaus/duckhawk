@@ -10,7 +10,6 @@ import java.text.NumberFormat;
 
 import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestExecutor;
-import org.duckhawk.core.TestListener;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestSuiteListener;

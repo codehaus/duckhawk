@@ -1,6 +1,5 @@
 package org.duckhawk.util;
 
-import sun.io.Converters;
 
 /**
  * Simple utility class that does convert an exception into a string

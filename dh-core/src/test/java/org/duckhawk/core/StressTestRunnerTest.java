@@ -2,7 +2,6 @@ package org.duckhawk.core;
 
 import static org.easymock.EasyMock.*;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -49,8 +48,6 @@ public class StressTestRunnerTest extends TestCase {
     }
     
     public void testRunRepeatedMultiThread() throws Throwable {
-        final Set<Thread> threads = Collections
-                .synchronizedSet(new HashSet<Thread>());
         new TestRunnerScaffolding(TestType.stress, 5, 1) {
             @Override
             protected TestRunner buildTestRunner(TestContext context, TestExecutor executor) {

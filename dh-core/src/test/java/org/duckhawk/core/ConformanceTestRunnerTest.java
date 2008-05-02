@@ -1,13 +1,8 @@
 package org.duckhawk.core;
 import static org.easymock.EasyMock.*;
-
-import java.util.Collections;
-
 import junit.framework.TestCase;
 
-import org.easymock.EasyMock;
 import org.easymock.IAnswer;
-import org.easymock.IArgumentMatcher;
 
 public class ConformanceTestRunnerTest extends TestCase {
     
