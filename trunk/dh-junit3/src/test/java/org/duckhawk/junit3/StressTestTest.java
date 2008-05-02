@@ -1,9 +1,9 @@
 package org.duckhawk.junit3;
-import org.duckhawk.core.TestContext;
-import org.duckhawk.util.PerformanceSummarizer;
-
 import junit.framework.TestCase;
 import junit.framework.TestResult;
+
+import org.duckhawk.core.TestContext;
+import org.duckhawk.util.PerformanceSummarizer;
 
 public class StressTestTest extends TestCase {
     

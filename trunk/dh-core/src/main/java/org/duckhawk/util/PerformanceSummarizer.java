@@ -5,9 +5,9 @@ import java.text.NumberFormat;
 import java.util.Arrays;
 
 import org.duckhawk.core.TestExecutor;
+import org.duckhawk.core.TestListener;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
-import org.duckhawk.core.TestListener;
 
 /**
  * A performance numbers summarizer. It can be used direcly or act as a {@link TestListener} . <p> When used directly: <ul> <li>create the summarizer</li> <li>call  {@link #start(int)} </li> <li>call  {@link #accumulate(double)}  for each time event you want to record</li> <li>call  {@link #done()}  when the series end to have the statistics computed</li> <li>call the getters to grab the statistics</li> </ul> </p> <p> When used as a listener: <ul> <li>create the summarizer and put it in the listener chain before any other listener that might use the summaries <li>other listeners will be able to grab the following properties once the test run is complete: <ul> <li> {@link TestExecutor#KEY_CALL_COUNT} </li> <li> {@link TestExecutor#KEY_AVG_TIME} </li> <li> {@link TestExecutor#KEY_MED_TIME} </li> <li> {@link TestExecutor#KEY_MIN_TIME} </li> <li> {@link TestExecutor#KEY_MAX_TIME} </li> <li> {@link TestExecutor#KEY_TOTAL_TIME} </li> </ul> </ul>

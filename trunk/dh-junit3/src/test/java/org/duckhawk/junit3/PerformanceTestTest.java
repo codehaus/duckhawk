@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 import junit.framework.TestResult;
 
 import org.duckhawk.core.TestContext;
-import org.duckhawk.junit3.PerformanceTest;
 import org.duckhawk.util.PerformanceSummarizer;
 
 public class PerformanceTestTest extends TestCase {
