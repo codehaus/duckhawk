@@ -222,7 +222,6 @@ public class PerformanceTestRunner extends ConformanceTestRunner {
                 LOGGER.info("Sleep up to target wait interrupted");
             }
             sleepTime = targetTime - (System.nanoTime() - start) / 1000000;
-            System.out.println("Cancelled " + cancelled);
         }
     }
 

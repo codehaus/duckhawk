@@ -172,7 +172,6 @@ public class StressTestRunner extends PerformanceTestRunner {
                 } catch (InterruptedException e) {
                     // we want to wait for the threads no matter what
                 }
-                System.out.println("Notified!");
             }
         }
     }
@@ -185,7 +184,6 @@ public class StressTestRunner extends PerformanceTestRunner {
     }
 
     private synchronized void testEnded(LinearRunThread thread) {
-        System.out.println("Test ended for thread " + thread.getName());
         runningThreads.remove(thread);
         notifyAll();
     }
