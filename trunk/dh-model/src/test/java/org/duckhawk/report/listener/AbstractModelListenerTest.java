@@ -1,3 +1,4 @@
+package org.duckhawk.report.listener;
 import junit.framework.TestCase;
 
 import org.duckhawk.core.TestExecutor;
