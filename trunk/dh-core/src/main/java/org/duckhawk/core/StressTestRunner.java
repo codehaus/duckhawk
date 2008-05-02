@@ -1,6 +1,7 @@
 package org.duckhawk.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class StressTestRunner extends PerformanceTestRunner {
@@ -23,7 +24,7 @@ public class StressTestRunner extends PerformanceTestRunner {
     /**
      * Number of threads that still have to terminate
      */
-    protected List<LinearRunThread> runningThreads = new ArrayList<LinearRunThread>();
+    protected List<LinearRunThread> runningThreads = Collections.synchronizedList(new ArrayList<LinearRunThread>());
 
     /**
      * Number of seconds
@@ -99,6 +100,7 @@ public class StressTestRunner extends PerformanceTestRunner {
     public void runTests() {
         // fill in the test wide properties with the configuration params
         TestProperties testProperties = new TestPropertiesImpl();
+        executor.init(context.getEnvironment(), testProperties);
         testProperties.put(TestExecutor.KEY_TEST_TYPE, TestType.stress
                 .toString());
         testProperties.put(KEY_REPETITIONS, TestType.performance.toString());
@@ -132,7 +134,7 @@ public class StressTestRunner extends PerformanceTestRunner {
      * @param factory
      * @param metadata
      */
-    protected synchronized void runParallel() {
+    protected void runParallel() {
         double rampDelay = numThreads == 1 ? 0 : rampUp * 1000
                 / (numThreads - 1);
         long start = System.nanoTime();
@@ -148,22 +150,29 @@ public class StressTestRunner extends PerformanceTestRunner {
                 sleepUpToTarget(start, targetStartTime);
             }
 
-            // we may have woken up due to cancellation, check
-            if (cancelled)
-                break;
+            // if cancel happens, we don't want to start a thread in parallel
+            synchronized (this) {
+                // we may have woken up due to cancellation, check
+                if (cancelled)
+                    break;
 
-            // ok, start the thread
-            LinearRunThread thread = new LinearRunThread(executor
-                    .cloneExecutor());
-            runningThreads.add(thread);
-            thread.start();
+                // ok, start the thread
+                LinearRunThread thread = new LinearRunThread(executor
+                        .cloneExecutor());
+                runningThreads.add(thread);
+                thread.start();
+            }
         }
 
-        while (runningThreads.size() > 0) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                // we want to wait for the threads no matter what
+        // if cancel happens, we don't want to go back to sleep in parallel
+        synchronized (this) {
+            while (runningThreads.size() > 0) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    // we want to wait for the threads no matter what
+                }
+                System.out.println("Notified!");
             }
         }
     }
@@ -176,6 +185,7 @@ public class StressTestRunner extends PerformanceTestRunner {
     }
 
     private synchronized void testEnded(LinearRunThread thread) {
+        System.out.println("Test ended for thread " + thread.getName());
         runningThreads.remove(thread);
         notifyAll();
     }
@@ -185,11 +195,13 @@ public class StressTestRunner extends PerformanceTestRunner {
      * inform all the {@link TestExecutor} instances used in this runner to
      * actually stop execution
      */
-    public void cancel() {
+    public synchronized void cancel() {
         cancelled = true;
         try {
-            // if we have an active executor, time to
-            for (LinearRunThread thread : runningThreads) {
+            // if we have an active executor, time to cancel them
+            // (use a copy list to avoid locking the running threads list for too long)
+            List<LinearRunThread> currentList = new ArrayList<LinearRunThread>(runningThreads);
+            for (LinearRunThread thread : currentList) {
                 try {
                     if (thread.executor != null)
                         thread.executor.cancel();

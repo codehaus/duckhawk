@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import junit.framework.TestResult;
 
 import org.duckhawk.core.TestContext;
+import org.duckhawk.core.TestProperties;
 import org.duckhawk.util.PerformanceSummarizer;
 
 public class PerformanceTestTest extends TestCase {
@@ -112,4 +113,5 @@ public class PerformanceTestTest extends TestCase {
         // make sure only the testStuff method has been timed
         assertEquals(0.2, summarizer.getMedian(), 0.01);
     }
+    
 }

@@ -71,6 +71,7 @@ public class StressTestRunnerTest extends TestCase {
             protected TestExecutor buildExecutor() throws Throwable {
                 // build an executor that does nothing (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
+                executor.init(isA(TestProperties.class), isA(TestProperties.class));
                 expect(executor.cloneExecutor()).andAnswer(new IAnswer<TestExecutor>() {
                 
                     public TestExecutor answer() throws Throwable {
@@ -131,6 +132,7 @@ public class StressTestRunnerTest extends TestCase {
             protected TestExecutor buildExecutor() throws Throwable {
                 // build an executor that does nothing (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
+                executor.init(isA(TestProperties.class), isA(TestProperties.class));
                 executor.run(isA(TestProperties.class));
                 // check the thread running this thing is just one
                 expectLastCall().andAnswer(new IAnswer<Object>() {
@@ -188,6 +190,7 @@ public class StressTestRunnerTest extends TestCase {
             protected TestExecutor buildExecutor() throws Throwable {
                 // build an executor that does nothing (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
+                executor.init(isA(TestProperties.class), isA(TestProperties.class));
                 expect(executor.cloneExecutor()).andAnswer(new IAnswer<TestExecutor>() {
                 
                     public TestExecutor answer() throws Throwable {

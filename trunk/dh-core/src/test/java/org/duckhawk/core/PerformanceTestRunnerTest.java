@@ -53,6 +53,7 @@ public class PerformanceTestRunnerTest extends TestCase {
             protected TestExecutor buildExecutor() throws Throwable {
                 // build an executor that does nothing (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
+                executor.init(isA(TestProperties.class), isA(TestProperties.class));
                 executor.run(isA(TestProperties.class));
                 // check the thread running this thing is just one
                 expectLastCall().andAnswer(new IAnswer<Object>() {
@@ -114,6 +115,7 @@ public class PerformanceTestRunnerTest extends TestCase {
             protected TestExecutor buildExecutor() throws Throwable {
                 // build an executor that does nothing (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
+                executor.init(isA(TestProperties.class), isA(TestProperties.class));
                 executor.run(isA(TestProperties.class));
                 // check it's called 20 timed (timed runs) + 1 (warmup)
                 expectLastCall().times(20 + 1);

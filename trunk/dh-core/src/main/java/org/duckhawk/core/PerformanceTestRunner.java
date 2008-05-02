@@ -113,6 +113,7 @@ public class PerformanceTestRunner extends ConformanceTestRunner {
         // reset cancellation state and setup the test properties
         cancelled = false;
         TestProperties testProperties = new TestPropertiesImpl();
+        executor.init(context.getEnvironment(), testProperties);
         testProperties.put(TestExecutor.KEY_TEST_TYPE, TestType.performance
                 .toString());
         testProperties.put(KEY_REPETITIONS, repetitions);
@@ -214,13 +215,14 @@ public class PerformanceTestRunner extends ConformanceTestRunner {
                 // wake up after
                 // an interrupt, so now I'm making it sleep for a short time,
                 // check, sleep again, and so on
-                Thread.sleep(20);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 // forget about it and go back on sleeping if necessary
                 // that is, unless the execution has been canceled
-                System.out.println("Who disturbs my sleep?");
+                LOGGER.info("Sleep up to target wait interrupted");
             }
             sleepTime = targetTime - (System.nanoTime() - start) / 1000000;
+            System.out.println("Cancelled " + cancelled);
         }
     }
 

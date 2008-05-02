@@ -15,18 +15,27 @@ import org.duckhawk.core.TestProperties;
  * <li>store the properties in class fields (each test method is run in a
  * separate instance of the test class)</li>
  * <li>fill in the property map with those field values when
- * {@link #fillProperties(Map)} is called </li>
+ * {@link #fillCallProperties(Map)} is called (which will happen after the
+ * test/check method sequence is called)</li>
  * </ul>
  * 
  * @author Andrea Aime (TOPP)
  * 
  */
 public interface PropertyTest {
+
     /**
-     * This method is the bridge betweent the test class fields and the
-     * {@link org.duckhawk.core.TestExecutor#fillProperties(Map)} method.
+     * Provide the test with the environment properties
+     * 
+     * @param environment
+     */
+    public void initEnviroment(TestProperties environment);
+
+    /**
+     * This method is the bridge between the test class fields and the
+     * {@link org.duckhawk.core.TestExecutor#fillCallProperties(Map)} method.
      * 
      * @param callProperties
      */
-    public void fillProperties(TestProperties callProperties);
+    public void fillCallProperties(TestProperties callProperties);
 }

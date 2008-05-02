@@ -31,6 +31,7 @@ public class ConformanceTestRunnerTest extends TestCase {
             protected TestExecutor buildExecutor() throws Throwable {
                 // build an executor that does throw an exception (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
+                executor.init(isA(TestProperties.class), isA(TestProperties.class));
                 executor.run(isA(TestProperties.class));
                 expectLastCall().andThrow(t);
                 expect(executor.getTestId()).andReturn("test");
@@ -80,6 +81,7 @@ public class ConformanceTestRunnerTest extends TestCase {
             protected TestExecutor buildExecutor() throws Throwable {
                 // build an executor that does throw an exception (and set expectations)
                 TestExecutor executor = createMock(TestExecutor.class);
+                executor.init(isA(TestProperties.class), isA(TestProperties.class));
                 executor.run(isA(TestProperties.class));
                 expectLastCall().andAnswer(new IAnswer<Object>() {
 
