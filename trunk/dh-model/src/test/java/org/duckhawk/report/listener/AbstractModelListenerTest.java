@@ -1,6 +1,7 @@
 package org.duckhawk.report.listener;
 import junit.framework.TestCase;
 
+import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
@@ -32,6 +33,8 @@ public class AbstractModelListenerTest extends TestCase {
     private TestPropertiesImpl emptyProperties;
 
     private TestExecutor executor;
+
+    private TestRun run;
     
 
     private class TestModelLister extends AbstractModelListener {
@@ -59,7 +62,7 @@ public class AbstractModelListenerTest extends TestCase {
 
         @Override
         protected void testSuiteStarting(TestRun run) throws Exception {
-            // not used
+            AbstractModelListenerTest.this.run = run;
         }
     }
     
@@ -177,5 +180,18 @@ public class AbstractModelListenerTest extends TestCase {
         assertSame(endResult1.getTestRun(), endResult2.getTestRun());
         assertNotSame(startResult1.getTest(), startResult2.getTest());
         assertNotSame(endResult1.getTest(), endResult2.getTest());
+    }
+    
+    public void testSuiteEvents() {
+        TestProperties environment = new TestPropertiesImpl();
+        environment.put("one", new Integer(1));
+        environment.put("host", "www.google.com");
+        TestContext context = new TestContext(metadata.getProductId(), metadata.getProductVersion(), environment);
+        listener.testSuiteStarting(context);
+        
+        assertNotNull(run);
+        assertEquals(run.getProductVersion().getProduct().getName(), context.getProductId());
+        assertEquals(run.getProductVersion().getVersion(), context.getProductVersion());
+        assertEquals(run.getEnvironment(), context.getEnvironment());
     }
 }

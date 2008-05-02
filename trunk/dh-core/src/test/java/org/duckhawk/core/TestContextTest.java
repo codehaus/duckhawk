@@ -18,5 +18,8 @@ public class TestContextTest extends TestCase {
         } catch (Exception e) {
             // fine
         }
+        
+        // provide no listeners and no properties, should not break anyways
+        new TestContext("product", "version", null, null);
     }
 }
