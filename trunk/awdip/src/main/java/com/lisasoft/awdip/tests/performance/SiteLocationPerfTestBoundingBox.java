@@ -60,7 +60,7 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         comm = new Communication(host, port);
 
         request = new Request(RequestMethod.POST,
-                "/" + getTestProperty(KEY_HOST) + "/TestWfsPost");
+                "/" + getTestProperty(KEY_GS_PATH) + "/TestWfsPost");
 
         data.put("url", "http://" + host + ":" + port + "/"
                 + path + "/wfs");
