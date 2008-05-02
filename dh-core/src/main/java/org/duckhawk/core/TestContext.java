@@ -45,7 +45,10 @@ public class TestContext {
             throw new IllegalArgumentException("VersionId not specified");
         this.environment = environment == null ? new TestPropertiesImpl()
                 : environment;
-        this.listeners = Collections.unmodifiableList(Arrays.asList(listeners));
+        if(listeners != null)
+            this.listeners = Collections.unmodifiableList(Arrays.asList(listeners));
+        else
+            this.listeners = Collections.emptyList();
         this.productId = productId;
         this.productVersion = productVersion;
         this.state = TestSuiteState.ready;

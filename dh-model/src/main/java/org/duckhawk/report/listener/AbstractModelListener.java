@@ -25,7 +25,6 @@ public abstract class AbstractModelListener implements TestListener,
      * TODO: replace these with a GT2 SoftValueHashMap or anything else that
      * ensures these maps won't grow too much *
      */
-
     private Map<String, Map<String, TestRun>> testRunCache = new HashMap<String, Map<String, TestRun>>();
 
     private Map<TestMetadata, TestResult> testResultCache = new HashMap<TestMetadata, TestResult>();
@@ -33,7 +32,7 @@ public abstract class AbstractModelListener implements TestListener,
     public void testSuiteStarting(TestContext context) {
         try {
             testSuiteStarting(getTestRun(context.getProductId(), context
-                    .getProductVersion()));
+                    .getProductVersion(), context.getEnvironment()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -45,7 +44,7 @@ public abstract class AbstractModelListener implements TestListener,
     public void testSuiteCompleted(TestContext context) {
         try {
             testSuiteCompleted(getTestRun(context.getProductId(), context
-                    .getProductVersion()));
+                    .getProductVersion(), context.getEnvironment()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -108,7 +107,7 @@ public abstract class AbstractModelListener implements TestListener,
         }
     }
 
-    protected TestRun getTestRun(String productId, String versionId) {
+    protected TestRun getTestRun(String productId, String versionId, TestProperties environment) {
         TestRun run = null;
         Product product = null;
         ProductVersion productVersion = null;
@@ -119,6 +118,8 @@ public abstract class AbstractModelListener implements TestListener,
                 productVersion = runs.values().iterator().next()
                         .getProductVersion();
                 run = new TestRun(new Date(), false, productVersion);
+                if(environment != null)
+                    run.getEnvironment().putAll(environment);
                 runs.put(versionId, run);
             }
         } else {
@@ -127,6 +128,8 @@ public abstract class AbstractModelListener implements TestListener,
             run = new TestRun(new Date(), false, productVersion);
             runs = new HashMap<String, TestRun>();
             runs.put(versionId, run);
+            if(environment != null)
+                run.getEnvironment().putAll(environment);
             testRunCache.put(productId, runs);
         }
         return run;
@@ -136,7 +139,7 @@ public abstract class AbstractModelListener implements TestListener,
         TestResult result = testResultCache.get(metadata);
         if (result == null) {
             TestRun testRun = getTestRun(metadata.getProductId(), metadata
-                    .getProductVersion());
+                    .getProductVersion(), null);
             Test test = new Test(metadata.getTestId(), TestType.undetermined,
                     testRun.getProductVersion().getProduct());
             result = new TestResult(test, testRun);

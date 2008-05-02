@@ -3,6 +3,9 @@ package org.duckhawk.report.model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.duckhawk.core.TestProperties;
+import org.duckhawk.core.TestPropertiesImpl;
+
 /**
  * @author   Andrea Aime (TOPP)
  */
@@ -26,6 +29,8 @@ public class TestRun {
     boolean reference;
 
     ProductVersion productVersion;
+    
+    TestProperties environment;
 
     protected TestRun() {
     }
@@ -103,5 +108,15 @@ public class TestRun {
 
     public String getIdentifier() {
         return productVersion.getProduct().getName() + "-" + productVersion.getVersion() + "-" + ISO_FORMAT.format(getDate());
+    }
+    
+    /**
+     * @return
+     * @uml.property  name="testProperties"
+     */
+    public TestProperties getEnvironment() {
+        if (environment == null)
+            environment = new TestPropertiesImpl();
+        return environment;
     }
 }

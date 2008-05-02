@@ -1,3 +1,5 @@
+package org.duckhawk.report.listener;
+
 import static org.custommonkey.xmlunit.XMLAssert.*;
 
 import java.io.BufferedReader;
@@ -13,6 +15,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.custommonkey.xmlunit.XMLUnit;
+import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestPropertiesImpl;
@@ -45,8 +48,8 @@ public class XStreamDumperTest extends TestCase {
         root = new File("./target");
         dumper = new XStreamDumper(root);
         executor = EasyMock.createNiceMock(TestExecutor.class);
-        metadata = new TestMetadata("Product",
-                "VapourWareEdition", "ThisIsTheTest", TestType.undetermined);
+        metadata = new TestMetadata("Product", "VapourWareEdition",
+                "ThisIsTheTest", TestType.undetermined);
         metadata2 = new TestMetadata("ThisIsTheSecondTest", "Product",
                 "VapourWareEdition", TestType.undetermined);
         emptyProperties = new TestPropertiesImpl();
@@ -249,10 +252,11 @@ public class XStreamDumperTest extends TestCase {
         // detail, thus the following test
         assertXpathEvaluatesTo("0", "count(//testRun)", doc);
     }
-    
+
     public void testDetailSortingKeys() throws Exception {
         dumper.testRunStarting(metadata, emptyProperties, 25);
-        dumper.testCallExecuted(executor, metadata, sampleProperties, 2.5,
+        dumper
+                .testCallExecuted(executor, metadata, sampleProperties, 2.5,
                         null);
         dumper.testRunCompleted(metadata, sampleProperties);
         dumper.close();
@@ -267,17 +271,54 @@ public class XStreamDumperTest extends TestCase {
 
         // open an parse the detail report
         File detailFile = detailDir.listFiles()[0];
-        print(detailFile);
+        // print(detailFile);
         Document doc = XMLUnit.buildControlDocument(new InputSource(
                 new FileInputStream(detailFile)));
-        
-        // now make sure the callProperties keys are sorted in alphabetical order
+
+        // now make sure the callProperties keys are sorted in alphabetical
+        // order
         List<String> keys = new ArrayList<String>(sampleProperties.keySet());
         Collections.sort(keys);
-        assertXpathEvaluatesTo("" + keys.size(), "count(//callProperties/entry)", doc);
+        assertXpathEvaluatesTo("" + keys.size(),
+                "count(//callProperties/entry)", doc);
         for (int i = 0; i < keys.size(); i++) {
-            assertXpathEvaluatesTo(keys.get(i), "//callProperties/entry[" + (i + 1) + "]/@key", doc);
+            assertXpathEvaluatesTo(keys.get(i), "//callProperties/entry["
+                    + (i + 1) + "]/@key", doc);
         }
+    }
+
+    public void testEnviroment() throws Exception {
+        TestPropertiesImpl env = new TestPropertiesImpl();
+        env.put("one", new Integer(1));
+        env.put("msg", "Hey there!");
+        TestContext context = new TestContext("product", "version", env);
+        dumper.testSuiteStarting(context);
+        dumper.testSuiteCompleted(context);
+
+        // make sure the detail dir is there and that we have no detail reports
+        String mainFilePath = dumper.getMainReportFile().getAbsolutePath();
+        File detailDir = new File(mainFilePath.substring(0, mainFilePath
+                .length() - 3));
+        assertTrue(detailDir.exists());
+        assertEquals(0, detailDir.listFiles().length);
+
+        // open an parse the main report
+        // print(dumper.getMainReportFile());
+        Document doc = XMLUnit.buildControlDocument(new InputSource(
+                new FileInputStream(dumper.getMainReportFile())));
+
+        assertXpathEvaluatesTo("1", "count(/TestSummary)", doc);
+        assertXpathEvaluatesTo("1", "count(/TestSummary/TestInformation)", doc);
+        assertXpathEvaluatesTo(context.getProductId(), "//productVersion/name",
+                doc);
+        assertXpathEvaluatesTo(context.getProductVersion(),
+                "//productVersion/version", doc);
+        assertXpathEvaluatesTo("2",
+                "count(//TestInformation/environment/entry)", doc);
+        assertXpathEvaluatesTo("1",
+                "//TestInformation/environment/entry[@key=\"one\"]", doc);
+        assertXpathEvaluatesTo("Hey there!",
+                "//TestInformation/environment/entry[@key=\"msg\"]", doc);
     }
 
 }
