@@ -121,7 +121,7 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
      * 
      * @return
      */
-    public Object getTestProperty(String key) {
+    public Object getEnvironment(String key) {
         return enviroment.get(key);
     }
 
