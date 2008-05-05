@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.commons.httpclient.HttpException;
+import org.custommonkey.xmlunit.XMLAssert;
+import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.junit3.PerformanceTest;
+import org.xml.sax.SAXException;
 
 import static com.lisasoft.awdip.AWDIPTestSupport.*;
 
@@ -134,6 +137,14 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
+    
+    public void checkSiteLocationBoundingBox100()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("1",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
+
 
     public void testSiteLocationBoundingBox10000()
     throws HttpException, IOException {
@@ -149,7 +160,15 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
+    
+    public void checkSiteLocationBoundingBox10000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("10",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
 
+    
     public void testSiteLocationBoundingBox40000()
     throws HttpException, IOException {
         double[] bbox = getGrownBbox("bb40000");
@@ -164,6 +183,14 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
+    
+    public void checkSiteLocationBoundingBox40000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("37",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
+
 
     public void testSiteLocationBoundingBox90000()
     throws HttpException, IOException {
@@ -179,7 +206,15 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
+    
+    public void checkSiteLocationBoundingBox90000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("70",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
 
+    
     public void testSiteLocationBoundingBox160000()
     throws HttpException, IOException {
         double[] bbox = getGrownBbox("bb160000");
@@ -193,7 +228,15 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
 
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
-    } 
+    }
+    
+    public void checkSiteLocationBoundingBox160000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("110",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
+    
 
     public void testSiteLocationBoundingBox250000()
     throws HttpException, IOException {
@@ -209,6 +252,14 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
+    
+    public void checkSiteLocationBoundingBox250000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("160",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
+    
 
     public void testSiteLocationBoundingBox360000()
     throws HttpException, IOException {
@@ -224,6 +275,14 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
+    
+    public void checkSiteLocationBoundingBox360000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("181",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
+
 
     public void testSiteLocationBoundingBox490000()
     throws HttpException, IOException {
@@ -239,6 +298,14 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
+    
+    public void checkSiteLocationBoundingBox490000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("217",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
+
 
     public void testSiteLocationBoundingBox640000()
     throws HttpException, IOException {
@@ -254,6 +321,14 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
+    
+    public void checkSiteLocationBoundingBox640000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("226",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
+
 
     public void testSiteLocationBoundingBox810000()
     throws HttpException, IOException {
@@ -269,6 +344,14 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
+    
+    public void checkSiteLocationBoundingBox810000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("324",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
+
 
     public void testSiteLocationBoundingBox1000000()
     throws HttpException, IOException {
@@ -284,6 +367,14 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
+    
+    public void checkSiteLocationBoundingBox1000000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("444",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
+
 
     public void testSiteLocationBoundingBox1440000()
     throws HttpException, IOException {
@@ -299,6 +390,14 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
+    
+    public void checkSiteLocationBoundingBox1440000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("709",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
+
 
     public void testSiteLocationBoundingBox1960000()
     throws HttpException, IOException {
@@ -314,6 +413,14 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     } 
+    
+    public void checkSiteLocationBoundingBox1960000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("871",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
+
 
     public void testSiteLocationBoundingBox2560000()
     throws HttpException, IOException {
@@ -329,6 +436,14 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
+    
+    public void checkSiteLocationBoundingBox2560000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("1020",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
+
 
     public void testSiteLocationBoundingBox3240000()
     throws HttpException, IOException {
@@ -344,6 +459,14 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
+    
+    public void checkSiteLocationBoundingBox3240000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("1153",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
+
 
     public void testSiteLocationBoundingBox4000000()
     throws HttpException, IOException {
@@ -359,5 +482,14 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
+
+    public void checkSiteLocationBoundingBox4000000()
+    throws XpathException, SAXException, IOException{
+        XMLAssert.assertXpathEvaluatesTo("1327",
+                "//wfs:FeatureCollection/@numberOfFeatures",
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+    }
+
+  
 }
 
