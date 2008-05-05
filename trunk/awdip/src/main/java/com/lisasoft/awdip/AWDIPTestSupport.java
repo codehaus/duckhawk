@@ -9,6 +9,7 @@ import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestPropertiesImpl;
 import org.duckhawk.report.listener.XStreamDumper;
+import org.duckhawk.util.ConformanceSummarizer;
 import org.duckhawk.util.PerformanceSummarizer;
 import org.duckhawk.util.PrintStreamListener;
 
@@ -46,8 +47,9 @@ public class AWDIPTestSupport {
             
             // setup the context
             context = new TestContext("AWDIP", "0.1", environment,
-                    new PerformanceSummarizer(), //
-                    new PrintStreamListener(true, true), // 
+                    new PerformanceSummarizer(),
+                    new ConformanceSummarizer(),
+                    new PrintStreamListener(true, true), 
                     new XStreamDumper(new File("./target/dh-report")));
         }
         return context;
