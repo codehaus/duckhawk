@@ -16,8 +16,8 @@ public class TestSupport {
     public static TestContext getContext() {
         if (context == null) {
             TestProperties env = new TestPropertiesImpl();
-            env.put("title", "This is a fictous test to show up conformance, "
-                    + "performance and stress testing abilities "
+            env.put("description", "This is a fictous test to show up "
+                    + "conformance, performance and stress testing abilities "
                     + "of DuckHawk with the JUnit3 integration");
             context = new TestContext("Math", "1.0", env,
                     new PerformanceSummarizer(), //
