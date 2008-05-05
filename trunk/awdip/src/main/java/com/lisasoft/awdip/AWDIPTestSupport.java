@@ -20,13 +20,13 @@ public class AWDIPTestSupport {
     public static final String KEY_HOST = "host"; 
     public static final String KEY_PORT = "port";
     public static final String KEY_GS_PATH = "geoserverPath";
-    public static final String KEY_SCHEMA_RPATH = "geoserverPath";
+    public static final String KEY_SCHEMA_RPATH = "schemaPath";
 
     public static TestContext getAwdipContext() {
         if (context == null) {
             // setup the environment
             TestProperties environment = new TestPropertiesImpl();
-            environment.put(KEY_HOST, "thor3.adl.ardec.com.au");
+            environment.put(KEY_HOST, "venus.adl.ardec.com.au");
             environment.put(KEY_PORT, 5580);
             environment.put(KEY_GS_PATH, "geoserver");
             environment.put(KEY_SCHEMA_RPATH, "src/main/resources/schemas/all.xsd");
