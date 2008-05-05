@@ -138,6 +138,15 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
     }
 
     /**
+     * Returns a the property of the current call.
+     * 
+     * @param key
+     */
+    public Object getCallProperty(String key) {
+        return properties.get(key);
+    }
+    
+    /**
      * Used by the JUnit3 integration to provide back the call properties
      * collected by the test during its execution. Tests should not use it, if you need to add a property to the call 
      */
