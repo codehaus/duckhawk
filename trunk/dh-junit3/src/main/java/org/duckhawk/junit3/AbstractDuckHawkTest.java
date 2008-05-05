@@ -53,6 +53,7 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
      */
     public AbstractDuckHawkTest(TestContext context) {
         this.context = context;
+        this.enviroment = context.getEnvironment();        
         this.properties = new TestPropertiesImpl();
     }
 
