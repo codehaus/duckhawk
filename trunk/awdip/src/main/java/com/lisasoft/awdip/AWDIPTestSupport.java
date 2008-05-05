@@ -1,7 +1,10 @@
 package com.lisasoft.awdip;
 
 import java.io.File;
+import java.util.HashMap;
 
+import org.custommonkey.xmlunit.SimpleNamespaceContext;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestPropertiesImpl;
@@ -24,6 +27,16 @@ public class AWDIPTestSupport {
 
     public static TestContext getAwdipContext() {
         if (context == null) {
+            // init xmlunit (from geotools' WFSVTestSupport)
+            HashMap<String, String> namespaces = new HashMap<String, String>();
+            namespaces.put("wfs", "http://www.opengis.net/wfs");
+            namespaces.put("ows", "http://www.opengis.net/ows");
+            namespaces.put("ogc", "http://www.opengis.net/ogc");
+            namespaces.put("gml", "http://www.opengis.net/gml");
+            namespaces.put("xs", "http://www.w3.org/2001/XMLSchema");
+            namespaces.put("aw", "http://www.water.gov.au/awdip");
+            XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(namespaces));             
+            
             // setup the environment
             TestProperties environment = new TestPropertiesImpl();
             environment.put(KEY_HOST, "venus.adl.ardec.com.au");
