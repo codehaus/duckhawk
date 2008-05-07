@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.lisasoft</groupId>
+  <artifactId>awdip-jetty</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>DuckHawk AWDIP - Jetty</name>
+  
+  <parent>
+    <groupId>org.duckhawk</groupId>
+	<artifactId>duckhawk</artifactId>
+	<version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <scm>
+    <connection>scm:svn:http://svn.codehaus.org/duckhawk/trunk/awdip/</connection>
+    <url>http://svn.codehaus.org/duckhawk/trunk/awdip/</url>
+  </scm>
+
+  <description>
+	AWDIP Duckhawk Tests
+  </description>
+
+  <organization>
+    <name>The DuckHawk project</name>
+    <url>http://docs.codehaus.org/display/DH/Home</url>
+  </organization>
+  <inceptionYear>2008</inceptionYear>
+
+  <licenses>
+    <license>
+      <name>Lesser General Public License (LGPL)</name>
+      <url>http://www.gnu.org/copyleft/lgpl.txt</url>
+    </license>
+  </licenses>
+
+  <dependencies>
+    <!--  Jetty starter dependencies -->
+    <dependency>
+      <groupId>commons-el</groupId>
+      <artifactId>commons-el</artifactId>
+      <exclusions>
+      </exclusions>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jsp-2.0</artifactId>
+      <type>pom</type>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+        <groupId>xerces</groupId>
+        <artifactId>xercesImpl</artifactId>
+    </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+  
+ 
+</project>
