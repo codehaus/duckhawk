@@ -103,7 +103,7 @@ public class StressTestRunner extends PerformanceTestRunner {
         executor.init(context.getEnvironment(), testProperties);
         testProperties.put(TestExecutor.KEY_TEST_TYPE, TestType.stress
                 .toString());
-        testProperties.put(KEY_REPETITIONS, TestType.performance.toString());
+        testProperties.put(KEY_REPETITIONS, repetitions);
         testProperties.put(KEY_NUMTHREADS, numThreads);
         testProperties.put(KEY_RAMPUP, rampUp);
         if (random != null) {
