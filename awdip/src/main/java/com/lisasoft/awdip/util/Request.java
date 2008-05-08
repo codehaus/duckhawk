@@ -57,6 +57,14 @@ public class Request {
     }
 
     
+    /**
+     * Returns the value of a key-value pair named "body"
+     * 
+     * @return value for key "body" (null if not set).
+     */
+    public String getBody() {
+        return data.get("body");
+    }
     
     /**
      * Get request method

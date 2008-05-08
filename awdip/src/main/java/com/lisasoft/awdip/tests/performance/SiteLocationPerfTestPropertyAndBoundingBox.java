@@ -2,17 +2,12 @@ package com.lisasoft.awdip.tests.performance;
 
 import static com.lisasoft.awdip.AWDIPTestSupport.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.commons.httpclient.HttpException;
 import org.duckhawk.core.TestExecutor;
-import org.duckhawk.core.TestListener;
 import org.duckhawk.junit3.PerformanceTest;
-import org.duckhawk.report.listener.XStreamDumper;
-import org.duckhawk.util.PerformanceSummarizer;
-import org.duckhawk.util.PrintStreamListener;
 
 import com.lisasoft.awdip.AWDIPTestSupport;
 import com.lisasoft.awdip.util.Communication;
@@ -41,6 +36,15 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
     
     String response = "";
 
+    /** properties that should make it into the output */
+    static final String KEY_BBOX = "params.boundingBox";
+    static final String KEY_BBOX_SIZE = "params.boundingBoxSize";
+    
+    /** force properties to be in the output, even if "null" */
+    static final String[] forcePropertyOutput = new String[]{
+            KEY_BBOX,
+            KEY_BBOX_SIZE
+    }; 
     
     /** Bounding box to start with, and size changes for the tests **/
     double[] bboxInit;
@@ -54,7 +58,7 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
     
 
     public SiteLocationPerfTestPropertyAndBoundingBox() {
-        super(AWDIPTestSupport.getAwdipContext(), 5);
+        super(AWDIPTestSupport.getAwdipContext(forcePropertyOutput), 5);
 
     }
     
@@ -66,11 +70,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
         String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
         comm = new Communication(host, port);
 
-        request = new Request(RequestMethod.POST,
-                "/" + path + "/TestWfsPost");
-
-        data.put("url", "http://" + host + ":" + port + "/"
-                + path + "/wfs");
+        comm = new Communication(host, port);
+        request = new Request(RequestMethod.POST, "/" + path);
         
         bboxInit = new double[]{127.2, -17.9, 127.3, -17.8};
 
@@ -98,24 +99,6 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
     }
 
     
-    
-    static TestListener[] listeners;
-    
-    private static TestListener[] getListeners() {
-        if (listeners == null) {
-            listeners = new TestListener[] {
-                    new PerformanceSummarizer(), //
-                    new PrintStreamListener(true, true), // 
-                    new XStreamDumper(new File("./target/dh-report"))
-            };
-        }
-        return listeners;
-    }
-
-
-
-
-    
     /** Creates a new bounding box, based on the given key. The values for the
      * key are retrieved from  @see bbGrow. The base bounding box is @see bbox.
      * @param key desired bbGrow offsets 
@@ -136,8 +119,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bboxInit),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-        putCallProperty("boundingBox", bboxInit);
-        putCallProperty("boundingBoxSize", "100");
+        putCallProperty(KEY_BBOX, bboxInit);
+        putCallProperty(KEY_BBOX_SIZE, "100");
         
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -153,8 +136,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));        
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "10000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "10000");
         
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -170,8 +153,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "40000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "40000");
         
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -187,8 +170,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "90000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "90000");
         
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -204,8 +187,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "160000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "160000");
         
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -221,8 +204,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-       putCallProperty("boundingBox", bbox);
-       putCallProperty("boundingBoxSize", "250000");
+       putCallProperty(KEY_BBOX, bbox);
+       putCallProperty(KEY_BBOX_SIZE, "250000");
        
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -238,8 +221,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "360000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "360000");
         
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -255,8 +238,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "490000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "490000");
         
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -272,8 +255,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "640000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "640000");
         
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -289,8 +272,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "810000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "810000");
         
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -306,8 +289,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "1000000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "1000000");
         
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -323,8 +306,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "1440000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "1440000");
         
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -340,8 +323,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "1960000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "1960000");
         
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -357,8 +340,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "2560000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "2560000");
         
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -374,8 +357,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "3240000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "3240000");
         
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -391,8 +374,8 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
                 Gml.createBoundingBoxFilter(bbox),
                 Gml.createPropertyFilter("aw:samplingRegimeType", "monitoring"));
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "4000000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "4000000");
                 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);

@@ -37,6 +37,16 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
     
     String response = "";
 
+    /** properties that should make it into the output */
+    static final String KEY_BBOX = "params.boundingBox";
+    static final String KEY_BBOX_SIZE = "params.boundingBoxSize";
+    
+    /** force properties to be in the output, even if "null" */
+    static final String[] forcePropertyOutput = new String[]{
+            KEY_BBOX,
+            KEY_BBOX_SIZE
+    }; 
+
     
     /** Bounding box to start with, and size changes for the tests **/
     double[] bboxInit;
@@ -50,8 +60,7 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
     
 
     public SiteLocationPerfTestBoundingBox() {
-        super(getAwdipContext(), 5);
-
+        super(getAwdipContext(forcePropertyOutput), 5);     
     }
     
     
@@ -59,14 +68,10 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
     protected void setUp() throws Exception {
         String host = (String) getEnvironment(KEY_HOST);
         int port = (Integer) getEnvironment(KEY_PORT);
-        String path = (String) getEnvironment(KEY_GS_PATH);
+        String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
+        
         comm = new Communication(host, port);
-
-        request = new Request(RequestMethod.POST,
-                "/" + getEnvironment(KEY_GS_PATH) + "/TestWfsPost");
-
-        data.put("url", "http://" + host + ":" + port + "/"
-                + path + "/wfs");
+        request = new Request(RequestMethod.POST, "/" + path);
         
         bboxInit = new double[]{127.2, -17.9, 127.3, -17.8};
 
@@ -128,8 +133,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
     throws HttpException, IOException {
         String body = createBoundingBoxRequest(bboxInit);
 
-        putCallProperty("boundingBox", bboxInit);
-        putCallProperty("boundingBoxSize", "100");
+        putCallProperty("KEY_BBOX", bboxInit);
+        putCallProperty("params.boundingBoxSize", "100");
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -151,8 +156,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         double[] bbox = getGrownBbox("bb10000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "10000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "10000");
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -168,14 +173,14 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
                 (String)getCallProperty(TestExecutor.KEY_RESPONSE));
     }
 
-    
+
     public void testSiteLocationBoundingBox40000()
     throws HttpException, IOException {
         double[] bbox = getGrownBbox("bb40000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "40000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "40000");
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -197,8 +202,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         double[] bbox = getGrownBbox("bb90000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "90000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "90000");
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -220,8 +225,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         double[] bbox = getGrownBbox("bb160000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "160000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "160000");
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -243,8 +248,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         double[] bbox = getGrownBbox("bb250000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "250000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "250000");
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -266,8 +271,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         double[] bbox = getGrownBbox("bb360000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "360000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "360000");
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -289,8 +294,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         double[] bbox = getGrownBbox("bb490000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "490000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "490000");
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -312,8 +317,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         double[] bbox = getGrownBbox("bb640000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "640000");        
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "640000");        
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -324,7 +329,7 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
     
     public void checkSiteLocationBoundingBox640000()
     throws XpathException, SAXException, IOException{
-        XMLAssert.assertXpathEvaluatesTo("226",
+        XMLAssert.assertXpathEvaluatesTo("266",
                 "//wfs:FeatureCollection/@numberOfFeatures",
                 (String)getCallProperty(TestExecutor.KEY_RESPONSE));
     }
@@ -335,8 +340,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         double[] bbox = getGrownBbox("bb810000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "810000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "810000");
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -358,8 +363,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         double[] bbox = getGrownBbox("bb1000000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "1000000");        
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "1000000");        
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -381,8 +386,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         double[] bbox = getGrownBbox("bb1440000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "1440000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "1440000");
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -404,8 +409,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         double[] bbox = getGrownBbox("bb1960000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "1960000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "1960000");
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -427,8 +432,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         double[] bbox = getGrownBbox("bb2560000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "2560000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "2560000");
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -450,8 +455,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         double[] bbox = getGrownBbox("bb3240000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "3240000");        
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "3240000");        
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -473,8 +478,8 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
         double[] bbox = getGrownBbox("bb4000000");
         String body = createBoundingBoxRequest(bbox);
 
-        putCallProperty("boundingBox", bbox);
-        putCallProperty("boundingBoxSize", "4000000");
+        putCallProperty(KEY_BBOX, bbox);
+        putCallProperty(KEY_BBOX_SIZE, "4000000");
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -489,7 +494,6 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
                 "//wfs:FeatureCollection/@numberOfFeatures",
                 (String)getCallProperty(TestExecutor.KEY_RESPONSE));
     }
-
   
 }
 

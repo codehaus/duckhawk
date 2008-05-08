@@ -59,13 +59,9 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         String host = (String) getEnvironment(KEY_HOST);
         int port = (Integer) getEnvironment(KEY_PORT);
         String path = (String) getEnvironment(KEY_GS_PATH);
+
         comm = new Communication(host, port);
-
-        request = new Request(RequestMethod.POST,
-                "/" + path + "/TestWfsPost");
-
-        data.put("url", "http://" + host + ":" + port + "/"
-                + path + "/wfs");
+        request = new Request(RequestMethod.POST, "/" + path);
         
         bboxAll = new double[]{52.0, -81.0, 1-149.0, 8.0};
     }
@@ -73,7 +69,7 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
     public String createMaxFeaturesRequest(String typeName, int maxFeatures) {
         StringBuffer request = new StringBuffer();
         request.append("<wfs:GetFeature service=\"WFS\" version=\"1.1.0\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:om=\"http://www.opengis.net/om/1.0\" xmlns:wfs=\"http://www.opengis.net/wfs\" xmlns:sa=\"http://www.opengis.net/sampling/1.0\" xmlns:aw=\"http://www.water.gov.au/awdip\"  xmlns:ows=\"http://www.opengis.net/ows\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd\"");
-        request.append("maxFeatures=\""+maxFeatures+"\">");
+        request.append(" maxFeatures=\""+maxFeatures+"\">");
         request.append(" <wfs:Query typeName=\""+typeName+"\">");
         request.append("<ogc:Filter>");
         request.append(Gml.createBoundingBoxFilter(bboxAll));
