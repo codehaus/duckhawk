@@ -10,8 +10,6 @@ import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.duckhawk.core.TestExecutor;
-
 
 
 public class Communication {
@@ -50,7 +48,8 @@ public class Communication {
     }    
 
     /**
-     * Send request to server
+     * Send request to server. HTTP GET will use all values of the key-value
+     * pair, HTTP POST will only use the value of a key named "body".
      * 
      * @param request Request to the server
      * @return Response the server made
@@ -65,7 +64,8 @@ public class Communication {
             case GET:
                 return sendGetRequest(request.getDataAsNameValuePairs(), uri);
             case POST:
-                return sendPostRequest(request.getDataAsNameValuePairs(), uri);
+                //return sendPostRequest(request.getDataAsNameValuePairs(), uri);
+                return sendPostRequest(request.getBody(), uri);
             default:
                 throw new HttpException("Request Method not supported");
         }
@@ -112,28 +112,7 @@ public class Communication {
      * Data is set as key/value pair.
      * 
      * @param data Data to send
-     * @param uri Adress to send the data
-     * @return Response the server made
-     * 
-     * @throws HttpException
-     * @throws IOException
-     */
-    private String sendPostRequest(NameValuePair[] data, URI uri)
-            throws HttpException, IOException {
-        reqPost.setURI(uri);
-        reqPost.setRequestBody(data);
-        client.executeMethod(reqPost);
-        return reqPost.getResponseBodyAsString();
-    }
-    
-    
-    /**
-     * Send POST request to server
-     * 
-     * Data is set as key/value pair.
-     * 
-     * @param data Data to send
-     * @param uri Adress to send the data
+     * @param uri Address to send the data
      * @return Response the server made
      * 
      * @throws HttpException
@@ -143,7 +122,7 @@ public class Communication {
             throws HttpException, IOException {
         reqPost.setURI(uri);
         reqPost.setRequestHeader(
-                "Content-type", "text/xml; charset=ISO-8859-1");
+                "Content-type", "text/xml; charset=UTF-8");
         reqPost.setRequestEntity(new StringRequestEntity(data));
                 
         client.executeMethod(reqPost);

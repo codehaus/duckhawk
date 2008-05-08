@@ -13,6 +13,26 @@ import org.apache.commons.httpclient.NameValuePair;
  *
  */
 public class Util {
+    
+    /**
+     * Concats two string arrays
+     *  
+     * @param a array the other one will be appended to
+     * @param b array that will be appended to the other one
+     * @return
+     */
+    public static String[] concatStringArrays(String[] a, String[] b) {
+        if (a == null && b == null) return new String[0];
+        if (a == null) return b;
+        if (b == null) return a;
+        
+        String[] c = new String[a.length + b.length];
+        System.arraycopy(a, 0, c, 0, a.length);
+        System.arraycopy(b, 0, c, a.length, b.length);
+        return c;
+    }
+    
+    
     /**
      * Converts an hashMap to a nameValuePair array
      * 
