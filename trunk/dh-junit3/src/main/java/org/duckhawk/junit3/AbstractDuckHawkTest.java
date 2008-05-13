@@ -125,6 +125,16 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
     public Object getEnvironment(String key) {
         return enviroment.get(key);
     }
+    
+    /**
+     * Allows to store a environment property after initialization. For example
+     * to set the description of a test.
+     * 
+     * @return
+     */
+    public Object putEnvironment(String key, Object value) {
+        return enviroment.put(key, value);
+    }
 
     /**
      * Allows to store a per call property so that listeners will see it in the
