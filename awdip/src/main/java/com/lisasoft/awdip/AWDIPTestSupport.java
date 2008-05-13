@@ -29,6 +29,7 @@ public class AWDIPTestSupport {
     public static final String KEY_PORT = "port";
     public static final String KEY_GS_PATH = "geoserverPath";
     public static final String KEY_SCHEMA_RPATH = "schemaPath";
+    public static final String KEY_DESCRIPTION = "description";
 
     
     /**
