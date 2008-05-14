@@ -73,5 +73,17 @@ public class Util {
         }
         
         return nameValuePairs;
-    }    
+    } 
+    
+    /** swaps to values within an double array
+     * 
+     * @param array Array to swap
+     * @param a swap this value...
+     * @param b ...with this one
+     */
+    public static void swapDouble(double[] array, int a, int b) {
+        double tmp = array[a];
+        array[a] = array[b];
+        array[b] = tmp;
+    }
 }

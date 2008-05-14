@@ -59,6 +59,13 @@ public class AWDIPTestSupport {
             namespaces.put("gml", "http://www.opengis.net/gml");
             namespaces.put("xs", "http://www.w3.org/2001/XMLSchema");
             namespaces.put("aw", "http://www.water.gov.au/awdip");
+            namespaces.put("sa", "http://www.opengis.net/sampling/1.0");
+            namespaces.put("om", "http://www.opengis.net/om/1.0");
+            namespaces.put("swe", "http://www.opengis.net/swe/1.0.1");
+            namespaces.put("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            namespaces.put("cv", "http://www.opengis.net/cv/0.2.1");
+            namespaces.put("xlink", "http://www.w3.org/1999/xlink");      
+            
             XMLUnit.setXpathNamespaceContext(
                     new SimpleNamespaceContext(namespaces));             
             
