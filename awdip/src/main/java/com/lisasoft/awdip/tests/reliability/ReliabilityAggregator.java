@@ -54,6 +54,8 @@ public class ReliabilityAggregator extends PerformanceTest {
     
     public ReliabilityAggregator() {
         super(getAwdipContext(forcePropertyOutput), 5);
+        random.setSeed(100);
+        currentRandom = random.nextInt(NUMBER_OF_TESTS);
     }
     
     public void initReliabilty(TestProperties props) {
