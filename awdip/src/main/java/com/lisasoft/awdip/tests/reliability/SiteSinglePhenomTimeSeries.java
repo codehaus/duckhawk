@@ -19,7 +19,7 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestProperties;
-import org.duckhawk.junit3.StressTest;
+import org.duckhawk.junit3.ConformanceTest;
 import org.xml.sax.SAXException;
 
 import com.lisasoft.awdip.util.Communication;
@@ -29,12 +29,12 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
 
 
 /**
- * Tests the performance of the SiteSinglePhenomTimeSeriesFeatures
+ * Tests the conformance of the SiteSinglePhenomTimeSeriesFeatures
  * 
  * @author vmische
  *
  */
-public class SiteSinglePhenomTimeSeries extends StressTest {
+public class SiteSinglePhenomTimeSeries extends ConformanceTest {
     static Communication comm;
 
     /** data sent to the server (body of the POST message) */
@@ -64,13 +64,23 @@ public class SiteSinglePhenomTimeSeries extends StressTest {
     
     
     public SiteSinglePhenomTimeSeries() {
-        super(getAwdipContext(), 5, 1, 0);
+        super(getAwdipContext(forcePropertyOutput));
         putEnvironment(KEY_DESCRIPTION,
                 "Tests the singlePhenomTimeSeries feature type.");
     }
     
+    /** Constructor for reliability aggregator
+     * 
+     * @param dummy Dummy parameter to make distinction from default constructor
+     */ 
+    public SiteSinglePhenomTimeSeries(Object dummy) {
+        this();
+        setUp();
+    }   
+    
+    
     @Override
-    protected void setUp() throws Exception {
+    protected void setUp() {
         String host = (String) getEnvironment(KEY_HOST);
         int port = (Integer) getEnvironment(KEY_PORT);
         String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";

@@ -18,7 +18,7 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestProperties;
-import org.duckhawk.junit3.StressTest;
+import org.duckhawk.junit3.ConformanceTest;
 import org.xml.sax.SAXException;
 
 import com.lisasoft.awdip.util.Communication;
@@ -29,12 +29,12 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
 
 
 /**
- * Tests the performance of the SiteSinglePhenomTimeSeriesFeatures
+ * Tests the conformance of the SiteSinglePhenomTimeSeriesFeatures
  * 
  * @author vmische
  *
  */
-public class SiteLocation extends StressTest {
+public class SiteLocation extends ConformanceTest {
     static Communication comm;
 
     /** data sent to the server (body of the POST message) */
@@ -67,12 +67,21 @@ public class SiteLocation extends StressTest {
     
     
     public SiteLocation() {
-        super(getAwdipContext(), 1, 1, 0);
+        super(getAwdipContext(forcePropertyOutput));
         putEnvironment(KEY_DESCRIPTION,
                 "Request all features of type SiteLocation within a randomly " +
                 "(within a certain range) chosen bounding box. Maximum " +
                 "number of returned features is 1000");  
     }
+    
+    /** Constructor for reliability aggregator
+     * 
+     * @param dummy Dummy parameter to make distinction from default constructor
+     */ 
+    public SiteLocation(Object dummy) {
+        this();
+        setUp();
+    }    
     
     @Override
     protected void setUp() throws Exception {
