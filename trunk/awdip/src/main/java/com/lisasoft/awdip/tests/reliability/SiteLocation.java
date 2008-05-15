@@ -56,7 +56,7 @@ public class SiteLocation extends ConformanceTest {
             KEY_BBOX
     }; 
     
-    Random rand = new Random();
+    Random random = new Random();
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     
     // set bounding box range. Bounding box coordinate order:
@@ -71,7 +71,8 @@ public class SiteLocation extends ConformanceTest {
         putEnvironment(KEY_DESCRIPTION,
                 "Request all features of type SiteLocation within a randomly " +
                 "(within a certain range) chosen bounding box. Maximum " +
-                "number of returned features is 1000");  
+                "number of returned features is 1000");
+        random.setSeed(100);
     }
     
     /** Constructor for reliability aggregator
@@ -84,7 +85,7 @@ public class SiteLocation extends ConformanceTest {
     }    
     
     @Override
-    protected void setUp() throws Exception {
+    protected void setUp() {
         String host = (String) getEnvironment(KEY_HOST);
         int port = (Integer) getEnvironment(KEY_PORT);
         String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
@@ -108,7 +109,7 @@ public class SiteLocation extends ConformanceTest {
         
         for (int i=0; i<bbox.length; i++) {
             interval = maxBbox[i] - minBbox[i];
-            bbox[i] = minBbox[i] + (interval*rand.nextFloat());
+            bbox[i] = minBbox[i] + (interval*random.nextFloat());
         }
         
         // ensure min values are bigger than max values

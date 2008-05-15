@@ -59,7 +59,7 @@ public class SiteSinglePhenomTimeSeries extends ConformanceTest {
     }; 
     
     
-    Random rand = new Random();
+    Random random = new Random();
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     
     
@@ -67,6 +67,7 @@ public class SiteSinglePhenomTimeSeries extends ConformanceTest {
         super(getAwdipContext(forcePropertyOutput));
         putEnvironment(KEY_DESCRIPTION,
                 "Tests the singlePhenomTimeSeries feature type.");
+        random.setSeed(100);
     }
     
     /** Constructor for reliability aggregator
@@ -113,8 +114,8 @@ public class SiteSinglePhenomTimeSeries extends ConformanceTest {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         long rangeStartLong = rangeStart.getTime();
         long interval = rangeEnd.getTime()-rangeStartLong;
-        long startDateLong =rangeStartLong+(long)(interval*rand.nextFloat());
-        long endDateLong = rangeStartLong+(long)(interval*rand.nextFloat());
+        long startDateLong =rangeStartLong+(long)(interval*random.nextFloat());
+        long endDateLong = rangeStartLong+(long)(interval*random.nextFloat());
         
         return (startDateLong < endDateLong)
                 ? new String[]{format.format(new Date(startDateLong)),
