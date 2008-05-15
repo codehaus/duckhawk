@@ -148,7 +148,7 @@ public class PerformanceTestRunner extends ConformanceTestRunner {
         // use System.nanoTime() to control the advancement
         long[] targets = new long[repetitions];
         for (int i = 0; i < targets.length; i++) {
-            targets[i] = (long) (random.nextDouble() * time * 10e9);
+            targets[i] = (long) (random.nextDouble() * time * 1e9);
         }
         // sort them so that we can use them in a wait and run loop
         Arrays.sort(targets);
@@ -204,7 +204,7 @@ public class PerformanceTestRunner extends ConformanceTestRunner {
      * @param targetTime
      */
     protected void sleepUpToTarget(long start, long targetTime) {
-        long sleepTime = targetTime - (System.nanoTime() - start) / 1000000;
+        long sleepTime = targetTime - System.nanoTime();
         while (sleepTime > 0) {
             // first off check the execution has not been canceled
             if (cancelled)
@@ -221,7 +221,7 @@ public class PerformanceTestRunner extends ConformanceTestRunner {
                 // that is, unless the execution has been canceled
                 LOGGER.info("Sleep up to target wait interrupted");
             }
-            sleepTime = targetTime - (System.nanoTime() - start) / 1000000;
+            sleepTime = targetTime - System.nanoTime();
         }
     }
 
