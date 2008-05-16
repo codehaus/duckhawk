@@ -7,9 +7,8 @@ import java.util.HashMap;
 
 import org.apache.commons.httpclient.HttpException;
 import org.duckhawk.core.TestExecutor;
-import org.duckhawk.junit3.PerformanceTest;
+import org.duckhawk.junit3.StressTest;
 
-import com.lisasoft.awdip.AWDIPTestSupport;
 import com.lisasoft.awdip.util.Communication;
 import com.lisasoft.awdip.util.Gml;
 import com.lisasoft.awdip.util.Request;
@@ -25,7 +24,7 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
  * @author vmische
  *
  */
-public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest  {
+public class SiteLocationTestPropertyAndBoundingBox extends StressTest  {
     static Communication comm;
     
     /** data sent to the server (path and body of the POST message) */
@@ -56,18 +55,27 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
      */
     HashMap<String,double[]> bboxGrow;
     
-
-    public SiteLocationPerfTestPropertyAndBoundingBox() {
-        super(AWDIPTestSupport.getAwdipContext(forcePropertyOutput), 5);
-
+    
+    /** Use as performance test with one thread */
+    public SiteLocationTestPropertyAndBoundingBox() {
+        this(getPerfTimes(), 1, 0);
     }
+    
+  
+    /** For load tests with multiple threads */
+    public SiteLocationTestPropertyAndBoundingBox(int times, int numThreads,
+            int rampUp) {
+        super(getAwdipContext(), times, numThreads, rampUp);
+        putEnvironment(KEY_DESCRIPTION,
+                "Test with single property filter and growing bounding box");        
+    }      
     
     
     @Override
     protected void setUp() throws Exception {
         String host = (String) getEnvironment(KEY_HOST);
         int port = (Integer) getEnvironment(KEY_PORT);
-        String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
+        String path = (String) getEnvironment(KEY_GS_PATH);
         comm = new Communication(host, port);
 
         comm = new Communication(host, port);
@@ -366,7 +374,7 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
-
+/*
     public void testSiteLocationBoundingBox4000000()
     throws HttpException, IOException {
         double[] bbox = getGrownBbox("bb4000000");
@@ -383,5 +391,6 @@ public class SiteLocationPerfTestPropertyAndBoundingBox extends PerformanceTest 
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }
+*/    
 }
 

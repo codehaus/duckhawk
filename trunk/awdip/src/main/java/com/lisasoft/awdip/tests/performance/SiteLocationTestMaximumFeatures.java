@@ -7,9 +7,8 @@ import java.util.HashMap;
 
 import org.apache.commons.httpclient.HttpException;
 import org.duckhawk.core.TestExecutor;
-import org.duckhawk.junit3.PerformanceTest;
+import org.duckhawk.junit3.StressTest;
 
-import com.lisasoft.awdip.AWDIPTestSupport;
 import com.lisasoft.awdip.util.Communication;
 import com.lisasoft.awdip.util.Gml;
 import com.lisasoft.awdip.util.Request;
@@ -25,7 +24,7 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
  * @author vmische
  *
  */
-public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
+public class SiteLocationTestMaximumFeatures extends StressTest  {
     static Communication comm;
     
     /** data sent to the server (path and body of the POST message) */
@@ -47,12 +46,20 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
      */
     HashMap<String,double[]> bboxGrow;
     
-
-    public SiteLocationPerfTestMaximumFeatures() {
-        super(AWDIPTestSupport.getAwdipContext(), 5);
+    /** Use as performance test with one thread */
+    public SiteLocationTestMaximumFeatures() {
+        this(getPerfTimes(), 1, 0);
 
     }
     
+    /** For load tests with multiple threads */
+    public SiteLocationTestMaximumFeatures(int times, int numThreads,
+            int rampUp) {
+        super(getAwdipContext(), times, numThreads, rampUp);
+        putEnvironment(KEY_DESCRIPTION,
+                    "Test with bounding box around the whole data, " +
+                    "increasing maxmimumFeatures.");
+    }    
     
     @Override
     protected void setUp() throws Exception {
@@ -63,7 +70,10 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         comm = new Communication(host, port);
         request = new Request(RequestMethod.POST, "/" + path);
         
-        bboxAll = new double[]{52.0, -81.0, 1-149.0, 8.0};
+        // This bounding box fails on BOM data set
+        //bboxAll = new double[]{52.0, -81.0, -149.0, 8.0};
+        // so I use a smaller one
+        bboxAll = new double[]{52.0, -81.0, 180.0, 8.0};
     }
 
     public String createMaxFeaturesRequest(String typeName, int maxFeatures) {
@@ -209,7 +219,7 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);            
     }    
-
+/*
     public void testSiteLocationMaxFeatures1500()
     throws HttpException, IOException {
         String body =  createMaxFeaturesRequest("aw:SiteLocation", 1500);
@@ -462,6 +472,7 @@ public class SiteLocationPerfTestMaximumFeatures extends PerformanceTest  {
 
         response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);         
-    }    
+    }
+*/
 }
 

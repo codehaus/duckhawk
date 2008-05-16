@@ -7,10 +7,11 @@ import org.apache.commons.httpclient.HttpException;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.duckhawk.core.TestExecutor;
-import org.duckhawk.junit3.PerformanceTest;
+import org.duckhawk.junit3.StressTest;
 import org.xml.sax.SAXException;
 
 import static com.lisasoft.awdip.AWDIPTestSupport.*;
+
 
 import com.lisasoft.awdip.util.Communication;
 import com.lisasoft.awdip.util.Gml;
@@ -26,7 +27,7 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
  * @author vmische
  *
  */
-public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
+public class SiteLocationTestBoundingBox extends StressTest  {
     static Communication comm;
 
     /** data sent to the server (path and body of the POST message) */
@@ -59,8 +60,18 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
     HashMap<String,double[]> bboxGrow;
     
 
-    public SiteLocationPerfTestBoundingBox() {
-        super(getAwdipContext(forcePropertyOutput), 5);     
+    /** Use as performance test with one thread */
+    public SiteLocationTestBoundingBox() {
+        this(getPerfTimes(), 1, 0);     
+    }
+
+    
+    /** For load tests with multiple threads */
+    public SiteLocationTestBoundingBox(int times, int numThreads,
+            int rampUp) {
+        super(getAwdipContext(forcePropertyOutput), times, numThreads, rampUp);
+        putEnvironment(KEY_DESCRIPTION,
+            "Test with growing bounding box. No maxFeatures limit.");        
     }
     
     
@@ -68,7 +79,7 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
     protected void setUp() throws Exception {
         String host = (String) getEnvironment(KEY_HOST);
         int port = (Integer) getEnvironment(KEY_PORT);
-        String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
+        String path = (String) getEnvironment(KEY_GS_PATH);
         
         comm = new Communication(host, port);
         request = new Request(RequestMethod.POST, "/" + path);
@@ -472,7 +483,7 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
                 (String)getCallProperty(TestExecutor.KEY_RESPONSE));
     }
 
-
+    /*
     public void testSiteLocationBoundingBox4000000()
     throws HttpException, IOException {
         double[] bbox = getGrownBbox("bb4000000");
@@ -494,6 +505,6 @@ public class SiteLocationPerfTestBoundingBox extends PerformanceTest  {
                 "//wfs:FeatureCollection/@numberOfFeatures",
                 (String)getCallProperty(TestExecutor.KEY_RESPONSE));
     }
-  
+*/  
 }
 
