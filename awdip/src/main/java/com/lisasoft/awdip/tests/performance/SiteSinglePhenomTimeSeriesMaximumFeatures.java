@@ -5,6 +5,7 @@ import static com.lisasoft.awdip.AWDIPTestSupport.KEY_HOST;
 import static com.lisasoft.awdip.AWDIPTestSupport.KEY_PORT;
 import static com.lisasoft.awdip.AWDIPTestSupport.KEY_DESCRIPTION;
 import static com.lisasoft.awdip.AWDIPTestSupport.getAwdipContext;
+import static com.lisasoft.awdip.AWDIPTestSupport.getPerfTimes;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestProperties;
-import org.duckhawk.junit3.PerformanceTest;
+import org.duckhawk.junit3.StressTest;
 import org.xml.sax.SAXException;
 
 import com.lisasoft.awdip.util.Communication;
@@ -29,7 +30,7 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
  * @author vmische
  *
  */
-public class SiteSinglePhenomTimeSeriesMaximumFeatures extends PerformanceTest {
+public class SiteSinglePhenomTimeSeriesMaximumFeatures extends StressTest {
     static Communication comm;
 
     /** data sent to the server (body of the POST message) */
@@ -40,21 +41,30 @@ public class SiteSinglePhenomTimeSeriesMaximumFeatures extends PerformanceTest {
     
     String response = "";
     
+    
+    /** Use as performance test with one thread */
     public SiteSinglePhenomTimeSeriesMaximumFeatures() {
-        super(getAwdipContext(), 5);
-        putEnvironment(KEY_DESCRIPTION,
-                "Testing the impact of maxFeatures for requesting a single" +
-                "phenomenon type at any date. Steps for PREC_TotD ranges" +
-                "from 200 to 1800 with step size 200; for PREC_TotM from " +
-                "10 to 110 with step size 10; for PREC_TotY from 1000 to" +
-                "13000 with step size 1000");
+        this(getPerfTimes(), 1, 0);
     }
+
+    /** For load tests with multiple threads */
+    public SiteSinglePhenomTimeSeriesMaximumFeatures(int times, int numThreads,
+            int rampUp) {
+        super(getAwdipContext(), times, numThreads, rampUp);
+        putEnvironment(KEY_DESCRIPTION,
+                "This test tests the impact of restricting the returned data" +
+                "to a certain period (days/month). It tests one phenomenon" +
+                "type (PREC_TotD and PREC_TotM) between several dates. Don't" +
+                "interpret to much into this test, as you never know how many" +
+                "features get returned");
+    }       
+    
     
     @Override
     protected void setUp() throws Exception {
         String host = (String) getEnvironment(KEY_HOST);
         int port = (Integer) getEnvironment(KEY_PORT);
-        String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
+        String path = (String) getEnvironment(KEY_GS_PATH);
 
         comm = new Communication(host, port);
         request = new Request(RequestMethod.POST, "/" + path);

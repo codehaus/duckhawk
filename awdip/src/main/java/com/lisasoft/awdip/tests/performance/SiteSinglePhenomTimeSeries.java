@@ -5,6 +5,7 @@ import static com.lisasoft.awdip.AWDIPTestSupport.KEY_HOST;
 import static com.lisasoft.awdip.AWDIPTestSupport.KEY_PORT;
 import static com.lisasoft.awdip.AWDIPTestSupport.KEY_DESCRIPTION;
 import static com.lisasoft.awdip.AWDIPTestSupport.getAwdipContext;
+import static com.lisasoft.awdip.AWDIPTestSupport.getPerfTimes;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestProperties;
-import org.duckhawk.junit3.PerformanceTest;
+import org.duckhawk.junit3.StressTest;
 import org.xml.sax.SAXException;
 
 import com.lisasoft.awdip.util.Communication;
@@ -29,7 +30,7 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
  * @author vmische
  *
  */
-public class SiteSinglePhenomTimeSeries extends PerformanceTest {
+public class SiteSinglePhenomTimeSeries extends StressTest {
     static Communication comm;
 
     /** data sent to the server (body of the POST message) */
@@ -40,17 +41,25 @@ public class SiteSinglePhenomTimeSeries extends PerformanceTest {
     
     String response = "";
     
+    /** Use as performance test with one thread */
     public SiteSinglePhenomTimeSeries() {
-        super(getAwdipContext(), 1);
+        this(getPerfTimes(), 1, 0);
+    }
+    
+    
+    /** For load tests with multiple threads */
+    public SiteSinglePhenomTimeSeries(int times, int numThreads,
+            int rampUp) {
+        super(getAwdipContext(), times, numThreads, rampUp);
         putEnvironment(KEY_DESCRIPTION,
                 "Tests the singlePhenomTimeSeries feature type.");
-    }
+    }          
     
     @Override
     protected void setUp() throws Exception {
         String host = (String) getEnvironment(KEY_HOST);
         int port = (Integer) getEnvironment(KEY_PORT);
-        String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
+        String path = (String) getEnvironment(KEY_GS_PATH);
 
         comm = new Communication(host, port);
         request = new Request(RequestMethod.POST, "/" + path);
@@ -158,7 +167,7 @@ public class SiteSinglePhenomTimeSeries extends PerformanceTest {
     public void initOnePhenomenonTypeAnyDate50(TestProperties props) {
         props.put(TestExecutor.KEY_DESCRIPTION,
             "Test one type of phenomena at any date with a maximum of" +
-            "50 features");
+            "50 features (else data would be too much).");
 
         String body = Gml.createAndFilterMaxFeaturesRequest(
                 "aw:SiteSinglePhenomTimeSeries",
@@ -183,7 +192,7 @@ public class SiteSinglePhenomTimeSeries extends PerformanceTest {
     public void initOnePhenomenonTypeOneDate50(TestProperties props) {
         props.put(TestExecutor.KEY_DESCRIPTION,
             "Test one type of phenomena at one date with a maximum of" +
-            "50 features.");
+            "50 features (else data would be too much).");
         
         String body = Gml.createAndFilterMaxFeaturesRequest(
                 "aw:SiteSinglePhenomTimeSeries",
@@ -209,7 +218,7 @@ public class SiteSinglePhenomTimeSeries extends PerformanceTest {
     public void initOnePhenomenonTypeBetweenTwoDates50(TestProperties props) {
         props.put(TestExecutor.KEY_DESCRIPTION,
                 "Test one type of phenomena between two datse with a" +
-                "maximum of 50 features.");
+                "maximum of 50 features (else data would be too much).");
                     
         String body = Gml.createAndFilterMaxFeaturesRequest(
                 "aw:SiteSinglePhenomTimeSeries",

@@ -31,6 +31,13 @@ public class AWDIPTestSupport {
     public static final String KEY_SCHEMA_RPATH = "schemaPath";
     public static final String KEY_DESCRIPTION = "description";
 
+    // startup settings for performance tests
+    static int perfTimes = 1;
+    
+    // startup settings for load tests
+    static int loadTimes = 1;
+    static int loadNumThreads = 1;
+    static int loadRampUp = 5;
     
     /**
      * Setting up the environment for the AWDIP test suite.
@@ -74,7 +81,7 @@ public class AWDIPTestSupport {
             //environment.put(KEY_HOST, "thor3.adl.ardec.com.au");
             environment.put(KEY_HOST, "venus.adl.ardec.com.au");
             environment.put(KEY_PORT, 5580);
-            environment.put(KEY_GS_PATH, "geoserver");
+            environment.put(KEY_GS_PATH, "geoserver/wfs");
             environment.put(KEY_SCHEMA_RPATH,
                     "src/main/resources/schemas/all.xsd");
             
@@ -97,5 +104,21 @@ public class AWDIPTestSupport {
                     new XStreamDumper(new File("./target/dh-report")));
         }
         return context;
+    }
+
+    public static int getPerfTimes() {
+        return perfTimes;
+    }
+
+    public static int getLoadTimes() {
+        return loadTimes;
+    }
+
+    public static int getLoadNumThreads() {
+        return loadNumThreads;
+    }
+
+    public static int getLoadRampUp() {
+        return loadRampUp;
     }
 }

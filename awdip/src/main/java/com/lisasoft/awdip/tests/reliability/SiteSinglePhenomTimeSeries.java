@@ -84,7 +84,7 @@ public class SiteSinglePhenomTimeSeries extends ConformanceTest {
     protected void setUp() {
         String host = (String) getEnvironment(KEY_HOST);
         int port = (Integer) getEnvironment(KEY_PORT);
-        String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
+        String path = (String) getEnvironment(KEY_GS_PATH);
 
         comm = new Communication(host, port);
         request = new Request(RequestMethod.POST, "/" + path);

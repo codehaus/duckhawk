@@ -54,7 +54,7 @@ public class XMLUnitValidationTest  extends ConformanceTest {
 
 		String host = (String) getEnvironment(KEY_HOST);
                 int port = (Integer) getEnvironment(KEY_PORT);
-                String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
+                String path = (String) getEnvironment(KEY_GS_PATH);
 		String response = Communication.sendWFSPost(host, port, path, body);
 		
 		return response.replaceAll(regex, replacement);

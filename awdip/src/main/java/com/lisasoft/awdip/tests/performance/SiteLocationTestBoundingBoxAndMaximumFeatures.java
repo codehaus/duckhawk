@@ -7,9 +7,8 @@ import java.util.HashMap;
 
 import org.apache.commons.httpclient.HttpException;
 import org.duckhawk.core.TestExecutor;
-import org.duckhawk.junit3.PerformanceTest;
+import org.duckhawk.junit3.StressTest;
 
-import com.lisasoft.awdip.AWDIPTestSupport;
 import com.lisasoft.awdip.util.Communication;
 import com.lisasoft.awdip.util.Gml;
 import com.lisasoft.awdip.util.Request;
@@ -19,7 +18,7 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
 /**
  * Test with growing bounding box and a fixed value of maxFeatures. The
  * number of the possibly returned feature must be higher than the maxFeatures
- * value, so the maxFeaters really limit the feature set.
+ * value, so the maxFeatures really limit the feature set.
  * 
  * The box with 640000 square kilometres returns 266 Features. Running tests
  * with maxFeatures 50, 100, 150, 200 and 250.
@@ -30,8 +29,8 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
  * @author vmische
  *
  */
-public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
-        extends PerformanceTest  {
+public class SiteLocationTestBoundingBoxAndMaximumFeatures
+        extends StressTest  {
     static Communication comm;
     
     /** data sent to the server (path and body of the POST message) */
@@ -64,17 +63,29 @@ public class SiteLocationPerfTestBoundingBoxAndMaximumFeatures
     HashMap<String,double[]> bboxGrow;
     
 
-    public SiteLocationPerfTestBoundingBoxAndMaximumFeatures() {
-        super(AWDIPTestSupport.getAwdipContext(forcePropertyOutput), 1);
-
+    /** Use as performance test with one thread */
+    public SiteLocationTestBoundingBoxAndMaximumFeatures() {
+        this(getPerfTimes(), 1, 0);
     }
     
+    /** For load tests with multiple threads */
+    public SiteLocationTestBoundingBoxAndMaximumFeatures(int times,
+            int numThreads, int rampUp) {
+        super(getAwdipContext(forcePropertyOutput), times, numThreads, rampUp);
+        putEnvironment(KEY_DESCRIPTION,
+                "Test with growing bounding box and a fixed value of " +
+                "maxFeatures. The number of the possibly returned feature " +
+                "must be higher than the maxFeatures value, so the " +
+                "maxFeatures really limit the feature set.\n" +
+                "The box with 640000 square kilometres returns 266 Features. " +
+                "Running tests with maxFeatures 50, 100, 150, 200 and 250.");
+    }
     
     @Override
     protected void setUp() throws Exception {
         String host = (String) getEnvironment(KEY_HOST);
         int port = (Integer) getEnvironment(KEY_PORT);
-        String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
+        String path = (String) getEnvironment(KEY_GS_PATH);
 
         comm = new Communication(host, port);
         request = new Request(RequestMethod.POST, "/" + path);

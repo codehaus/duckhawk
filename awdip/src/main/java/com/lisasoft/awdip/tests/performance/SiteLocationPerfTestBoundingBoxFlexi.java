@@ -88,7 +88,7 @@ public class SiteLocationPerfTestBoundingBoxFlexi extends PerformanceTest {
     protected void setUp() throws Exception {
         String host = (String) getEnvironment(KEY_HOST);
         int port = (Integer) getEnvironment(KEY_PORT);
-        String path = (String) getEnvironment(KEY_GS_PATH) + "/wfs";
+        String path = (String) getEnvironment(KEY_GS_PATH);
         
         comm = new Communication(host, port);
         this.request = new Request(RequestMethod.POST, "/" + path);
