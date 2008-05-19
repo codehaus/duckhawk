@@ -15,6 +15,7 @@ import org.duckhawk.util.PerformanceSummarizer;
 import org.duckhawk.util.PrintStreamListener;
 
 import com.lisasoft.awdip.util.SetPropertyListener;
+import com.lisasoft.awdip.util.TransformHtmlListener;
 import com.lisasoft.awdip.util.Util;
 
 /**
@@ -104,7 +105,6 @@ public class AWDIPTestSupport {
                     new PrintStreamListener(false, true),
                     new XStreamDumper(new File("./target/dh-report/xml")),
                     new TransformHtmlListener(
-                            new File("./target/dh-report/xml"),
                             new File("./target/dh-report/html")));
         }
         return context;

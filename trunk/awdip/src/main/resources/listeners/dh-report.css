@@ -1,0 +1,129 @@
+body {
+    font-size:0.8em;
+}
+
+p, table, h1, h2, h3, h4 ,h5 , h6, ul {
+font-family:sans-serif;
+}
+
+a {
+  color:#379;
+  text-decoration:none;
+}
+a:hover {
+  text-decoration:underline;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    clear:both;
+}
+
+h1 {
+    border-bottom:2px dotted #ccc;
+}
+
+h2 {
+    /*border-bottom:1px dotted #ccc;*/
+    /*padding-top:2em;*/
+    margin-bottom:1.0em;
+}
+
+.result-set {
+    margin-bottom:5em;
+    clear:both;
+}
+
+
+h3 {
+    margin:0;
+    margin-left:0.5em;
+    padding-top:0.75em;
+}
+
+/*.result-set-general {*/
+.test-class-results {
+    clear:both;
+    /*border:2px solid #999;*/
+    border:1px solid #ddd;
+    margin:1em 1em 4em 2em;
+}
+.test-class-summary {
+    float:none;
+}
+
+table {
+    float:left;
+    margin:1em;
+    margin-bottom:1.5em;
+    border-collapse:collapse;
+}
+
+table tr.seperator {
+    border-bottom:1px dotted #999;
+}
+
+table thead th {
+    border-bottom:1px solid #999;
+
+}
+
+table th, table td {
+    padding:0.2em 0.75em;
+    vertical-align:top;
+}
+
+.view-details {
+    clear:both;
+    margin-left:1.1em;
+}
+
+.error-summary {
+    clear:both;
+    float:left;
+    margin-bottom:2em;    
+}
+.error-summary div {
+    float:left;
+    margin:0 1em;
+}
+.error-summary p {
+    padding:0.2em 1em;
+}
+.error-summary .failed p {
+    font-weight:bold;
+    color:#fff;
+    background-color:#e40
+}
+.error-summary .passed p {
+    color:#fff;
+    background-color:#372
+}
+
+.failed a, a.failed {
+    color:#e40;
+    font-weight:bold;
+    background-color:#fff;
+}
+.failed a:visited {
+    color:#b20;
+}
+
+.failed h3, td.failed {
+    color:#fff;
+    background-color:#e40;
+    font-weight:bold;
+    padding:0.2em 1em;
+}
+
+.passed a, td.passed {
+    color:#372;
+}
+.passed a:visited {
+    color:#151;
+}
+
+
+/* especially details page */
+.error-occured {
+    /*border:3px solid #e40;*/
+}
