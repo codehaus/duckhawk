@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestSuiteListener;
 import org.duckhawk.report.model.Product;
 import org.duckhawk.report.model.ProductVersion;
@@ -18,6 +19,11 @@ import com.thoughtworks.xstream.XStream;
 
 public class XStreamDumper extends AbstractModelListener implements
         TestSuiteListener {
+    
+    /**
+     * Key for the file object pointing at 
+     */
+    public static final String XML_MAIN_REPORT = "xmlMainReportFile";
 
     ObjectOutputStream resultsOos;
 
@@ -195,6 +201,12 @@ public class XStreamDumper extends AbstractModelListener implements
     @Override
     protected void testSuiteStarting(TestRun run) throws Exception {
         prepareTestSuite(run);
+    }
+    
+    @Override
+    public void testSuiteCompleted(TestContext context) {
+        super.testSuiteCompleted(context);
+        context.getEnvironment().put(XML_MAIN_REPORT, mainReportFile);
     }
 
 }

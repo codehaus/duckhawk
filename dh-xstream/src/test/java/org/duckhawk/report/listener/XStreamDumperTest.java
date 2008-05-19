@@ -320,5 +320,16 @@ public class XStreamDumperTest extends TestCase {
         assertXpathEvaluatesTo("Hey there!",
                 "//TestInformation/environment/entry[@key=\"msg\"]", doc);
     }
+    
+    public void testPushInfoIntoEnviroment() throws Exception {
+        TestPropertiesImpl env = new TestPropertiesImpl();
+        env.put("one", new Integer(1));
+        env.put("msg", "Hey there!");
+        TestContext context = new TestContext("product", "version", env);
+        dumper.testSuiteStarting(context);
+        dumper.testSuiteCompleted(context);
+        
+        assertEquals(dumper.getMainReportFile(), context.getEnvironment().get(XStreamDumper.XML_MAIN_REPORT));
+    }
 
 }
