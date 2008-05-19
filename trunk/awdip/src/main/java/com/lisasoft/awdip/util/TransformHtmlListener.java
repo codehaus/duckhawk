@@ -16,6 +16,7 @@ import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestSuiteListener;
+import org.duckhawk.report.listener.XStreamDumper;
 
 
 
@@ -71,7 +72,7 @@ public class TransformHtmlListener implements TestSuiteListener {
         String testRunName = sanitizeFileName(testRunId);
         
         try {
-            File xmlReportFile = new File(xmlDir, testRunName + ".xml");
+            File xmlReportFile = (File) context.getEnvironment().get(XStreamDumper.XML_MAIN_REPORT);
             Source xmlReportSource = new StreamSource(xmlReportFile);
 
             InputStream xsltStream = getClass()
