@@ -100,8 +100,12 @@ public class AWDIPTestSupport {
                     new PerformanceSummarizer(),
                     new ConformanceSummarizer(),
                     new SetPropertyListener(forcePropertyOutput),
-                    new PrintStreamListener(true, true), 
-                    new XStreamDumper(new File("./target/dh-report")));
+                    //new PrintStreamListener(true, true), 
+                    new PrintStreamListener(false, true),
+                    new XStreamDumper(new File("./target/dh-report/xml")),
+                    new TransformHtmlListener(
+                            new File("./target/dh-report/xml"),
+                            new File("./target/dh-report/html")));
         }
         return context;
     }
