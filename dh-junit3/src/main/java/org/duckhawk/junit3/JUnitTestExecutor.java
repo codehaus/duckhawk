@@ -26,7 +26,7 @@ class JUnitTestExecutor implements TestExecutor {
         // look up for the method that will be used for performing test property initialization
         try {
             String initMethodName = "init" + method.getName().substring(4);
-            initMethod = test.getClass().getDeclaredMethod(initMethodName,
+            initMethod = test.getClass().getMethod(initMethodName,
                     new Class[] { TestProperties.class });
             initMethod.setAccessible(true);
         } catch (NoSuchMethodException e) {
@@ -36,7 +36,7 @@ class JUnitTestExecutor implements TestExecutor {
         // look up for the method that will be used for performing un-timed checks
         try {
             String checkMethodName = "check" + method.getName().substring(4);
-            checkMethod = test.getClass().getDeclaredMethod(checkMethodName,
+            checkMethod = test.getClass().getMethod(checkMethodName,
                     new Class[0]);
             checkMethod.setAccessible(true);
         } catch (NoSuchMethodException e) {
