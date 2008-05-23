@@ -5,10 +5,15 @@ import java.lang.reflect.Method;
 
 import junit.framework.TestCase;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestProperties;
 
 class JUnitTestExecutor implements TestExecutor {
+    private static final Log LOGGER = LogFactory
+            .getLog(JUnitTestExecutor.class);
 
     protected Method runMethod;
 
@@ -22,25 +27,28 @@ class JUnitTestExecutor implements TestExecutor {
         this.test = test;
         this.runMethod = method;
         this.runMethod.setAccessible(true);
-        
-        // look up for the method that will be used for performing test property initialization
+
+        // look up for the method that will be used for performing test property
+        // initialization
+        String initMethodName = "init" + method.getName().substring(4);
         try {
-            String initMethodName = "init" + method.getName().substring(4);
             initMethod = test.getClass().getMethod(initMethodName,
                     new Class[] { TestProperties.class });
             initMethod.setAccessible(true);
         } catch (NoSuchMethodException e) {
+            LOGGER.debug("Could not find init method " + initMethodName
+                    + " with TestProperties param, skipping init");
             // ok, fine, no test properties init
         }
-        
-        // look up for the method that will be used for performing un-timed checks
+
+        // look up for the method that will be used for performing un-timed
+        // checks
+        String checkMethodName = "check" + method.getName().substring(4);
         try {
-            String checkMethodName = "check" + method.getName().substring(4);
-            checkMethod = test.getClass().getMethod(checkMethodName,
-                    new Class[0]);
+            checkMethod = test.getClass().getMethod(checkMethodName);
             checkMethod.setAccessible(true);
         } catch (NoSuchMethodException e) {
-            // ok, fine, no checking
+            LOGGER.debug("Could not find check method " + checkMethodName + " skipping check");
         }
     }
 
@@ -89,14 +97,13 @@ class JUnitTestExecutor implements TestExecutor {
      * Test id is the class name plus method name
      */
     public String getTestId() {
-        return runMethod.getDeclaringClass().getName() + "#"
-                + runMethod.getName();
+        return test.getClass().getName() + "#" + runMethod.getName();
     }
 
     public void init(TestProperties environment, TestProperties testProperties) {
-        if(test instanceof PropertyTest)
+        if (test instanceof PropertyTest)
             ((PropertyTest) test).initEnviroment(environment);
-        
+
         if (initMethod == null)
             return;
 
