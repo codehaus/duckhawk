@@ -34,9 +34,11 @@ public class Gml {
                 }
                 request.append("</ogc:And>");
             }
+            
+            request.append("</ogc:Filter>");
         }
         
-        request.append("</ogc:Filter></wfs:Query></wfs:GetFeature>");
+        request.append("</wfs:Query></wfs:GetFeature>");
         return request.toString();
     }
 
@@ -47,13 +49,41 @@ public class Gml {
      * be returned can be limited.
      * 
      * @param typeName Name of the feature to request
-     * @param maxFeatures Number of maximum features
+     * @param filters additional filters 
      * @return A WFS request
      */
     public static String createAndFilterRequest(String typeName, String... filters) {
         return createAndFilterMaxFeaturesRequest(typeName, 0, filters);
     }
     
+    
+    /**
+     * Create a WFS request that requests a single propert. Number of features
+     * that should be returned will be limited by maxFeatures.
+     * 
+     * @param typeName Name of the feature to request
+     * @param maxFeatures Number of maximum features
+     * @param filters additional filters 
+     * @return A WFS request
+     */
+    public static String createMaxFeaturesRequest(String typeName,
+            int maxFeatures) {
+        return createAndFilterMaxFeaturesRequest(typeName, maxFeatures,
+                new String[0]);
+    }
+    
+    /**
+     * Creates a WFS filter for queries between two dates. The dates are within
+     * the interval (>= and <=)
+     * @param from start date of the date range (format: yyyy-MM-dd)  
+     * @param to end date of the date range (format: yyyy-MM-dd)
+     * @return WFS filter expression
+     */
+    public static String createBetweenTwoDatesFilter(String from, String to) {
+        return "<ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyName>aw:relatedObservation/aw:PhenomenonTimeSeries/om:result/cv:CompactDiscreteTimeCoverage/cv:element/cv:CompactTimeValuePair/cv:geometry</ogc:PropertyName><ogc:Literal>"
+        + from + "</ogc:Literal></ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyIsLessThanOrEqualTo><ogc:PropertyName>aw:relatedObservation/aw:PhenomenonTimeSeries/om:result/cv:CompactDiscreteTimeCoverage/cv:element/cv:CompactTimeValuePair/cv:geometry</ogc:PropertyName><ogc:Literal>"
+        + to + "</ogc:Literal></ogc:PropertyIsLessThanOrEqualTo>";        
+    }
     
     /** Creates the body for a request with a bounding box filter
      * 
@@ -75,5 +105,20 @@ public class Gml {
     }
     
 
+    /**
+     * Creates an XPath query that returns how many locations are not within
+     * a specified bounding box
+     * 
+     * @param bbox bounding within the location should be
+     * @return XPath expression that will the number of locations that are not
+     *     within the specified bounding box 
+     */
+    public static String createCountNotWithinBoundingBoxXpath(double[] bbox) {
+        return "count(/wfs:FeatureCollection/gml:featureMembers/aw:SiteLocation/sa:position/gml:Point/gml:pos[" +
+        "number(substring-before(.,' ')) < " + (bbox[0]<bbox[2]?bbox[0]:bbox[2]) + 
+        " or number(substring-before(.,' ')) > " + (bbox[0]<bbox[2]?bbox[2]:bbox[0]) + 
+        " or number(substring-after(.,' ')) < " + (bbox[1]<bbox[3]?bbox[1]:bbox[3]) + 
+        " or number(substring-after(.,' ')) > " + (bbox[1]<bbox[3]?bbox[3]:bbox[1]) + "])";
+    }
     
 }

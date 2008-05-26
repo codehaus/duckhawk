@@ -31,15 +31,24 @@ public class AWDIPTestSupport {
     public static final String KEY_GS_PATH = "geoserverPath";
     public static final String KEY_SCHEMA_RPATH = "schemaPath";
     public static final String KEY_DESCRIPTION = "description";
+    
+    public static final String KEY_TESTS_CONFIG_DIR = "testsConfigurationDir";
 
     // startup settings for performance tests
-    static int perfTimes = 1;
+    static int perfTimes = 10;
     
     // startup settings for load tests
-    static int loadTimes = 1;
-    static int loadNumThreads = 1;
-    static int loadRampUp = 5;
+    static int loadTimes = 5;
+    static int loadNumThreads = 10;
+    static int loadRampUp = 1;
+
+    /**
+     * Directory where the configuration files for the tests are
+     * TODO vmische Make it a configuration file parameter
+     */
+    private static String testsConfigDir = "src/main/resources/tests";
     
+     
     /**
      * Setting up the environment for the AWDIP test suite.
      * 
@@ -79,12 +88,14 @@ public class AWDIPTestSupport {
             
             // setup the environment
             TestProperties environment = new TestPropertiesImpl();
-            //environment.put(KEY_HOST, "thor3.adl.ardec.com.au");
-            environment.put(KEY_HOST, "venus.adl.ardec.com.au");
+            environment.put(KEY_HOST, "thor3.adl.ardec.com.au");
+            //environment.put(KEY_HOST, "venus.adl.ardec.com.au");
             environment.put(KEY_PORT, 5580);
-            environment.put(KEY_GS_PATH, "geoserver/wfs");
+            environment.put(KEY_GS_PATH, "geoserver2/wfs");
+            //environment.put(KEY_GS_PATH, "geoserver/wfs");
             environment.put(KEY_SCHEMA_RPATH,
                     "src/main/resources/schemas/all.xsd");
+            environment.put(KEY_TESTS_CONFIG_DIR, testsConfigDir);            
             
             /** test call properties that definitely be in the output (set to
              * "null" if not set at all) */ 

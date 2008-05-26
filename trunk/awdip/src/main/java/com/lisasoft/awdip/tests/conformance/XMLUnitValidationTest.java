@@ -5,12 +5,17 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import org.custommonkey.xmlunit.Validator;
+import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.exceptions.ConfigurationException;
 import org.duckhawk.junit3.ConformanceTest;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import static com.lisasoft.awdip.AWDIPTestSupport.*;
+import static com.lisasoft.awdip.AWDIPTestSupport.getAwdipContext;
+import static com.lisasoft.awdip.AWDIPTestSupport.KEY_HOST;
+import static com.lisasoft.awdip.AWDIPTestSupport.KEY_PORT;
+import static com.lisasoft.awdip.AWDIPTestSupport.KEY_GS_PATH;
+import static com.lisasoft.awdip.AWDIPTestSupport.KEY_SCHEMA_RPATH;
 
 import com.lisasoft.awdip.util.Communication;
 
@@ -30,9 +35,9 @@ public class XMLUnitValidationTest  extends ConformanceTest {
 		InputSource is = new InputSource(new StringReader(response));
 		Validator v = new Validator(is);
 		v.useXMLSchema(true);
-		v.setJAXP12SchemaSource(new File((String) getEnvironment(KEY_SCHEMA_RPATH)));
+		v.setJAXP12SchemaSource(new File((String) getAwdipContext().getEnvironment().get(KEY_SCHEMA_RPATH)));
 		
-		assertTrue(v.toString(), v.isValid());
+		XMLAssert.assertTrue(v.toString(), v.isValid());
 	}
 
 	private String sendRequest() throws IOException {
@@ -52,9 +57,9 @@ public class XMLUnitValidationTest  extends ConformanceTest {
 		"http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\" maxFeatures=\"5\"> " +
 		"<wfs:Query typeName=\"aw:SiteLocation\"> </wfs:Query> </wfs:GetFeature>";		
 
-		String host = (String) getEnvironment(KEY_HOST);
-                int port = (Integer) getEnvironment(KEY_PORT);
-                String path = (String) getEnvironment(KEY_GS_PATH);
+		String host = (String) getAwdipContext().getEnvironment().get(KEY_HOST);
+                int port = (Integer) getAwdipContext().getEnvironment().get(KEY_PORT);
+                String path = (String) getAwdipContext().getEnvironment().get(KEY_GS_PATH);
 		String response = Communication.sendWFSPost(host, port, path, body);
 		
 		return response.replaceAll(regex, replacement);
