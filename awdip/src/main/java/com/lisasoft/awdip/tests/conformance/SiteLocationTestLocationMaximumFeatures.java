@@ -3,11 +3,11 @@ package com.lisasoft.awdip.tests.conformance;
 import java.io.IOException;
 import java.text.ParseException;
 
-import com.lisasoft.awdip.tests.general.AbstractTestLocationBoundingBoxAndMaximumFeatures;
+import com.lisasoft.awdip.tests.general.AbstractTestLocationMaximumFeatures;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
 public class SiteLocationTestLocationMaximumFeatures
-extends AbstractTestLocationBoundingBoxAndMaximumFeatures {
+extends AbstractTestLocationMaximumFeatures {
     final static String FEATURE_TYPE_NAME = "aw:SiteLocation"; 
     final static String CONFIG_FILE =
             "/conformance/SiteLocationTestLocationMaximumFeatures.csv";

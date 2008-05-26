@@ -24,6 +24,7 @@ import com.lisasoft.awdip.util.Gml;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
 public abstract class AbstractTestDateBetween extends AbstractAwdipTest {
+
     // properties that should make it into the output
     static final String KEY_SITE_NAME = "params.siteName";
     static final String KEY_PHENOMS_NAME = "params.phenomsName";
@@ -229,7 +230,7 @@ public abstract class AbstractTestDateBetween extends AbstractAwdipTest {
     protected void checkResponse()
     throws XpathException, SAXException, IOException {
         XMLAssert.assertXpathExists(
-                "//wfs:FeatureCollection/gml:featureMembers",
+                "/wfs:FeatureCollection/gml:featureMembers",
                 (String)getCallProperty(TestExecutor.KEY_RESPONSE));
         
         // make sure that there were no features outside of the date range

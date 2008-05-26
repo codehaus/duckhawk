@@ -22,9 +22,7 @@ import com.lisasoft.awdip.util.Gml;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
 public abstract class AbstractTestDateAny extends AbstractAwdipTest {
-    /** name of this test (part of the name for the output) */
-    static final String TEST_NAME = "AnyDate";
-    
+
     // properties that should make it into the output
     static final String KEY_SITE_NAME = "params.siteName";
     static final String KEY_PHENOM_NAME = "params.phenomName";
@@ -127,12 +125,7 @@ public abstract class AbstractTestDateAny extends AbstractAwdipTest {
         String body = Gml.createAndFilterRequest(getFeatureTypeName(),
                 Gml.createPropertyFilter("gml:name", site),
                 Gml.createPropertyFilter("aw:relatedObservation/aw:PhenomenonTimeSeries/om:observedProperty/swe:Phenomenon/gml:name", phenomenon));
-        /*
-        putCallProperty(KEY_TEST_FULL_METHOD_NAME,
-                sanitizeForFilename(getFeatureTypeName())
-                + "#" + TEST_NAME + step);
-                */
-
+ 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
 
@@ -151,7 +144,7 @@ public abstract class AbstractTestDateAny extends AbstractAwdipTest {
     protected void checkResponse()
     throws XpathException, SAXException, IOException {
         XMLAssert.assertXpathExists(
-                "//wfs:FeatureCollection/gml:featureMembers",
+                "/wfs:FeatureCollection/gml:featureMembers",
                 (String)getCallProperty(TestExecutor.KEY_RESPONSE));
     }
 

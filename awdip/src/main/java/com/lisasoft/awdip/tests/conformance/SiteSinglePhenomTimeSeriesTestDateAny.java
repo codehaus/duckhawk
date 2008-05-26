@@ -14,7 +14,7 @@ public class SiteSinglePhenomTimeSeriesTestDateAny
 extends AbstractTestDateAny {
     final static String FEATURE_TYPE_NAME = "aw:SiteSinglePhenomTimeSeries"; 
     final static String CONFIG_FILE =
-            "/conformance/SiteSinglePhenomTimeSeriesDateAny.csv";
+            "/conformance/SiteSinglePhenomTimeSeriesTestDateAny.csv";
      
     public SiteSinglePhenomTimeSeriesTestDateAny()
     throws IOException,  InvalidConfigFileException, ParseException {
