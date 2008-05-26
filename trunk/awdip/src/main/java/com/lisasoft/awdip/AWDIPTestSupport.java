@@ -39,7 +39,7 @@ public class AWDIPTestSupport {
     
     // startup settings for load tests
     static int loadTimes = 5;
-    static int loadNumThreads = 10;
+    static int loadNumThreads = 3;
     static int loadRampUp = 1;
 
     /**

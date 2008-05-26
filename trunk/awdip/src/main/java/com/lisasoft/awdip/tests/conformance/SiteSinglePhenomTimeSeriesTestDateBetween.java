@@ -14,7 +14,7 @@ public class SiteSinglePhenomTimeSeriesTestDateBetween
 extends AbstractTestDateBetween {
     final static String FEATURE_TYPE_NAME = "aw:SiteSinglePhenomTimeSeries"; 
     final static String CONFIG_FILE =
-            "/conformance/SiteSinglePhenomTimeSeriesDateBetween.csv";
+            "/conformance/SiteSinglePhenomTimeSeriesTestDateBetween.csv";
      
     public SiteSinglePhenomTimeSeriesTestDateBetween()
     throws IOException,  InvalidConfigFileException, ParseException {

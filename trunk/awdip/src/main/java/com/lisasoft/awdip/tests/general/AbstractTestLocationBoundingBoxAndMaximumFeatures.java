@@ -191,7 +191,7 @@ extends AbstractAwdipTest {
     protected void checkResponse()
     throws XpathException, SAXException, IOException {
         XMLAssert.assertXpathExists(
-                "//wfs:FeatureCollection/gml:featureMembers",
+                "/wfs:FeatureCollection/gml:featureMembers",
                 (String)getCallProperty(TestExecutor.KEY_RESPONSE));
 
         // make sure that there were no features outside of the bounding box

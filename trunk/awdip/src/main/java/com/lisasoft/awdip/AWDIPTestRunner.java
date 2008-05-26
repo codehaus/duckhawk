@@ -4,6 +4,12 @@ import junit.textui.TestRunner;
 
 
 public class AWDIPTestRunner {
+    
+        private static void run(Class testClass) {
+            System.out.println(testClass.getSimpleName());
+            TestRunner.run(testClass);
+        }
+    
 
 	/**
 	 * @param args
@@ -17,25 +23,28 @@ public class AWDIPTestRunner {
 		//TestRunner.run(XMLUnitValidationTest.class);
 
 	    // conformance tests
-            TestRunner.run(com.lisasoft.awdip.tests.conformance.SiteLocationTestLocationBoundingBox.class);
-            TestRunner.run(com.lisasoft.awdip.tests.conformance.SiteLocationTestLocationBoundingBoxAndMaximumFeatures.class);
-            TestRunner.run(com.lisasoft.awdip.tests.conformance.SiteLocationTestLocationMaximumFeatures.class);
-            TestRunner.run(com.lisasoft.awdip.tests.conformance.SiteSinglePhenomTimeSeriesTestDateAny.class);
-            TestRunner.run(com.lisasoft.awdip.tests.conformance.SiteSinglePhenomTimeSeriesTestDateBetween.class);
+	    System.out.println("conformance");
+	    run(com.lisasoft.awdip.tests.conformance.SiteLocationTestLocationBoundingBox.class);
+	    run(com.lisasoft.awdip.tests.conformance.SiteLocationTestLocationBoundingBoxAndMaximumFeatures.class);
+	    run(com.lisasoft.awdip.tests.conformance.SiteLocationTestLocationMaximumFeatures.class);
+	    run(com.lisasoft.awdip.tests.conformance.SiteSinglePhenomTimeSeriesTestDateAny.class);
+	    run(com.lisasoft.awdip.tests.conformance.SiteSinglePhenomTimeSeriesTestDateBetween.class);
 
-            // performance tests
-            TestRunner.run(com.lisasoft.awdip.tests.performance.SiteLocationTestLocationBoundingBox.class);
-            TestRunner.run(com.lisasoft.awdip.tests.performance.SiteLocationTestLocationBoundingBoxAndMaximumFeatures.class);
-            TestRunner.run(com.lisasoft.awdip.tests.performance.SiteLocationTestLocationMaximumFeatures.class);
-            TestRunner.run(com.lisasoft.awdip.tests.performance.SiteSinglePhenomTimeSeriesTestDateAny.class);
-            TestRunner.run(com.lisasoft.awdip.tests.performance.SiteSinglePhenomTimeSeriesTestDateBetween.class);
+	    // performance tests
+            System.out.println("performance");
+	    run(com.lisasoft.awdip.tests.performance.SiteLocationTestLocationBoundingBox.class);
+	    run(com.lisasoft.awdip.tests.performance.SiteLocationTestLocationBoundingBoxAndMaximumFeatures.class);
+	    run(com.lisasoft.awdip.tests.performance.SiteLocationTestLocationMaximumFeatures.class);
+	    run(com.lisasoft.awdip.tests.performance.SiteSinglePhenomTimeSeriesTestDateAny.class);
+	    run(com.lisasoft.awdip.tests.performance.SiteSinglePhenomTimeSeriesTestDateBetween.class);
 
-            // load tests
-            TestRunner.run(com.lisasoft.awdip.tests.load.SiteLocationTestLocationBoundingBox.class);
-            TestRunner.run(com.lisasoft.awdip.tests.load.SiteLocationTestLocationBoundingBoxAndMaximumFeatures.class);
-            TestRunner.run(com.lisasoft.awdip.tests.load.SiteLocationTestLocationMaximumFeatures.class);
-            TestRunner.run(com.lisasoft.awdip.tests.load.SiteSinglePhenomTimeSeriesTestDateAny.class);
-            TestRunner.run(com.lisasoft.awdip.tests.load.SiteSinglePhenomTimeSeriesTestDateBetween.class);
+	    // load tests
+            System.out.println("load");
+	    run(com.lisasoft.awdip.tests.load.SiteLocationTestLocationBoundingBox.class);
+	    run(com.lisasoft.awdip.tests.load.SiteLocationTestLocationBoundingBoxAndMaximumFeatures.class);
+	    run(com.lisasoft.awdip.tests.load.SiteLocationTestLocationMaximumFeatures.class);
+	    run(com.lisasoft.awdip.tests.load.SiteSinglePhenomTimeSeriesTestDateAny.class);
+	    run(com.lisasoft.awdip.tests.load.SiteSinglePhenomTimeSeriesTestDateBetween.class);
 }
 	
 
