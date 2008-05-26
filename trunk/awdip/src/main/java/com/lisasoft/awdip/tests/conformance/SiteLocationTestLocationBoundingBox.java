@@ -10,7 +10,7 @@ public class SiteLocationTestLocationBoundingBox
 extends AbstractTestLocationBoundingBox {
     final static String FEATURE_TYPE_NAME = "aw:SiteLocation"; 
     final static String CONFIG_FILE =
-            "/conformance/SiteLocationTestBoundingBox.csv";
+            "/conformance/SiteLocationTestLocationBoundingBox.csv";
      
     public SiteLocationTestLocationBoundingBox()
     throws IOException, InvalidConfigFileException, ParseException {
