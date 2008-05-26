@@ -176,11 +176,11 @@ extends AbstractAwdipTest {
         putCallProperty(TestExecutor.KEY_RESPONSE, response);
     }
     
-    protected void checkResponse(String response)
+    protected void checkResponse()
     throws XpathException, SAXException, IOException {
         XMLAssert.assertXpathExists(
                 "//wfs:FeatureCollection/gml:featureMembers",
-                response);
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
         
         // make sure that there were no features outside of the bounding box
         XMLAssert.assertXpathEvaluatesTo("0",
@@ -202,7 +202,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox0()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox1(TestProperties props) {
@@ -214,7 +214,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox1()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox2(TestProperties props) {
@@ -226,7 +226,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox2()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox3(TestProperties props) {
@@ -238,7 +238,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox3()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox4(TestProperties props) {
@@ -250,7 +250,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox4()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox5(TestProperties props) {
@@ -262,7 +262,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox5()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox6(TestProperties props) {
@@ -274,7 +274,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox6()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox7(TestProperties props) {
@@ -286,7 +286,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox7()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox8(TestProperties props) {
@@ -298,7 +298,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox8()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox9(TestProperties props) {
@@ -310,7 +310,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox9()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox10(TestProperties props) {
@@ -322,7 +322,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox10()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox11(TestProperties props) {
@@ -334,7 +334,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox11()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox12(TestProperties props) {
@@ -346,7 +346,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox12()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox13(TestProperties props) {
@@ -358,7 +358,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox13()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox14(TestProperties props) {
@@ -370,7 +370,7 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox14()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 
     public void initSiteLocationBoundingBox15(TestProperties props) {
@@ -382,6 +382,6 @@ extends AbstractAwdipTest {
     }
     public void checkSiteLocationBoundingBox15()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
 }

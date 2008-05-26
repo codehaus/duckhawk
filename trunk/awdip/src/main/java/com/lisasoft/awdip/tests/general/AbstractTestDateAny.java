@@ -148,11 +148,11 @@ public abstract class AbstractTestDateAny extends AbstractAwdipTest {
         putCallProperty(TestExecutor.KEY_RESPONSE, response);
     }
     
-    protected void checkResponse(String response)
+    protected void checkResponse()
     throws XpathException, SAXException, IOException {
         XMLAssert.assertXpathExists(
                 "//wfs:FeatureCollection/gml:featureMembers",
-                response);
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
     }
 
     
@@ -166,7 +166,7 @@ public abstract class AbstractTestDateAny extends AbstractAwdipTest {
     }
     public void checkAnyDate0()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
     
     public void initAnyDate1(TestProperties props) {
@@ -178,7 +178,7 @@ public abstract class AbstractTestDateAny extends AbstractAwdipTest {
     }
     public void checkAnyDate1()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
     
     public void initAnyDate2(TestProperties props) {
@@ -190,7 +190,7 @@ public abstract class AbstractTestDateAny extends AbstractAwdipTest {
     }
     public void checkAnyDate2()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
     
     public void initAnyDate3(TestProperties props) {
@@ -202,7 +202,7 @@ public abstract class AbstractTestDateAny extends AbstractAwdipTest {
     }
     public void checkAnyDate3()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }
     
     public void initAnyDate4(TestProperties props) {
@@ -214,6 +214,6 @@ public abstract class AbstractTestDateAny extends AbstractAwdipTest {
     }
     public void checkAnyDate4()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE));
+        checkResponse();
     }    
 }
