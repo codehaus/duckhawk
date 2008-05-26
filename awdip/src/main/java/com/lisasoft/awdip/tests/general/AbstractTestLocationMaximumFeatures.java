@@ -172,11 +172,12 @@ extends AbstractAwdipTest {
         putCallProperty(TestExecutor.KEY_RESPONSE, response);
     }
     
-    protected void checkResponse(String response, int maxFeatures)
+    protected void checkResponse()
     throws XpathException, SAXException, IOException {
         XMLAssert.assertXpathEvaluatesTo("true",
-                "/wfs:FeatureCollection/@numberOfFeatures <= "+maxFeatures,
-                response);
+                "/wfs:FeatureCollection/@numberOfFeatures <= "
+                +(Integer)getCallProperty(KEY_MAX_FEATURES),
+                (String)getCallProperty(TestExecutor.KEY_RESPONSE));        
     }
     
     
@@ -190,8 +191,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures0()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }
     
     public void initLocationMaximumFeatures1(TestProperties props) {
@@ -203,8 +203,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures1()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 
     public void initLocationMaximumFeatures2(TestProperties props) {
@@ -216,8 +215,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures2()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 
     public void initLocationMaximumFeatures3(TestProperties props) {
@@ -229,8 +227,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures3()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 
     public void initLocationMaximumFeatures4(TestProperties props) {
@@ -242,8 +239,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures4()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 
     public void initLocationMaximumFeatures5(TestProperties props) {
@@ -255,8 +251,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures5()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 
     public void initLocationMaximumFeatures6(TestProperties props) {
@@ -268,8 +263,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures6()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 
     public void initLocationMaximumFeatures7(TestProperties props) {
@@ -281,8 +275,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures7()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 
     public void initLocationMaximumFeatures8(TestProperties props) {
@@ -294,8 +287,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures8()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 
     public void initLocationMaximumFeatures9(TestProperties props) {
@@ -307,8 +299,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures9()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 
     public void initLocationMaximumFeatures10(TestProperties props) {
@@ -320,8 +311,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures10()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 
     public void initLocationMaximumFeatures11(TestProperties props) {
@@ -333,8 +323,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures11()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 
     public void initLocationMaximumFeatures12(TestProperties props) {
@@ -346,8 +335,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures12()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 
     public void initLocationMaximumFeatures13(TestProperties props) {
@@ -359,8 +347,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures13()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 
     public void initLocationMaximumFeatures14(TestProperties props) {
@@ -372,8 +359,7 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures14()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 
     public void initLocationMaximumFeatures15(TestProperties props) {
@@ -385,7 +371,6 @@ extends AbstractAwdipTest {
     }
     public void checkLocationMaximumFeatures15()
     throws XpathException, SAXException, IOException{
-        checkResponse((String)getCallProperty(TestExecutor.KEY_RESPONSE),
-                (Integer)getCallProperty(KEY_MAX_FEATURES));
+        checkResponse();
     }    
 }

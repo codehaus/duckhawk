@@ -7,11 +7,11 @@ import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.duckhawk.core.TestExecutor;
 import org.xml.sax.SAXException;
 
-import com.lisasoft.awdip.tests.general.AbstractTestDateBetween;
+import com.lisasoft.awdip.tests.general.AbstractTestDateAny;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
 public class SiteSinglePhenomTimeSeriesTestDateAny
-extends AbstractTestDateBetween {
+extends AbstractTestDateAny {
     final static String FEATURE_TYPE_NAME = "aw:SiteSinglePhenomTimeSeries"; 
     final static String CONFIG_FILE =
             "/conformance/SiteSinglePhenomTimeSeriesDateAny.csv";
