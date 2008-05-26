@@ -42,7 +42,7 @@ public class XStreamDumper extends AbstractModelListener implements
     public XStreamDumper(File root) {
         this.root = root;
         if (!root.exists())
-            if (!root.mkdir())
+            if (!root.mkdirs())
                 throw new IllegalArgumentException("Root directory "
                         + root.getAbsolutePath()
                         + " does not exist and cannot be created either");

@@ -34,7 +34,7 @@ public class TransformHtmlListener implements TestSuiteListener {
     
     public TransformHtmlListener(File htmlDir) {
         if (!htmlDir.exists())
-            if (!htmlDir.mkdir())
+            if (!htmlDir.mkdirs())
                 throw new IllegalArgumentException("Directory for HTML output"
                         + htmlDir.getAbsolutePath()
                         + " does not exist and cannot be created either");
