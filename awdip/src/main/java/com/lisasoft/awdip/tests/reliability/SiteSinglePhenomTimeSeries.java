@@ -97,11 +97,7 @@ public class SiteSinglePhenomTimeSeries extends ConformanceTest {
         + phenomenonType + "</ogc:Literal></ogc:PropertyIsEqualTo>";
     }
 
-    private String createBetweenTwoDatesFilter(String from, String to) {
-        return "<ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyName>aw:relatedObservation/aw:PhenomenonTimeSeries/om:result/cv:CompactDiscreteTimeCoverage/cv:element/cv:CompactTimeValuePair/cv:geometry</ogc:PropertyName><ogc:Literal>"
-        + from + "</ogc:Literal></ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyIsLessThanOrEqualTo><ogc:PropertyName>aw:relatedObservation/aw:PhenomenonTimeSeries/om:result/cv:CompactDiscreteTimeCoverage/cv:element/cv:CompactTimeValuePair/cv:geometry</ogc:PropertyName><ogc:Literal>"
-        + to + "</ogc:Literal></ogc:PropertyIsLessThanOrEqualTo>";        
-    }
+
 
 
     /**
@@ -182,7 +178,7 @@ public class SiteSinglePhenomTimeSeries extends ConformanceTest {
                 "aw:SiteSinglePhenomTimeSeries",
                 500,
                 createOnePhenomenonTypeFilter(phenomType),
-                createBetweenTwoDatesFilter(dateRange[0], dateRange[1]));
+                Gml.createBetweenTwoDatesFilter(dateRange[0], dateRange[1]));
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
         

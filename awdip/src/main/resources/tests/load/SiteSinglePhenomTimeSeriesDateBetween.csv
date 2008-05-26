@@ -1,0 +1,6 @@
+site,phenomena,date_range
+"DIAMANTINA RIVER @ Birdsville","1966-10-17,1967-06-22",FLOW_Mean_Daily,
+"DIAMANTINA RIVER @ Birdsville","1966-10-17,1967-05-09","FLOW_Maximum_Daily"
+"DIAMANTINA RIVER @ Birdsville","1966-10-17,1967-06-22","FLOW"
+"DIAMANTINA RIVER @ Birdsville","1966-10-17,1967-05-09","FLOW_Mean_Daily,FLOW_Maximum_Daily"
+"DIAMANTINA RIVER @ Birdsville","1966-10-17,1967-06-22","FLOW_Mean_Daily,FLOW_Maximum_Daily,FLOW"
