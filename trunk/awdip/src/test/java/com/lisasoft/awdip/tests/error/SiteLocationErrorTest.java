@@ -23,8 +23,6 @@ public class SiteLocationErrorTest extends ConformanceTest {
 
     protected Request request;
 
-    private String response;
-
     public SiteLocationErrorTest() {
         super(getAwdipContext());
     }
@@ -49,7 +47,7 @@ public class SiteLocationErrorTest extends ConformanceTest {
                 "Testing error response for a plain text request (instead of valid XML)");
 
         // run
-        response = comm.sendRequest(request, data);
+        String response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);
 
         // check
@@ -69,7 +67,7 @@ public class SiteLocationErrorTest extends ConformanceTest {
                 "Testing error response for an non well formed XML request.");
 
         // run
-        response = comm.sendRequest(request, data);
+        String response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);
 
         // check
@@ -87,7 +85,7 @@ public class SiteLocationErrorTest extends ConformanceTest {
                         + "replacing wfs:GetFeature with wfs:InvalidElement.");
 
         // run
-        response = comm.sendRequest(request, data);
+        String response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);
 
         // check
@@ -111,6 +109,7 @@ public class SiteLocationErrorTest extends ConformanceTest {
 
         // run
         // COMMENTED OUT TO AVOID WAITING FOREVER ON EACH REQUEST
+        String response = null;
         // response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);
 
@@ -129,7 +128,7 @@ public class SiteLocationErrorTest extends ConformanceTest {
                 "Testing error response for a non existing feature type.");
 
         // run
-        response = comm.sendRequest(request, data);
+        String response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);
 
         // check
@@ -146,7 +145,7 @@ public class SiteLocationErrorTest extends ConformanceTest {
                 "Testing error response for a non existing namespace.");
 
         // run
-        response = comm.sendRequest(request, data);
+        String response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);
 
         // check
@@ -163,7 +162,7 @@ public class SiteLocationErrorTest extends ConformanceTest {
                 "Testing error response for a non existing attribute (used in the filter).");
 
         // run
-        response = comm.sendRequest(request, data);
+        String response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);
 
         // check
@@ -183,7 +182,7 @@ public class SiteLocationErrorTest extends ConformanceTest {
                 "Testing error response for a non existing attribute (used as a PropertyName).");
 
         // run
-        response = comm.sendRequest(request, data);
+        String response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);
 
         // check
@@ -205,7 +204,7 @@ public class SiteLocationErrorTest extends ConformanceTest {
 //                "Testing error response for an invalid bbox.");
 //
 //        // run
-//        response = comm.sendRequest(request, data);
+//        String response = comm.sendRequest(request, data);
 //        putCallProperty(TestExecutor.KEY_RESPONSE, response);
 //
 //        // check
