@@ -49,7 +49,7 @@ public class Communication {
         this.manager = new MultiThreadedHttpConnectionManager();
         this.client = new HttpClient(manager);
     }
-
+    
     /**
      * Send request to server. HTTP GET will use all values of the key-value
      * pair, HTTP POST will only use the value of a key named "body".
@@ -68,7 +68,6 @@ public class Communication {
         case GET:
             return sendGetRequest(request.getDataAsNameValuePairs(), uri);
         case POST:
-            // return sendPostRequest(request.getDataAsNameValuePairs(), uri);
             return sendPostRequest(request.getBody(), uri);
         default:
             throw new HttpException("Request Method not supported");
