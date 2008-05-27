@@ -10,13 +10,13 @@ import static com.lisasoft.awdip.AWDIPTestSupport.getLoadNumThreads;
 import static com.lisasoft.awdip.AWDIPTestSupport.getLoadRampUp;
 import static com.lisasoft.awdip.AWDIPTestSupport.getPerfTimes;
 
-public class SiteSinglePhenomTimeSeriesTestDateBetween
+public class SiteSinglePhenomTimeSeriesDateBetweenTest
 extends AbstractTestDateBetween {
     final static String FEATURE_TYPE_NAME = "aw:SiteSinglePhenomTimeSeries"; 
     final static String CONFIG_FILE =
             "/load/SiteSinglePhenomTimeSeriesTestDateBetween.csv";
      
-    public SiteSinglePhenomTimeSeriesTestDateBetween()
+    public SiteSinglePhenomTimeSeriesDateBetweenTest()
     throws IOException,  InvalidConfigFileException, ParseException {
         super(getPerfTimes(), getLoadNumThreads(), getLoadRampUp());
     }

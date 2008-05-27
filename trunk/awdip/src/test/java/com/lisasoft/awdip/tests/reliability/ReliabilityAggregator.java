@@ -24,8 +24,8 @@ import org.xml.sax.SAXException;
  *
  */
 public class ReliabilityAggregator extends PerformanceTest {
-    SiteLocation siteLocationTest;
-    SiteSinglePhenomTimeSeries siteSinglePhenomTimeSeries;
+    SiteLocationTest siteLocationTest;
+    SiteSinglePhenomTimeSeriesTest siteSinglePhenomTimeSeries;
     
     /** Number of reliability test that can be randomly chosen from */ 
     final static int NUMBER_OF_TESTS = 4;
@@ -73,25 +73,25 @@ public class ReliabilityAggregator extends PerformanceTest {
         
         switch (currentRandom) {
         case 0:
-            siteLocationTest = new SiteLocation(null);
+            siteLocationTest = new SiteLocationTest(null);
             siteLocationTest.testVariableBoundingBox();
             siteLocationTest.fillCallProperties(callProperties);
             siteLocationTest.checkVariableBoundingBox();
             break;
         case 1:
-            siteSinglePhenomTimeSeries = new SiteSinglePhenomTimeSeries(null);
+            siteSinglePhenomTimeSeries = new SiteSinglePhenomTimeSeriesTest(null);
             siteSinglePhenomTimeSeries.testOnePhenomenonTypePREC_ToDBetweenTwoDates();
             siteSinglePhenomTimeSeries.fillCallProperties(callProperties);
             siteSinglePhenomTimeSeries.checkOnePhenomenonTypePREC_ToDBetweenTwoDates();
             break;
         case 2:
-            siteSinglePhenomTimeSeries = new SiteSinglePhenomTimeSeries(null);
+            siteSinglePhenomTimeSeries = new SiteSinglePhenomTimeSeriesTest(null);
             siteSinglePhenomTimeSeries.testOnePhenomenonTypePREC_ToMBetweenTwoDates();
             siteSinglePhenomTimeSeries.fillCallProperties(callProperties);
             siteSinglePhenomTimeSeries.checkOnePhenomenonTypePREC_ToMBetweenTwoDates();
             break;
         case 3:
-            siteSinglePhenomTimeSeries = new SiteSinglePhenomTimeSeries(null);
+            siteSinglePhenomTimeSeries = new SiteSinglePhenomTimeSeriesTest(null);
             siteSinglePhenomTimeSeries.testOnePhenomenonTypePREC_ToYBetweenTwoDates();
             siteSinglePhenomTimeSeries.fillCallProperties(callProperties);
             siteSinglePhenomTimeSeries.checkOnePhenomenonTypePREC_ToYBetweenTwoDates();

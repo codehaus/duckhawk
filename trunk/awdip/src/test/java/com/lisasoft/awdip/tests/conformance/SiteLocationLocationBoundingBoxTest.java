@@ -6,13 +6,13 @@ import java.text.ParseException;
 import com.lisasoft.awdip.tests.general.AbstractTestLocationBoundingBox;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
-public class SiteLocationTestLocationBoundingBox
+public class SiteLocationLocationBoundingBoxTest
 extends AbstractTestLocationBoundingBox {
     final static String FEATURE_TYPE_NAME = "aw:SiteLocation"; 
     final static String CONFIG_FILE =
             "/conformance/SiteLocationTestLocationBoundingBox.csv";
      
-    public SiteLocationTestLocationBoundingBox()
+    public SiteLocationLocationBoundingBoxTest()
     throws IOException, InvalidConfigFileException, ParseException {
        super();
     }

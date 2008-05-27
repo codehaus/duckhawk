@@ -8,13 +8,13 @@ import com.lisasoft.awdip.util.InvalidConfigFileException;
 
 import static com.lisasoft.awdip.AWDIPTestSupport.getPerfTimes;
 
-public class SiteSinglePhenomTimeSeriesTestDateBetween
+public class SiteSinglePhenomTimeSeriesDateBetweenTest
 extends AbstractTestDateBetween {
     final static String FEATURE_TYPE_NAME = "aw:SiteSinglePhenomTimeSeries"; 
     final static String CONFIG_FILE =
             "/performance/SiteSinglePhenomTimeSeriesTestDateBetween.csv";
      
-    public SiteSinglePhenomTimeSeriesTestDateBetween()
+    public SiteSinglePhenomTimeSeriesDateBetweenTest()
     throws IOException,  InvalidConfigFileException, ParseException {
        super(getPerfTimes());
     }

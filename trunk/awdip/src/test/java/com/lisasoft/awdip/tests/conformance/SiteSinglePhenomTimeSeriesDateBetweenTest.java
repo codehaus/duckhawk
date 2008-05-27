@@ -7,16 +7,16 @@ import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.duckhawk.core.TestExecutor;
 import org.xml.sax.SAXException;
 
-import com.lisasoft.awdip.tests.general.AbstractTestDateAny;
+import com.lisasoft.awdip.tests.general.AbstractTestDateBetween;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
-public class SiteSinglePhenomTimeSeriesTestDateAny
-extends AbstractTestDateAny {
+public class SiteSinglePhenomTimeSeriesDateBetweenTest
+extends AbstractTestDateBetween {
     final static String FEATURE_TYPE_NAME = "aw:SiteSinglePhenomTimeSeries"; 
     final static String CONFIG_FILE =
-            "/conformance/SiteSinglePhenomTimeSeriesTestDateAny.csv";
+            "/conformance/SiteSinglePhenomTimeSeriesTestDateBetween.csv";
      
-    public SiteSinglePhenomTimeSeriesTestDateAny()
+    public SiteSinglePhenomTimeSeriesDateBetweenTest()
     throws IOException,  InvalidConfigFileException, ParseException {
        super();
     }

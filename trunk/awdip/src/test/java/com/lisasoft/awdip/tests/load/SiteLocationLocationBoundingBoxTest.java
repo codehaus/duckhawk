@@ -17,13 +17,13 @@ import static com.lisasoft.awdip.AWDIPTestSupport.getLoadRampUp;
  * @author vmische
  *
  */
-public class SiteLocationTestLocationBoundingBox
+public class SiteLocationLocationBoundingBoxTest
 extends AbstractTestLocationBoundingBox  {
     final static String FEATURE_TYPE_NAME = "aw:SiteLocation"; 
     final static String CONFIG_FILE =
             "/load/SiteLocationTestLocationBoundingBox.csv";
      
-    public SiteLocationTestLocationBoundingBox()
+    public SiteLocationLocationBoundingBoxTest()
     throws IOException,  InvalidConfigFileException {
        super(getPerfTimes(), getLoadNumThreads(), getLoadRampUp());
     }
