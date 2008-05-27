@@ -73,14 +73,15 @@ public class Gml {
     }
     
     /**
-     * Creates a WFS filter for queries between two dates. The dates are within
+     * Creates a WFS filter for queries between two values. The extrema are within
      * the interval (>= and <=)
-     * @param from start date of the date range (format: yyyy-MM-dd)  
-     * @param to end date of the date range (format: yyyy-MM-dd)
+     * @param property the property
+     * @param from start start of the range (date format: yyyy-MM-dd)  
+     * @param to end of the range (date format: yyyy-MM-dd)
      * @return WFS filter expression
      */
-    public static String createBetweenTwoDatesFilter(String from, String to) {
-        return "<ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyName>aw:relatedObservation/aw:PhenomenonTimeSeries/om:result/cv:CompactDiscreteTimeCoverage/cv:element/cv:CompactTimeValuePair/cv:geometry</ogc:PropertyName><ogc:Literal>"
+    public static String createBetweenFilter(String property, String from, String to) {
+        return "<ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyName>" + property + "</ogc:PropertyName><ogc:Literal>"
         + from + "</ogc:Literal></ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyIsLessThanOrEqualTo><ogc:PropertyName>aw:relatedObservation/aw:PhenomenonTimeSeries/om:result/cv:CompactDiscreteTimeCoverage/cv:element/cv:CompactTimeValuePair/cv:geometry</ogc:PropertyName><ogc:Literal>"
         + to + "</ogc:Literal></ogc:PropertyIsLessThanOrEqualTo>";        
     }

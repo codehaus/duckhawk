@@ -29,6 +29,7 @@ public abstract class AbstractTestDateBetween extends AbstractAwdipTest {
     static final String KEY_SITE_NAME = "params.siteName";
     static final String KEY_PHENOMS_NAME = "params.phenomsName";
     static final String KEY_DATE_RANGE = "params.dateRange";
+    static final String DATE_FIELD = "aw:relatedObservation/aw:PhenomenonTimeSeries/om:result/cv:CompactDiscreteTimeCoverage/cv:element/cv:CompactTimeValuePair/cv:geometry";
     
     /** force properties to be in the output, even if "null" */
     static final String[] forcePropertyOutput = new String[]{
@@ -177,7 +178,7 @@ public abstract class AbstractTestDateBetween extends AbstractAwdipTest {
         //    filters 
         String[] filters = new String[3];
         filters[0] = Gml.createPropertyFilter("gml:name", site);
-        filters[1] = Gml.createBetweenTwoDatesFilter(
+        filters[1] = Gml.createBetweenFilter(DATE_FIELD,
                 dateRangeString[0], dateRangeString[1]);
         
         //String[] phenomFilters = new String[phenoms.length];
