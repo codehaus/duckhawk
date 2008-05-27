@@ -3,39 +3,24 @@ package com.lisasoft.awdip.tests.error;
 import static com.lisasoft.awdip.AWDIPTestSupport.*;
 import static org.custommonkey.xmlunit.XMLAssert.*;
 
-import java.util.HashMap;
-
 import org.duckhawk.core.TestExecutor;
-import org.duckhawk.junit3.ConformanceTest;
 
-import com.lisasoft.awdip.util.Communication;
+import com.lisasoft.awdip.AbstractAwdipTest;
 import com.lisasoft.awdip.util.Gml;
-import com.lisasoft.awdip.util.Request;
-import com.lisasoft.awdip.util.Communication.RequestMethod;
 
-public class SiteLocationErrorTest extends ConformanceTest {
-
-    static final String FEATURE_TYPE = "aw:SiteLocation";
-
-    protected HashMap<String, String> data = new HashMap<String, String>();
-
-    protected Communication comm;
-
-    protected Request request;
-
+public class SiteLocationErrorTest extends AbstractAwdipTest {
     public SiteLocationErrorTest() {
         super(getAwdipContext());
     }
+    
+    @Override
+    public String getConfigFilename() {
+        throw new UnsupportedOperationException("Why do you need this?");
+    }
 
     @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        String host = (String) getEnvironment(KEY_HOST);
-        int port = (Integer) getEnvironment(KEY_PORT);
-        String path = (String) getEnvironment(KEY_GS_PATH);
-
-        comm = new Communication(host, port);
-        request = new Request(RequestMethod.POST, "/" + path);
+    public String getFeatureTypeName() {
+        throw new UnsupportedOperationException("Why do you need this?");
     }
 
     public void testNotXML() throws Exception {
@@ -190,6 +175,7 @@ public class SiteLocationErrorTest extends ConformanceTest {
         assertXpathExists("/ows:ExceptionReport/ows:Exception/ows:ExceptionText", response);
         assertTrue(response.contains("theMissingProperty"));
     }
+
 
     // THIS ONE CANNOT ACTUALLY RUN, SINCE GS IS LENIENT AND DOES NOT THROW AN EXCEPTION
     // FOR THIS KIND OF "INVALID" BBOX. IN FACT FOR SOME SPECS LIKE WCS THIS ONE IS VALID
