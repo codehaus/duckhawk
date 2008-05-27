@@ -22,7 +22,16 @@ public class ConformanceSummarizer implements TestListener {
 
     int callCount;
 
-    ExceptionConverter converter = new ExceptionConverter();
+    ExceptionConverter converter;
+    
+    public ConformanceSummarizer() {
+        this.converter = new ExceptionConverter();
+    }
+    
+    public ConformanceSummarizer(boolean verbose) {
+        this();
+        converter.setVerbose(verbose);
+    }
 
     /**
      * Prepares the summarizer for a summarization run (zeroes the counters and
