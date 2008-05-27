@@ -204,8 +204,7 @@ public class XStreamDumperTest extends TestCase {
         // report
         String mainFilePath = dumper.getMainReportFile().getAbsolutePath();
         File detailDir = new File(mainFilePath.substring(0, mainFilePath
-                .length() - 3));
-        System.out.println(detailDir.getAbsolutePath());
+                .length() - 4));
         assertTrue(detailDir.exists());
         assertEquals(1, detailDir.listFiles().length);
 
