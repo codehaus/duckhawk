@@ -46,7 +46,7 @@ public class AWDIPTestSupport {
      * Directory where the configuration files for the tests are
      * TODO vmische Make it a configuration file parameter
      */
-    private static String testsConfigDir = "src/main/resources/tests";
+    private static String testsConfigDir = "src/test/resources/tests";
     
      
     /**
@@ -94,7 +94,7 @@ public class AWDIPTestSupport {
             environment.put(KEY_GS_PATH, "geoserver2/wfs");
             //environment.put(KEY_GS_PATH, "geoserver/wfs");
             environment.put(KEY_SCHEMA_RPATH,
-                    "src/main/resources/schemas/all.xsd");
+                    "src/test/resources/schemas/all.xsd");
             environment.put(KEY_TESTS_CONFIG_DIR, testsConfigDir);            
             
             /** test call properties that definitely be in the output (set to
