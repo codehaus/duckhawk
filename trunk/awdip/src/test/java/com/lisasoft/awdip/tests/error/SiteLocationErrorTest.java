@@ -36,7 +36,6 @@ public class SiteLocationErrorTest extends AbstractAwdipTest {
         putCallProperty(TestExecutor.KEY_RESPONSE, response);
 
         // check
-        System.out.println(response);
         assertXpathExists("/ows:ExceptionReport/ows:Exception/ows:ExceptionText", response);
     }
 
@@ -45,7 +44,6 @@ public class SiteLocationErrorTest extends AbstractAwdipTest {
         String body = Gml.createAndFilterRequest("aw:SiteLocation");
         // ... let's remove the closing elements
         body = body.replaceAll("</wfs:GetFeature>", "");
-        System.out.println(body);
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
         putCallProperty(TestExecutor.KEY_DESCRIPTION,
@@ -75,7 +73,6 @@ public class SiteLocationErrorTest extends AbstractAwdipTest {
 
         // check
         assertXpathExists("/ows:ExceptionReport/ows:Exception/ows:ExceptionText", response);
-        System.out.println(response);
         assertTrue(response.contains("InvalidElement"));
     }
 
@@ -100,7 +97,6 @@ public class SiteLocationErrorTest extends AbstractAwdipTest {
 
         // check
         assertXpathExists("/ows:ExceptionReport/ows:Exception/ows:ExceptionText", response);
-        System.out.println(response);
         assertTrue(response.contains("InvalidElementHere"));
     }
 
@@ -160,7 +156,6 @@ public class SiteLocationErrorTest extends AbstractAwdipTest {
         // force in an invalid property request
         body = body.replaceAll("</wfs:Query>",
                 "<wfs:PropertyName>aw:theMissingProperty</wfs:PropertyName></wfs:Query>");
-        System.out.println(body);
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
         putCallProperty(TestExecutor.KEY_DESCRIPTION,
@@ -171,7 +166,6 @@ public class SiteLocationErrorTest extends AbstractAwdipTest {
         putCallProperty(TestExecutor.KEY_RESPONSE, response);
 
         // check
-        System.out.println(response);
         assertXpathExists("/ows:ExceptionReport/ows:Exception/ows:ExceptionText", response);
         assertTrue(response.contains("theMissingProperty"));
     }
@@ -183,7 +177,6 @@ public class SiteLocationErrorTest extends AbstractAwdipTest {
 //    public void testInvalidBBox() throws Exception {
 //        String body = Gml.createAndFilterMaxFeaturesRequest("aw:SiteLocation", 2, Gml
 //                .createBoundingBoxFilter(new double[] {0, 0, -10, -10}));
-//        System.out.println(body);
 //        data.put("body", body);
 //        putCallProperty(TestExecutor.KEY_REQUEST, body);
 //        putCallProperty(TestExecutor.KEY_DESCRIPTION,
@@ -194,7 +187,6 @@ public class SiteLocationErrorTest extends AbstractAwdipTest {
 //        putCallProperty(TestExecutor.KEY_RESPONSE, response);
 //
 //        // check
-//        System.out.println(response);
 //        assertXpathExists("/ows:ExceptionReport/ows:Exception/ows:ExceptionText", response);
 //        assertTrue(response.contains("theMissingProperty"));
 //    }
