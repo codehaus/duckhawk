@@ -6,13 +6,13 @@ import java.text.ParseException;
 import com.lisasoft.awdip.tests.general.AbstractTestLocationMaximumFeatures;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
-public class SiteLocationTestLocationMaximumFeatures
+public class SiteLocationLocationMaximumFeaturesTest
 extends AbstractTestLocationMaximumFeatures {
     final static String FEATURE_TYPE_NAME = "aw:SiteLocation"; 
     final static String CONFIG_FILE =
             "/conformance/SiteLocationTestLocationMaximumFeatures.csv";
      
-    public SiteLocationTestLocationMaximumFeatures()
+    public SiteLocationLocationMaximumFeaturesTest()
     throws IOException, InvalidConfigFileException, ParseException {
        super();
     }

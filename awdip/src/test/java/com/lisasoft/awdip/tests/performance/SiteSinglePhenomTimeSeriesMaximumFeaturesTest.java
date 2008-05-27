@@ -30,7 +30,7 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
  * @author vmische
  *
  */
-public class SiteSinglePhenomTimeSeriesMaximumFeatures extends StressTest {
+public class SiteSinglePhenomTimeSeriesMaximumFeaturesTest extends StressTest {
     static Communication comm;
 
     /** data sent to the server (body of the POST message) */
@@ -43,12 +43,12 @@ public class SiteSinglePhenomTimeSeriesMaximumFeatures extends StressTest {
     
     
     /** Use as performance test with one thread */
-    public SiteSinglePhenomTimeSeriesMaximumFeatures() {
+    public SiteSinglePhenomTimeSeriesMaximumFeaturesTest() {
         this(getPerfTimes(), 1, 0);
     }
 
     /** For load tests with multiple threads */
-    public SiteSinglePhenomTimeSeriesMaximumFeatures(int times, int numThreads,
+    public SiteSinglePhenomTimeSeriesMaximumFeaturesTest(int times, int numThreads,
             int rampUp) {
         super(getAwdipContext(), times, numThreads, rampUp);
         putEnvironment(KEY_DESCRIPTION,

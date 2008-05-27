@@ -15,13 +15,13 @@ import static com.lisasoft.awdip.AWDIPTestSupport.getPerfTimes;
  * @author vmische
  *
  */
-public class SiteLocationTestLocationBoundingBox
+public class SiteLocationLocationBoundingBoxTest
 extends AbstractTestLocationBoundingBox  {
     final static String FEATURE_TYPE_NAME = "aw:SiteLocation"; 
     final static String CONFIG_FILE =
             "/performance/SiteLocationTestLocationBoundingBox.csv";
      
-    public SiteLocationTestLocationBoundingBox()
+    public SiteLocationLocationBoundingBoxTest()
     throws IOException,  InvalidConfigFileException {
        super(getPerfTimes());
     }

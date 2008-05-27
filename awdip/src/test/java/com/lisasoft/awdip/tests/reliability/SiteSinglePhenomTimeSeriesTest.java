@@ -34,7 +34,7 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
  * @author vmische
  *
  */
-public class SiteSinglePhenomTimeSeries extends ConformanceTest {
+public class SiteSinglePhenomTimeSeriesTest extends ConformanceTest {
     static Communication comm;
 
     /** data sent to the server (body of the POST message) */
@@ -63,7 +63,7 @@ public class SiteSinglePhenomTimeSeries extends ConformanceTest {
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     
     
-    public SiteSinglePhenomTimeSeries() {
+    public SiteSinglePhenomTimeSeriesTest() {
         super(getAwdipContext(forcePropertyOutput));
         putEnvironment(KEY_DESCRIPTION,
                 "Tests the singlePhenomTimeSeries feature type.");
@@ -74,7 +74,7 @@ public class SiteSinglePhenomTimeSeries extends ConformanceTest {
      * 
      * @param dummy Dummy parameter to make distinction from default constructor
      */ 
-    public SiteSinglePhenomTimeSeries(Object dummy) {
+    public SiteSinglePhenomTimeSeriesTest(Object dummy) {
         this();
         setUp();
     }   

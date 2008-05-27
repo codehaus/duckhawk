@@ -24,7 +24,7 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
  * @author vmische
  *
  */
-public class SiteLocationTestPropertyAndBoundingBox extends StressTest  {
+public class SiteLocationPropertyAndBoundingBoxTest extends StressTest  {
     static Communication comm;
     
     /** data sent to the server (path and body of the POST message) */
@@ -57,13 +57,13 @@ public class SiteLocationTestPropertyAndBoundingBox extends StressTest  {
     
     
     /** Use as performance test with one thread */
-    public SiteLocationTestPropertyAndBoundingBox() {
+    public SiteLocationPropertyAndBoundingBoxTest() {
         this(getPerfTimes(), 1, 0);
     }
     
   
     /** For load tests with multiple threads */
-    public SiteLocationTestPropertyAndBoundingBox(int times, int numThreads,
+    public SiteLocationPropertyAndBoundingBoxTest(int times, int numThreads,
             int rampUp) {
         super(getAwdipContext(), times, numThreads, rampUp);
         putEnvironment(KEY_DESCRIPTION,

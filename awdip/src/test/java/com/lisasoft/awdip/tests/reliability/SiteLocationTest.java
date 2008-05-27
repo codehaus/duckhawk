@@ -34,7 +34,7 @@ import com.lisasoft.awdip.util.Communication.RequestMethod;
  * @author vmische
  *
  */
-public class SiteLocation extends ConformanceTest {
+public class SiteLocationTest extends ConformanceTest {
     static Communication comm;
 
     /** data sent to the server (body of the POST message) */
@@ -66,7 +66,7 @@ public class SiteLocation extends ConformanceTest {
     double[] maxBbox = new double[]{122, -23, 132, -13};
     
     
-    public SiteLocation() {
+    public SiteLocationTest() {
         super(getAwdipContext(forcePropertyOutput));
         putEnvironment(KEY_DESCRIPTION,
                 "Request all features of type SiteLocation within a randomly " +
@@ -79,7 +79,7 @@ public class SiteLocation extends ConformanceTest {
      * 
      * @param dummy Dummy parameter to make distinction from default constructor
      */ 
-    public SiteLocation(Object dummy) {
+    public SiteLocationTest(Object dummy) {
         this();
         setUp();
     }    

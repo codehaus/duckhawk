@@ -7,12 +7,12 @@ import java.io.IOException;
 import com.lisasoft.awdip.tests.general.AbstractTestDateAny;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
-public class SiteSinglePhenomTimeSeriesTestDateAny extends AbstractTestDateAny {
+public class SiteSinglePhenomTimeSeriesDateAnyTest extends AbstractTestDateAny {
     final static String FEATURE_TYPE_NAME = "aw:SiteSinglePhenomTimeSeries"; 
     final static String CONFIG_FILE =
             "/performance/SiteSinglePhenomTimeSeriesTestDateAny.csv";
     
-    public SiteSinglePhenomTimeSeriesTestDateAny()
+    public SiteSinglePhenomTimeSeriesDateAnyTest()
     throws IOException,  InvalidConfigFileException {
        super(getPerfTimes());
     }

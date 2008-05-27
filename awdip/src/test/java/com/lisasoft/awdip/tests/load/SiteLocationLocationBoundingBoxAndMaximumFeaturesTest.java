@@ -9,13 +9,13 @@ import java.io.IOException;
 import com.lisasoft.awdip.tests.general.AbstractTestLocationBoundingBoxAndMaximumFeatures;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
-public class SiteLocationTestLocationBoundingBoxAndMaximumFeatures
+public class SiteLocationLocationBoundingBoxAndMaximumFeaturesTest
 extends AbstractTestLocationBoundingBoxAndMaximumFeatures {
     final static String FEATURE_TYPE_NAME = "aw:SiteLocation"; 
     final static String CONFIG_FILE =
             "/load/SiteLocationTestLocationBoundingBoxAndMaximumFeatures.csv";
 
-    public SiteLocationTestLocationBoundingBoxAndMaximumFeatures()
+    public SiteLocationLocationBoundingBoxAndMaximumFeaturesTest()
     throws IOException,  InvalidConfigFileException {
         super(getPerfTimes(), getLoadNumThreads(), getLoadRampUp());
     }

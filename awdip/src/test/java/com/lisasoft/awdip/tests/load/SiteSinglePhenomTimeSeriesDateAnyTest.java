@@ -6,27 +6,26 @@ import static com.lisasoft.awdip.AWDIPTestSupport.getPerfTimes;
 
 import java.io.IOException;
 
-import com.lisasoft.awdip.tests.general.AbstractTestLocationMaximumFeatures;
+import com.lisasoft.awdip.tests.general.AbstractTestDateAny;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
-public class SiteLocationTestLocationMaximumFeatures
-extends AbstractTestLocationMaximumFeatures {
-    final static String FEATURE_TYPE_NAME = "aw:SiteLocation"; 
+public class SiteSinglePhenomTimeSeriesDateAnyTest extends AbstractTestDateAny {
+    final static String FEATURE_TYPE_NAME = "aw:SiteSinglePhenomTimeSeries"; 
     final static String CONFIG_FILE =
-            "/load/SiteLocationTestLocationMaximumFeatures.csv";
-
-    public SiteLocationTestLocationMaximumFeatures()
+            "/load/SiteSinglePhenomTimeSeriesTestDateAny.csv";
+    
+    public SiteSinglePhenomTimeSeriesDateAnyTest()
     throws IOException,  InvalidConfigFileException {
         super(getPerfTimes(), getLoadNumThreads(), getLoadRampUp());
+    }
+    
+    @Override
+    public String getConfigFilename() {
+        return CONFIG_FILE;
     }
 
     @Override
     public String getFeatureTypeName() {
         return FEATURE_TYPE_NAME;
-    }
-
-    @Override
-    public String getConfigFilename() {
-        return CONFIG_FILE;
     }
 }
