@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class TestContext {
+public class DefaultTestContext implements TestContext {
 
     public enum TestSuiteState {
         /**
@@ -37,7 +37,7 @@ public class TestContext {
 
     private long end;
 
-    public TestContext(String productId, String productVersion,
+    public DefaultTestContext(String productId, String productVersion,
             TestProperties environment, TestListener... listeners) {
         if (productId == null)
             throw new IllegalArgumentException("ProductId not specified");
@@ -54,25 +54,37 @@ public class TestContext {
         this.state = TestSuiteState.ready;
     }
 
+    /* (non-Javadoc)
+     * @see org.duckhawk.core.ITestContext#getEnvironment()
+     */
     public TestProperties getEnvironment() {
         // TODO: make this un-modifiable as well?
         return environment;
     }
 
+    /* (non-Javadoc)
+     * @see org.duckhawk.core.ITestContext#getListeners()
+     */
     public List<TestListener> getListeners() {
         return listeners;
     }
 
+    /* (non-Javadoc)
+     * @see org.duckhawk.core.ITestContext#getProductId()
+     */
     public String getProductId() {
         return productId;
     }
 
+    /* (non-Javadoc)
+     * @see org.duckhawk.core.ITestContext#getProductVersion()
+     */
     public String getProductVersion() {
         return productVersion;
     }
 
-    /**
-     * Notifies all test suite listeners that the test suite is about to start
+    /* (non-Javadoc)
+     * @see org.duckhawk.core.ITestContext#fireTestSuiteStarting()
      */
     public synchronized void fireTestSuiteStarting() {
         start = System.currentTimeMillis();
@@ -86,8 +98,8 @@ public class TestContext {
         }
     }
 
-    /**
-     * Notifies all test suite listeners that the test suite is ending
+    /* (non-Javadoc)
+     * @see org.duckhawk.core.ITestContext#fireTestSuiteEnding()
      */
     public synchronized void fireTestSuiteEnding() {
         end = System.currentTimeMillis();
@@ -101,38 +113,29 @@ public class TestContext {
         }
     }
 
-    /**
-     * Current state of the test suite
-     * 
-     * @return
+    /* (non-Javadoc)
+     * @see org.duckhawk.core.ITestContext#getState()
      */
     public TestSuiteState getState() {
         return state;
     }
 
-    /**
-     * Resets this context for reuse (sets back the state to
-     * {@link TestSuiteState#ready}).
+    /* (non-Javadoc)
+     * @see org.duckhawk.core.ITestContext#reset()
      */
     public void reset() {
         this.state = TestSuiteState.ready;
     }
 
-    /**
-     * Returns the time when the test suite started (according to
-     * {@link System#currentTimeMillis()} when the start suite event was fired)
-     * 
-     * @return
+    /* (non-Javadoc)
+     * @see org.duckhawk.core.ITestContext#getStart()
      */
     public long getStart() {
         return start;
     }
     
-    /**
-     * Returns the time when the test suite ended (according to
-     * {@link System#currentTimeMillis()} when the end suite event was fired)
-     * 
-     * @return
+    /* (non-Javadoc)
+     * @see org.duckhawk.core.ITestContext#getEnd()
      */
     public long getEnd() {
         return end;

@@ -3,6 +3,7 @@ package org.duckhawk.sample;
 import java.io.File;
 
 import org.duckhawk.core.TestContext;
+import org.duckhawk.core.DefaultTestContext;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestPropertiesImpl;
 import org.duckhawk.report.listener.XStreamDumper;
@@ -19,7 +20,7 @@ public class TestSupport {
             env.put("description", "This is a fictous test to show up "
                     + "conformance, performance and stress testing abilities "
                     + "of DuckHawk with the JUnit3 integration");
-            context = new TestContext("Math", "1.0", env,
+            context = new DefaultTestContext("Math", "1.0", env,
                     new PerformanceSummarizer(), //
                     new ConformanceSummarizer(), //
                     new PrintStreamListener(false, true), // 

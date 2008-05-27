@@ -3,6 +3,7 @@ import junit.framework.TestCase;
 import junit.framework.TestResult;
 
 import org.duckhawk.core.TestContext;
+import org.duckhawk.core.DefaultTestContext;
 import org.duckhawk.util.PerformanceSummarizer;
 
 public class StressTestTest extends TestCase {
@@ -13,7 +14,7 @@ public class StressTestTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         summarizer = new PerformanceSummarizer();
-        context = new TestContext("product", "0.1", null, summarizer);
+        context = new DefaultTestContext("product", "0.1", null, summarizer);
     }
 
     // test for DH-6

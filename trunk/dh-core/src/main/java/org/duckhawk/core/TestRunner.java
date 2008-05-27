@@ -3,7 +3,7 @@ package org.duckhawk.core;
 /**
  * Executes the test provided by the {@link TestExecutorFactory}.
  * <p>
- * The runner is supposed to operate in a {@link TestContext} and operate
+ * The runner is supposed to operate in a {@link DefaultTestContext} and operate
  * against a {@link TestExecutor} that actually performs whatever action needs
  * checking or timing.
  * <p>

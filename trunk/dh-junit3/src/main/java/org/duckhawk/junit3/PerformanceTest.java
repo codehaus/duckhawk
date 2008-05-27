@@ -2,8 +2,8 @@ package org.duckhawk.junit3;
 
 import java.util.Random;
 
-import org.duckhawk.core.PerformanceTestRunner;
 import org.duckhawk.core.TestContext;
+import org.duckhawk.core.PerformanceTestRunner;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestRunner;
 

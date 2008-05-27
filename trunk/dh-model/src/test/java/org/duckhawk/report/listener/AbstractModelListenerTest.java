@@ -2,6 +2,7 @@ package org.duckhawk.report.listener;
 import junit.framework.TestCase;
 
 import org.duckhawk.core.TestContext;
+import org.duckhawk.core.DefaultTestContext;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestMetadata;
 import org.duckhawk.core.TestProperties;
@@ -186,7 +187,7 @@ public class AbstractModelListenerTest extends TestCase {
         TestProperties environment = new TestPropertiesImpl();
         environment.put("one", new Integer(1));
         environment.put("host", "www.google.com");
-        TestContext context = new TestContext(metadata.getProductId(), metadata.getProductVersion(), environment);
+        TestContext context = new DefaultTestContext(metadata.getProductId(), metadata.getProductVersion(), environment);
         listener.testSuiteStarting(context);
         
         assertNotNull(run);
