@@ -117,23 +117,6 @@ public class XStreamDumperTest extends TestCase {
         }
     }
 
-    public void testDirectoryCannotBeCreated() throws Exception {
-        // make sure we have a new clean directory so that the dumper will be
-        // forced to create it
-        File root = new File("./target/hoolabaloola/dh-test"
-                + System.currentTimeMillis());
-        assertFalse(root.exists());
-
-        // run the dumper
-        try {
-            XStreamDumper d = new XStreamDumper(root);
-            d.testRunStarting(metadata, emptyProperties, 25);
-            fail("It should not be possible to create the root dir");
-        } catch (IllegalArgumentException e) {
-            // fine
-        }
-    }
-
     public void testNoDetail() throws Exception {
         dumper.testRunStarting(metadata, emptyProperties, 25);
         dumper.testRunCompleted(metadata, sampleProperties);
