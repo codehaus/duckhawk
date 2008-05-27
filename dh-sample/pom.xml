@@ -32,4 +32,16 @@
 	    <version>${project.version}</version>	
     </dependency>
   </dependencies>
+  
+  <build>
+    <plugins>
+      <!-- unit testing: ignore failures, they are there for demonstration reasons -->
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <testFailureIgnore>true</testFailureIgnore>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
