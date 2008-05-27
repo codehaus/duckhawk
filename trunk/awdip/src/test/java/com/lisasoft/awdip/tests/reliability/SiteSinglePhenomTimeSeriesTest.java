@@ -51,6 +51,7 @@ public class SiteSinglePhenomTimeSeriesTest extends ConformanceTest {
     /** properties that should make it into the output */
     static final String KEY_DATE_START = "params.dateStart";
     static final String KEY_DATE_END = "params.dateEnd";
+    static final String DATE_FIELD = "aw:relatedObservation/aw:PhenomenonTimeSeries/om:result/cv:CompactDiscreteTimeCoverage/cv:element/cv:CompactTimeValuePair/cv:geometry";
     
     /** force properties to be in the output, even if "null" */
     static final String[] forcePropertyOutput = new String[]{
@@ -178,7 +179,7 @@ public class SiteSinglePhenomTimeSeriesTest extends ConformanceTest {
                 "aw:SiteSinglePhenomTimeSeries",
                 500,
                 createOnePhenomenonTypeFilter(phenomType),
-                Gml.createBetweenTwoDatesFilter(dateRange[0], dateRange[1]));
+                Gml.createBetweenFilter(DATE_FIELD, dateRange[0], dateRange[1]));
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
         
