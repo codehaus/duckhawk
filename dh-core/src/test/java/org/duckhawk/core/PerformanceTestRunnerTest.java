@@ -8,7 +8,7 @@ import org.easymock.IAnswer;
 public class PerformanceTestRunnerTest extends TestCase {
     
     public void testBuilExceptions() {
-        TestContext context = new TestContext("test", "0.1", new TestPropertiesImpl());
+        TestContext context = new DefaultTestContext("test", "0.1", new TestPropertiesImpl());
         TestExecutor executor = EasyMock.createNiceMock(TestExecutor.class);
         try {
             new PerformanceTestRunner(context, executor, -10);

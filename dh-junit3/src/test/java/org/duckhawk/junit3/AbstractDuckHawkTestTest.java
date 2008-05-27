@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 import org.duckhawk.core.ConformanceTestRunner;
 import org.duckhawk.core.TestContext;
+import org.duckhawk.core.DefaultTestContext;
 import org.duckhawk.core.TestRunner;
 
 public class AbstractDuckHawkTestTest extends TestCase {
@@ -12,7 +13,7 @@ public class AbstractDuckHawkTestTest extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        context = new TestContext("product", "version", null);
+        context = new DefaultTestContext("product", "version", null);
     }
 
     public void testMissingMethod() {

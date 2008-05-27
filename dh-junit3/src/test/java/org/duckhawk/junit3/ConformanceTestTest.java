@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import junit.framework.TestResult;
 
 import org.duckhawk.core.TestContext;
+import org.duckhawk.core.DefaultTestContext;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestListener;
 import org.duckhawk.core.TestMetadata;
@@ -44,7 +45,7 @@ public class ConformanceTestTest extends TestCase {
     
     @Override
     protected void setUp() throws Exception {
-        context = new TestContext("product", "0.1", null, new RecordingListener());
+        context = new DefaultTestContext("product", "0.1", null, new RecordingListener());
     }
 
     public void testRunOneTest() {

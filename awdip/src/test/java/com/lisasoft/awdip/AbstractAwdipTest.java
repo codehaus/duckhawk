@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.Random;
 
 import org.duckhawk.core.ConformanceTestRunner;
+import org.duckhawk.core.TestContext;
 import org.duckhawk.core.PerformanceTestRunner;
 import org.duckhawk.core.StressTestRunner;
-import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestRunner;
 import org.duckhawk.junit3.AbstractDuckHawkTest;
 

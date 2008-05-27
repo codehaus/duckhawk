@@ -77,7 +77,7 @@ public class TestRunnerScaffolding {
                 type);
         emptyProperties = new TestPropertiesImpl();
         listeners = buildTestListeners();
-        context = new TestContext("whosGonnaTestTheTests", "0.1", emptyProperties, listeners);
+        context = new DefaultTestContext("whosGonnaTestTheTests", "0.1", emptyProperties, listeners);
         baseExecutor = buildExecutor();
 
         runner = buildTestRunner(context, baseExecutor);

@@ -10,7 +10,7 @@ import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestPropertiesImpl;
 import org.duckhawk.core.TestRunner;
-import org.duckhawk.core.TestContext.TestSuiteState;
+import org.duckhawk.core.DefaultTestContext.TestSuiteState;
 
 /**
  * The abstract integration between JUnit3 and DuckHawk. Subclasses specializes
@@ -26,7 +26,7 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
      * The test context in which we're running (to be used only in order to
      * create a runner)
      */
-    private TestContext context;
+    private ExceptionContextWrapper context;
 
     /**
      * The properties for the single test run.
@@ -44,7 +44,7 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
      * If true, this tests has been cancelled
      */
     protected boolean cancelled;
-
+    
     /**
      * Creates a new test with the minimum properties needed to identify a test.
      * 
@@ -52,11 +52,11 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
      * @param productVersion
      */
     public AbstractDuckHawkTest(TestContext context) {
-        this.context = context;
-        this.enviroment = context.getEnvironment();        
+        this.context = new ExceptionContextWrapper(context);
+        this.enviroment = context.getEnvironment();
         this.properties = new TestPropertiesImpl();
     }
-
+    
     protected abstract TestRunner getTestRunner(TestContext context);
 
     // //////////////////////////////////////////////////////////////////////////
@@ -66,7 +66,7 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
     public void cancel() {
         this.cancelled = true;
     }
-
+    
     @Override
     protected void runTest() throws Throwable {
         // if the context events have not been initialized by anything else, do
@@ -88,6 +88,22 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
 
         // now run the test as requested
         getTestRunner(context).runTests();
+
+        // if at least one exception was thrown during the execution of the
+        // method, throw it back to make it evident for the JUnit test runners
+        // that something wend bad
+        Throwable firstException = context.getFirstException();
+        if (firstException != null) {
+            int exceptionCount = context.getExceptionCount();
+            if (exceptionCount == 1)
+                throw firstException;
+            else
+                throw new Exception(exceptionCount
+                        + " exceptions occurred during "
+                        + "test execution, here is the first one",
+                        firstException);
+        }
+
     }
 
     protected TestExecutor buildTestExecutor() {
@@ -125,7 +141,7 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
     public Object getEnvironment(String key) {
         return enviroment.get(key);
     }
-    
+
     /**
      * Allows to store a environment property after initialization. For example
      * to set the description of a test.
@@ -164,16 +180,16 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
     public Object getCallPropertyObject() {
         return properties;
     }
-    
-    
+
     /**
      * Used by the JUnit3 integration to provide back the call properties
-     * collected by the test during its execution. Tests should not use it, if you need to add a property to the call 
+     * collected by the test during its execution. Tests should not use it, if
+     * you need to add a property to the call
      */
     public void fillCallProperties(TestProperties callProperties) {
         callProperties.putAll(properties);
     }
-    
+
     public void initEnviroment(TestProperties environment) {
         this.enviroment = environment;
     }

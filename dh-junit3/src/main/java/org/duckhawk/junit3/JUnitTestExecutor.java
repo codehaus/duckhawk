@@ -7,7 +7,6 @@ import junit.framework.TestCase;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Logger;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestProperties;
 

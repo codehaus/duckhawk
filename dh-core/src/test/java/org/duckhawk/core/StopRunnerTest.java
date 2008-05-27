@@ -16,7 +16,7 @@ public class StopRunnerTest extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        context = new TestContext("Product", "0.1", new TestPropertiesImpl(),
+        context = new DefaultTestContext("Product", "0.1", new TestPropertiesImpl(),
                 new StartEndTestListener());
 
         executor = new StoppableTestExecutor();

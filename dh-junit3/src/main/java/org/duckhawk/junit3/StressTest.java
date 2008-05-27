@@ -1,7 +1,7 @@
 package org.duckhawk.junit3;
 
-import org.duckhawk.core.StressTestRunner;
 import org.duckhawk.core.TestContext;
+import org.duckhawk.core.StressTestRunner;
 import org.duckhawk.core.TestRunner;
 
 /**

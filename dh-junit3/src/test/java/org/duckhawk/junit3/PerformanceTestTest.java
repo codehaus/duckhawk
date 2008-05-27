@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import junit.framework.TestResult;
 
 import org.duckhawk.core.TestContext;
+import org.duckhawk.core.DefaultTestContext;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.util.PerformanceSummarizer;
 
@@ -19,7 +20,7 @@ public class PerformanceTestTest extends TestCase {
         countCalls = 0;
         countChecks = 0;
         summarizer = new PerformanceSummarizer();
-        context = new TestContext("product", "0.1", null, summarizer);
+        context = new DefaultTestContext("product", "0.1", null, summarizer);
     }
 
     // test for DH-6
