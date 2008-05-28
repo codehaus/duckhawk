@@ -18,11 +18,27 @@ class JUnitTestExecutor implements TestExecutor {
 
     protected Method checkMethod;
 
-    private Method initMethod;
+    protected Method initMethod;
 
     protected TestCase test;
+    
+    protected String testMethodsSuffix;
+    
+    protected String testClassSuffix;
 
     public JUnitTestExecutor(TestCase test, Method method) {
+        this(test, method, null, null);
+    }
+    
+    /**
+     * Initializes the test executor
+     * @param test
+     * @param method
+     * @param testMethodsSuffix
+     */
+    public JUnitTestExecutor(TestCase test, Method method, String testClassSuffix, String testMethodsSuffix) {
+        this.testMethodsSuffix = testMethodsSuffix;
+        this.testClassSuffix = testClassSuffix;
         this.test = test;
         this.runMethod = method;
         this.runMethod.setAccessible(true);
@@ -96,7 +112,9 @@ class JUnitTestExecutor implements TestExecutor {
      * Test id is the class name plus method name
      */
     public String getTestId() {
-        return test.getClass().getName() + "#" + runMethod.getName();
+        String className = test.getClass().getName() + (testClassSuffix != null ? testClassSuffix : "");
+        String methodName = runMethod.getName() + (testMethodsSuffix != null ? testMethodsSuffix : "");
+        return className + "#" + methodName;
     }
 
     public void init(TestProperties environment, TestProperties testProperties) {

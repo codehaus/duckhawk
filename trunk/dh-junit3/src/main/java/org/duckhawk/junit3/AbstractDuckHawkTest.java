@@ -46,6 +46,18 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
     protected boolean cancelled;
     
     /**
+     * A suffix that will be appended to the test method name reported to the
+     * world. Useful if a parameterized testing is used
+     */
+    private String testMethodSuffix;
+    
+    /**
+     * A suffix that will be appended to the test class name reported to the
+     * world. Useful if a parameterized testing is used
+     */
+    private String testClassSuffix;
+    
+    /**
      * Creates a new test with the minimum properties needed to identify a test.
      * 
      * @param productId
@@ -107,7 +119,7 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
     }
 
     protected TestExecutor buildTestExecutor() {
-        return new JUnitTestExecutor(AbstractDuckHawkTest.this, getRunMethod());
+        return new JUnitTestExecutor(this, getRunMethod(), testClassSuffix, testMethodSuffix);
     }
 
     private Method getRunMethod() {
@@ -192,5 +204,35 @@ public abstract class AbstractDuckHawkTest extends TestCase implements
 
     public void initEnviroment(TestProperties environment) {
         this.enviroment = environment;
+    }
+
+    /**
+     * Returns the method name suffix, it's added to the method name when non null to build
+     * the test identifier. Useful when you are using parametrized tests since the same
+     * method can be run over and over with different parameters and thus execute a different job
+     * @return
+     */
+    public String getTestMethodSuffix() {
+        return testMethodSuffix;
+    }
+
+    public void setTestMethodSuffix(String testMethodSuffix) {
+        this.testMethodSuffix = testMethodSuffix;
+    }
+
+    /**
+     * Returns the test class suffix, it's added to the class name when non null to build
+     * the test identifier. Useful when you are using parametrized tests since the class name
+     * would stay the same, even if the tests being run are of a different name (parametrizing
+     * and using suite() one could generate conformance, performance and load tests from the
+     * same class)
+     * @return
+     */
+    public String getTestClassSuffix() {
+        return testClassSuffix;
+    }
+
+    public void setTestClassSuffix(String testClassSuffix) {
+        this.testClassSuffix = testClassSuffix;
     }
 }
