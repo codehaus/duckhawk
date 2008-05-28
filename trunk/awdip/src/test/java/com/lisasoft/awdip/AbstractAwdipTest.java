@@ -74,10 +74,15 @@ public abstract class AbstractAwdipTest extends AbstractDuckHawkTest {
      */
     public AbstractAwdipTest(TestContext context, int times) {
         super(context);
+        configureAsPerformanceTest(times);
+    }
+    
+    public void configureAsPerformanceTest(int times) {
         this.times = times;
         testType = TestType.PERFORMANCE;
     }
-    
+
+
     /**
      * Constructor for performance test (with certain requests within a certain
      * time)
@@ -91,8 +96,6 @@ public abstract class AbstractAwdipTest extends AbstractDuckHawkTest {
         this.random = random;
     }
     
-        
-    
     /**
      * Constructor for stress test
      * @param context
@@ -100,6 +103,11 @@ public abstract class AbstractAwdipTest extends AbstractDuckHawkTest {
     public AbstractAwdipTest(TestContext context, int times,
             int numThreads, int rampUp) {
         super(context);
+        configureAsLoadTest(times, numThreads, rampUp);
+    }
+
+
+    public void configureAsLoadTest(int times, int numThreads, int rampUp) {
         this.times = times;
         this.numThreads = numThreads;
         this.rampUp = rampUp;
@@ -112,14 +120,18 @@ public abstract class AbstractAwdipTest extends AbstractDuckHawkTest {
      * Returns the feature type of the current test
      * @return the feature type of the current test
      */
-    public abstract String getFeatureTypeName();
+    public String getFeatureTypeName() {
+        throw new UnsupportedOperationException("Subclasses neededing this method are supposed to override it");
+    }
 
     
     /**
      * Returns the filename of the configuration file for the current test
      * @return the filename of the configuration file for the current test
      */
-    public abstract String getConfigFilename();
+    public String getConfigFilename() {
+        throw new UnsupportedOperationException("Subclasses neededing this method are supposed to override it");
+    }
     
     
     
