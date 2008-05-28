@@ -90,8 +90,9 @@ public class SiteLocationErrorTest extends AbstractAwdipTest {
                         + "replacing wfs:Query with wfs:InvalidElement.");
 
         // run
-        // COMMENTED OUT TO AVOID WAITING FOREVER ON EACH REQUEST
-        String response = null;
+        // REQUEST COMMENTED OUT TO AVOID WAITING FOREVER ON EACH REQUEST
+        String response = "THIS REQUEST WASN'T ACTUALLY SENT AS IT WILL RETURN "
+        		+ "ALL DATA IF GEOSERVER IS NOT IN STRICT CITE MODE";
         // response = comm.sendRequest(request, data);
         putCallProperty(TestExecutor.KEY_RESPONSE, response);
 
