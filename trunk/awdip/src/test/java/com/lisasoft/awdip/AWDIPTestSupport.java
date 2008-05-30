@@ -116,24 +116,24 @@ public class AWDIPTestSupport {
 
             forcePropertyOutput = Util.concatStringArrays(
                     forcePropertyOutputGlobal, forcePropertyOutputLocal);
-
+/*
             // cleanup the report directory
             try {
                 FileUtils.cleanDirectory(new File("./target/dh-report"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
+*/
             // setup the context
             context = new DefaultTestContext("AWDIP", "0.1", environment,
                     new PerformanceSummarizer(),
-                    new ConformanceSummarizer(true), new SetPropertyListener(
-                            forcePropertyOutput),
-                    // new PrintStreamListener(true, true),
-                    new PrintStreamListener(false, true), new XStreamDumper(
-                            new File("./target/dh-report/xml")),
-                    new TransformHtmlListener(new File(
-                            "./target/dh-report/html")));
+                    new ConformanceSummarizer(true),
+                    new SetPropertyListener(forcePropertyOutput),
+                    //new PrintStreamListener(true, true),
+                    new PrintStreamListener(false, true),
+                    new XStreamDumper(new File("./target/dh-report/xml")),
+                    new TransformHtmlListener(
+                            new File("./target/dh-report/html")));
         }
         return context;
     }

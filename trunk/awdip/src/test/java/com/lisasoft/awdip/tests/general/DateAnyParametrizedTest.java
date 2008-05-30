@@ -14,9 +14,11 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestProperties;
+import org.duckhawk.core.TestType;
 import org.xml.sax.SAXException;
 
 import com.lisasoft.awdip.AbstractAwdipTest;
+import com.lisasoft.awdip.tests.conformance.AwdipConformanceTest;
 import com.lisasoft.awdip.util.CSVReader;
 import com.lisasoft.awdip.util.Gml;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
@@ -52,21 +54,8 @@ public class DateAnyParametrizedTest extends AbstractAwdipTest {
         super(getAwdipContext(forcePropertyOutput));
         setName("testAnyDate");
         setTestMethodSuffix(suffix);
-        setTestClassSuffix("Conformance");
         this.site = site;
         this.phenomenon = phenomenon;
-    }
-    
-    @Override
-    public void configureAsLoadTest(int times, int numThreads, int rampUp) {
-        super.configureAsLoadTest(times, numThreads, rampUp);
-        setTestClassSuffix("Load");
-    }
-    
-    @Override
-    public void configureAsPerformanceTest(int times) {
-        super.configureAsPerformanceTest(times);
-        setTestClassSuffix("Performance");
     }
     
     public static Test suite() throws Exception {
@@ -111,16 +100,18 @@ public class DateAnyParametrizedTest extends AbstractAwdipTest {
     }
 
     public void initAnyDate(TestProperties context) {
-        String body = Gml.createAndFilterRequest(FEATURE_TYPE_NAME, Gml.createPropertyFilter(
-                "gml:name", site), Gml.createPropertyFilter(DATE_FIELD, phenomenon));
+        String body = Gml.createAndFilterRequest(FEATURE_TYPE_NAME,
+                Gml.createPropertyFilter("gml:name", site),
+                Gml.createPropertyFilter(DATE_FIELD, phenomenon));
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
 
-        putCallProperty(KEY_SITE_NAME, site);
-        putCallProperty(KEY_PHENOM_NAME, phenomenon);
+        context.put(KEY_SITE_NAME, site);
+        context.put(KEY_PHENOM_NAME, phenomenon);
         putCallProperty(TestExecutor.KEY_DESCRIPTION,
-                "Part of the testing a single phenomenon at any date test" + "class.");
+                "Part of the testing a single phenomenon at any date test" +
+                "class.");
     }
 
     public void testAnyDate() throws HttpException, IOException {
@@ -129,8 +120,14 @@ public class DateAnyParametrizedTest extends AbstractAwdipTest {
     }
 
     public void checkAnyDate() throws XpathException, SAXException, IOException {
+        String response = (String) getCallProperty(TestExecutor.KEY_RESPONSE); 
         XMLAssert.assertXpathExists("/wfs:FeatureCollection/gml:featureMembers",
-                (String) getCallProperty(TestExecutor.KEY_RESPONSE));
+                response);
+        
+        if (getTestType()==TestType.conformance) {
+            AwdipConformanceTest.NumberOfFeaturesCheck(response);
+            AwdipConformanceTest.validate(response);
+        }
     }
 
 }
