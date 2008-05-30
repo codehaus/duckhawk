@@ -21,7 +21,10 @@ public class AWDIPTestRunner {
 	    //TestRunner.run(XercesSaxTest.class);
 		//TestRunner.run(XercesJaxpTest.class);
 		//TestRunner.run(XMLUnitValidationTest.class);
-
+	    
+	    
+	    run(com.lisasoft.awdip.tests.general.DateBetweenParametrizedTest.class);
+/*
 	    // conformance tests
 	    System.out.println("conformance");
 	    run(com.lisasoft.awdip.tests.conformance.SiteLocationLocationBoundingBoxTest.class);
@@ -45,6 +48,7 @@ public class AWDIPTestRunner {
 	    run(com.lisasoft.awdip.tests.load.SiteLocationLocationMaximumFeaturesTest.class);
 	    run(com.lisasoft.awdip.tests.load.SiteSinglePhenomTimeSeriesDateAnyTest.class);
 	    run(com.lisasoft.awdip.tests.load.SiteSinglePhenomTimeSeriesDateBetweenTest.class);
+*/	    
 }
 	
 

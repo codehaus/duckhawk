@@ -14,6 +14,7 @@ import org.duckhawk.core.TestContext;
 import org.duckhawk.core.PerformanceTestRunner;
 import org.duckhawk.core.StressTestRunner;
 import org.duckhawk.core.TestRunner;
+import org.duckhawk.core.TestType;
 import org.duckhawk.junit3.AbstractDuckHawkTest;
 
 import com.lisasoft.awdip.util.Communication;
@@ -57,6 +58,8 @@ public abstract class AbstractAwdipTest extends AbstractDuckHawkTest {
     /** Date format for XPath expressions */
     public static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         
+    /** Date format for filenames (shortened, not special character) */
+    public static DateFormat dff = new SimpleDateFormat("yyyyMMdd");
     
     /**
      * Constructor for conformance test
@@ -64,7 +67,8 @@ public abstract class AbstractAwdipTest extends AbstractDuckHawkTest {
      */
     public AbstractAwdipTest(TestContext context) {
         super(context);
-        testType = TestType.CONFORMANCE;
+        testType = TestType.conformance;
+        setTestClassSuffix("Conformance");        
     }
 
 
@@ -156,10 +160,10 @@ public abstract class AbstractAwdipTest extends AbstractDuckHawkTest {
         TestRunner runner;
         
         switch (testType) {
-        case CONFORMANCE:
+        case conformance:
             runner = new ConformanceTestRunner(context, buildTestExecutor());            
             break;
-        case PERFORMANCE:
+        case performance:
             if (random != null)
                 runner = new PerformanceTestRunner(context, buildTestExecutor(),
                         times, time, random);
@@ -167,12 +171,17 @@ public abstract class AbstractAwdipTest extends AbstractDuckHawkTest {
                 runner = new PerformanceTestRunner(context, buildTestExecutor(),
                         times);
             break;
-        case STRESS:
+        case stress:
         default:
             runner = new StressTestRunner(context, buildTestExecutor(), times,
                     numThreads, rampUp);
             break;
         }
         return runner;
+    }
+
+
+    public TestType getTestType() {
+        return testType;
     }
 }
