@@ -28,7 +28,7 @@ import com.lisasoft.awdip.util.CSVReader;
 import com.lisasoft.awdip.util.Gml;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
-public class SiteSinglePhenomDateBetweenParametrizedTest extends AbstractAwdipTest {
+public class SiteSinglePhenomDateBetweenTest extends AbstractAwdipTest {
     final static String CONFIG_FILE = "/SiteSinglePhenomTimeSeriesTestDateBetween.csv";
     
     /** XPath to date property */
@@ -66,7 +66,7 @@ public class SiteSinglePhenomDateBetweenParametrizedTest extends AbstractAwdipTe
      * @throws InvalidConfigFileException
      * @throws IOException
      */
-    public SiteSinglePhenomDateBetweenParametrizedTest(String testNameSuffix, String site,
+    public SiteSinglePhenomDateBetweenTest(String testNameSuffix, String site,
             String[] phenomena, long[] dateRange)
     throws IOException, InvalidConfigFileException {
         super(getAwdipContext(forcePropertyOutput));
@@ -78,15 +78,15 @@ public class SiteSinglePhenomDateBetweenParametrizedTest extends AbstractAwdipTe
     }
     
     /**
-     * Parse configuration file for the single phenomenon between two dates for
-     * one or more phenomena (5 different configurations)
+     * Parse configuration file for the single site between two dates for
+     * one or more phenomena
      * Format:
      * 1st line: names of the fields
      * next lines:
-     *     1st field: name of a site
-     *     2nd field: date range (comma separated, ISO: "yyyy-MM-dd,yyyy-MM-dd")
-     *     3rd field: number of steps till full range
-     *     4th field: names of the phenomena (comma separated)
+     *     1st field: number of steps till full range
+     *     2nd field: name of a site
+     *     3rd field: date range (comma separated, ISO: "yyyy-MM-dd,yyyy-MM-dd")
+     *     4th field: names of the phenomena (comma separated)     
      */
     public static Test suite() throws Exception {
         // Parsing configuration file
@@ -106,17 +106,22 @@ public class SiteSinglePhenomDateBetweenParametrizedTest extends AbstractAwdipTe
         List<Integer> numberOfSteps = new ArrayList<Integer>();
         
         List<String[]> lines = csv.getLines();
+        
+        if (lines==null)
+            throw new InvalidConfigFileException(
+                    "File doesn't contain any data!");
+        
         // remove header
         lines.remove(0);
 
         for (String[] line : lines) {
-            sites.add(line[0]);
-            String[] dateRangeString = line[1].split(",");
+            sites.add(line[1]);
+            String[] dateRangeString = line[2].split(",");
             phenomenons.add(line[3].split(","));
             dateRanges.add(new long[]{
                     df.parse(dateRangeString[0]).getTime(),
                     df.parse(dateRangeString[1]).getTime()});
-            numberOfSteps.add(new Integer(line[2]));
+            numberOfSteps.add(new Integer(line[0]));
         }
 
         // creating tests
@@ -145,8 +150,8 @@ public class SiteSinglePhenomDateBetweenParametrizedTest extends AbstractAwdipTe
             long[][] growingDateRange = divideDateRange(dateRanges.get(i),
                    numberOfSteps.get(i));
             for (long[] range : growingDateRange) {
-                SiteSinglePhenomDateBetweenParametrizedTest test =
-                    new SiteSinglePhenomDateBetweenParametrizedTest(
+                SiteSinglePhenomDateBetweenTest test =
+                    new SiteSinglePhenomDateBetweenTest(
                             i+"_"+dff.format(new Date(range[1])), sites.get(i),
                             phenomenons.get(i), range);
                 test.configureAsPerformanceTest(getPerfTimes());

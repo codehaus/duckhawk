@@ -23,7 +23,7 @@ import com.lisasoft.awdip.util.CSVReader;
 import com.lisasoft.awdip.util.Gml;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
-public class SiteSinglePhenomDateAnyParametrizedTest extends AbstractAwdipTest {
+public class SiteSinglePhenomDateAnyTest extends AbstractAwdipTest {
     /** the feature type to test */
     final static String FEATURE_TYPE_NAME = "aw:SiteSinglePhenomTimeSeries";
     final static String CONFIG_FILE = "/SiteSinglePhenomTimeSeriesTestDateAny.csv";
@@ -51,7 +51,7 @@ public class SiteSinglePhenomDateAnyParametrizedTest extends AbstractAwdipTest {
      * @throws InvalidConfigFileException
      * @throws IOException
      */
-    public SiteSinglePhenomDateAnyParametrizedTest(String site, String phenomenon, String suffix) throws IOException,
+    public SiteSinglePhenomDateAnyTest(String site, String phenomenon, String suffix) throws IOException,
             InvalidConfigFileException {
         super(getAwdipContext(forcePropertyOutput));
         setName("testAnyDate");
@@ -60,15 +60,26 @@ public class SiteSinglePhenomDateAnyParametrizedTest extends AbstractAwdipTest {
         this.phenomenon = phenomenon;
     }
     
+    
+    /**
+     * Parse configuration file for the single site and a single phenomenon test
+     * Format:
+     * 1st line: names of the fields
+     * next lines:
+     *     1st field: name of a site
+     *     2nd field: names of the phenomenon
+     */
     public static Test suite() throws Exception {
         // read CSV file
         String filename = (String) getAwdipContext().getEnvironment().get(KEY_TESTS_CONFIG_DIR)
                 + CONFIG_FILE;
         CSVReader csv = new CSVReader(new File(filename));
         List<String[]> lines = csv.getLines();
-        if (lines == null || lines.size() < 6)
-            throw new InvalidConfigFileException("6 lines expected!");
-        
+
+        if (lines==null)
+            throw new InvalidConfigFileException(
+                    "File doesn't contain any data!");
+
         // remove header
         lines.remove(0);
 
@@ -85,7 +96,7 @@ public class SiteSinglePhenomDateAnyParametrizedTest extends AbstractAwdipTest {
         // configure performance tests
         i = 1;
         for (String[] line : lines) {
-            SiteSinglePhenomDateAnyParametrizedTest test = new SiteSinglePhenomDateAnyParametrizedTest(line[0], line[1], i + "");
+            SiteSinglePhenomDateAnyTest test = new SiteSinglePhenomDateAnyTest(line[0], line[1], i + "");
             test.configureAsPerformanceTest(getPerfTimes());
             suite.addTest(test);
             i++;
