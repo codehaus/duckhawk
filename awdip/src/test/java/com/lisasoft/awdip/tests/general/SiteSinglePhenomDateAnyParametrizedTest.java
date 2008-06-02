@@ -23,24 +23,26 @@ import com.lisasoft.awdip.util.CSVReader;
 import com.lisasoft.awdip.util.Gml;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
-public class DateAnyParametrizedTest extends AbstractAwdipTest {
+public class SiteSinglePhenomDateAnyParametrizedTest extends AbstractAwdipTest {
+    /** the feature type to test */
+    final static String FEATURE_TYPE_NAME = "aw:SiteSinglePhenomTimeSeries";
+    final static String CONFIG_FILE = "/SiteSinglePhenomTimeSeriesTestDateAny.csv";
 
-    static final String DATE_FIELD = "aw:relatedObservation/aw:PhenomenonTimeSeries/om:observedProperty/swe:Phenomenon/gml:name";
+    /** XPath to the phenomenon name */
+    static final String PHENOM_FIELD = "aw:relatedObservation/aw:PhenomenonTimeSeries/om:observedProperty/swe:Phenomenon/gml:name";
+
 
     // properties that should make it into the output
     static final String KEY_SITE_NAME = "params.siteName";
-
     static final String KEY_PHENOM_NAME = "params.phenomName";
 
-    final static String FEATURE_TYPE_NAME = "aw:SiteSinglePhenomTimeSeries";
-
-    final static String CONFIG_FILE = "/performance/SiteSinglePhenomTimeSeriesTestDateAny.csv";
 
     /** force properties to be in the output, even if "null" */
     static final String[] forcePropertyOutput = new String[] { KEY_SITE_NAME, KEY_PHENOM_NAME };
 
+    /** Name of the site */
     String site;
-
+    /** Name of the  phenomena */
     String phenomenon;
 
     /**
@@ -49,7 +51,7 @@ public class DateAnyParametrizedTest extends AbstractAwdipTest {
      * @throws InvalidConfigFileException
      * @throws IOException
      */
-    public DateAnyParametrizedTest(String site, String phenomenon, String suffix) throws IOException,
+    public SiteSinglePhenomDateAnyParametrizedTest(String site, String phenomenon, String suffix) throws IOException,
             InvalidConfigFileException {
         super(getAwdipContext(forcePropertyOutput));
         setName("testAnyDate");
@@ -69,40 +71,42 @@ public class DateAnyParametrizedTest extends AbstractAwdipTest {
         
         // remove header
         lines.remove(0);
+
+        TestSuite suite = new TestSuite();
         
         // configure conformance tests
-        TestSuite suite = new TestSuite();
         int i = 1;
+/*        
         for (String[] line : lines) {
-            suite.addTest(new DateAnyParametrizedTest(line[0], line[1], i + ""));
+            suite.addTest(new SiteSinglePhenomDateAnyParametrizedTest(line[0], line[1], i + ""));
             i++;
         }
-        
+*/        
         // configure performance tests
         i = 1;
         for (String[] line : lines) {
-            DateAnyParametrizedTest test = new DateAnyParametrizedTest(line[0], line[1], i + "");
+            SiteSinglePhenomDateAnyParametrizedTest test = new SiteSinglePhenomDateAnyParametrizedTest(line[0], line[1], i + "");
             test.configureAsPerformanceTest(getPerfTimes());
             suite.addTest(test);
             i++;
         }
-
+/*
         // configure load tests
         i = 1;
         for (String[] line : lines) {
-            DateAnyParametrizedTest test = new DateAnyParametrizedTest(line[0], line[1], i + "");
+            SiteSinglePhenomDateAnyParametrizedTest test = new SiteSinglePhenomDateAnyParametrizedTest(line[0], line[1], i + "");
             test.configureAsLoadTest(getLoadTimes(), getLoadNumThreads(), getLoadRampUp());
             suite.addTest(test);
             i++;
         }
-        
+*/
         return suite;
     }
 
     public void initAnyDate(TestProperties context) {
         String body = Gml.createAndFilterRequest(FEATURE_TYPE_NAME,
                 Gml.createPropertyFilter("gml:name", site),
-                Gml.createPropertyFilter(DATE_FIELD, phenomenon));
+                Gml.createPropertyFilter(PHENOM_FIELD, phenomenon));
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
@@ -129,5 +133,4 @@ public class DateAnyParametrizedTest extends AbstractAwdipTest {
             AwdipConformanceTest.validate(response);
         }
     }
-
 }

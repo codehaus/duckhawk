@@ -47,12 +47,6 @@ public abstract class AbstractAwdipTest extends AbstractDuckHawkTest {
     private double time;
     private Random random;
 
-    private enum TestType {
-        PERFORMANCE,
-        CONFORMANCE,
-        STRESS
-    }
-    
     private TestType testType;
 
     /** Date format for XPath expressions */
@@ -83,7 +77,8 @@ public abstract class AbstractAwdipTest extends AbstractDuckHawkTest {
     
     public void configureAsPerformanceTest(int times) {
         this.times = times;
-        testType = TestType.PERFORMANCE;
+        testType = TestType.performance;
+        setTestClassSuffix("Performance");   
     }
 
 
@@ -98,6 +93,7 @@ public abstract class AbstractAwdipTest extends AbstractDuckHawkTest {
         this.times = times;
         this.time = time;
         this.random = random;
+        setTestClassSuffix("Performance");           
     }
     
     /**
@@ -115,7 +111,8 @@ public abstract class AbstractAwdipTest extends AbstractDuckHawkTest {
         this.times = times;
         this.numThreads = numThreads;
         this.rampUp = rampUp;
-        testType = TestType.STRESS;
+        testType = TestType.stress;
+        setTestClassSuffix("Load");        
     }
     
     
