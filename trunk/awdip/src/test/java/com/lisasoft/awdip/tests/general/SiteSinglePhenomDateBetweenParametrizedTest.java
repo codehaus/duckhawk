@@ -28,15 +28,15 @@ import com.lisasoft.awdip.util.CSVReader;
 import com.lisasoft.awdip.util.Gml;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
-public class DateBetweenParametrizedTest extends AbstractAwdipTest {
-    final static String CONFIG_FILE = "/performance/SiteSinglePhenomTimeSeriesTestDateBetween.csv";
+public class SiteSinglePhenomDateBetweenParametrizedTest extends AbstractAwdipTest {
+    final static String CONFIG_FILE = "/SiteSinglePhenomTimeSeriesTestDateBetween.csv";
     
     /** XPath to date property */
     static final String DATE_FIELD = "aw:relatedObservation/aw:PhenomenonTimeSeries/om:result/cv:CompactDiscreteTimeCoverage/cv:element/cv:CompactTimeValuePair/cv:geometry";    
     /** XPath to phenomenon property */
     static final String PHENOM_FIELD = "aw:relatedObservation/aw:PhenomenonTimeSeries/om:observedProperty/swe:Phenomenon/gml:name";
 
-    // IDEA vmische perhaps make it configuralable 
+    // IDEA vmische perhaps make it configurable 
     final static String FEATURE_TYPE_NAME = "aw:SiteSinglePhenomTimeSeries";
 
     
@@ -66,13 +66,12 @@ public class DateBetweenParametrizedTest extends AbstractAwdipTest {
      * @throws InvalidConfigFileException
      * @throws IOException
      */
-    public DateBetweenParametrizedTest(String testNameSuffix, String site,
+    public SiteSinglePhenomDateBetweenParametrizedTest(String testNameSuffix, String site,
             String[] phenomena, long[] dateRange)
     throws IOException, InvalidConfigFileException {
         super(getAwdipContext(forcePropertyOutput));
         setName("testBetweenDate");
         setTestMethodSuffix(testNameSuffix);
-        setTestClassSuffix("Conformance");
         this.site = site;
         this.phenomena = phenomena;
         this.dateRange = dateRange;
@@ -90,6 +89,9 @@ public class DateBetweenParametrizedTest extends AbstractAwdipTest {
      *     4th field: names of the phenomena (comma separated)
      */
     public static Test suite() throws Exception {
+        // Parsing configuration file
+        //------------------------------
+        
         // read CSV file
         String filename = (String)getAwdipContext().getEnvironment()
                 .get(KEY_TESTS_CONFIG_DIR) + CONFIG_FILE;
@@ -116,10 +118,13 @@ public class DateBetweenParametrizedTest extends AbstractAwdipTest {
                     df.parse(dateRangeString[1]).getTime()});
             numberOfSteps.add(new Integer(line[2]));
         }
+
+        // creating tests
+        //------------------------------
         
 
         TestSuite suite = new TestSuite();
-            
+/*            
         // create conformance tests
         for (int i=0; i<sites.size(); i++) {
             // we want a growing range
@@ -133,15 +138,15 @@ public class DateBetweenParametrizedTest extends AbstractAwdipTest {
                 suite.addTest(test);                
             }
         }
-    
+*/    
         // create performance tests
         for (int i=0; i<sites.size(); i++) {
             // we want a growing range
             long[][] growingDateRange = divideDateRange(dateRanges.get(i),
                    numberOfSteps.get(i));
             for (long[] range : growingDateRange) {
-                DateBetweenParametrizedTest test =
-                    new DateBetweenParametrizedTest(
+                SiteSinglePhenomDateBetweenParametrizedTest test =
+                    new SiteSinglePhenomDateBetweenParametrizedTest(
                             i+"_"+dff.format(new Date(range[1])), sites.get(i),
                             phenomenons.get(i), range);
                 test.configureAsPerformanceTest(getPerfTimes());
@@ -149,7 +154,7 @@ public class DateBetweenParametrizedTest extends AbstractAwdipTest {
             }
         }
             
-
+/*
         // create load tests
         for (int i=0; i<sites.size(); i++) {
             // we want a growing range
@@ -165,7 +170,7 @@ public class DateBetweenParametrizedTest extends AbstractAwdipTest {
                 suite.addTest(test);
             }            
         }
-          
+*/
         return suite;
     }
     

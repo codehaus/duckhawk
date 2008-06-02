@@ -191,7 +191,7 @@ testClasses - comma seperated list of all classes of the test suite -->
   <h3>Properties</h3>    
 
   <xsl:call-template name="GeneralResultProperties">
-    <xsl:with-param name="heading" select="'Test Parameters'"/>
+    <xsl:with-param name="heading" select="'Test Configuration'"/>
     <xsl:with-param name="properties">
       <xsl:call-template name="ExtractProperties">
         <xsl:with-param name="includes" select="'test.,stress.'"/>
@@ -230,7 +230,12 @@ testClasses - comma seperated list of all classes of the test suite -->
                 <th>
                   <xsl:value-of select="substring-after(@key,'perf.')"/>
                 </th>
-            </xsl:for-each> 
+            </xsl:for-each>
+            <xsl:for-each select="$testResults[1]/testProperties/entry[starts-with(@key,'params.')]">
+                <th>
+                  <xsl:value-of select="substring-after(@key,'params.')"/>
+                </th>
+            </xsl:for-each>                 
           </tr>
         </thead>
         <tbody>
@@ -286,12 +291,19 @@ testClasses - comma seperated list of all classes of the test suite -->
                       <xsl:value-of select="$methodName"/></a></td>
                   </xsl:otherwise>                
                 </xsl:choose>                
-                
+
                 <xsl:for-each select="$ppEntries/entry[starts-with(@key,'perf.')]">
                   <td>
                     <xsl:value-of select="."/>
                   </td>
                 </xsl:for-each>
+
+                <xsl:for-each select="$ppEntries/entry[starts-with(@key,'params.')]">
+                  <td>
+                    <xsl:value-of select="."/>
+                  </td>
+                </xsl:for-each>
+                
               </tr>
           </xsl:for-each>              
         </tbody>
@@ -580,6 +592,16 @@ properties - data to build the table upon
       <xsl:call-template name="AllGeneralResultProperties">
         <xsl:with-param name="properties" select="$generalProperties"/>
       </xsl:call-template>
+      
+      <xsl:call-template name="GeneralResultProperties">
+        <xsl:with-param name="heading" select="'Test Parameters'"/>
+          <xsl:with-param name="properties">
+            <xsl:call-template name="ExtractProperties">
+              <xsl:with-param name="includes" select="'params.'"/>
+              <xsl:with-param name="properties" select="$generalProperties"/>
+            </xsl:call-template>
+        </xsl:with-param>
+      </xsl:call-template>
 
 
       <h2>Details</h2>
@@ -590,7 +612,7 @@ properties - data to build the table upon
             <xsl:for-each select="entry[not(@key='test.description')]">
               <xsl:call-template name="PostProcessEntry">
                 <xsl:with-param name="entry" select="."/>
-                <xsl:with-param name="substrings" select="'test.,params.'"/>
+                <xsl:with-param name="substrings" select="'test.'"/>
               </xsl:call-template>
             </xsl:for-each>
           </callProperties>           
