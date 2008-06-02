@@ -115,27 +115,7 @@ public abstract class AbstractAwdipTest extends AbstractDuckHawkTest {
         setTestClassSuffix("Load");        
     }
     
-    
-
-    /**
-     * Returns the feature type of the current test
-     * @return the feature type of the current test
-     */
-    public String getFeatureTypeName() {
-        throw new UnsupportedOperationException("Subclasses neededing this method are supposed to override it");
-    }
-
-    
-    /**
-     * Returns the filename of the configuration file for the current test
-     * @return the filename of the configuration file for the current test
-     */
-    public String getConfigFilename() {
-        throw new UnsupportedOperationException("Subclasses neededing this method are supposed to override it");
-    }
-    
-    
-    
+   
     @Override
     protected void setUp() throws Exception {
         super.setUp();
