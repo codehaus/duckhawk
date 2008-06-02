@@ -13,16 +13,6 @@ public class SiteLocationErrorTest extends AbstractAwdipTest {
         super(getAwdipContext());
     }
     
-    @Override
-    public String getConfigFilename() {
-        throw new UnsupportedOperationException("Why do you need this?");
-    }
-
-    @Override
-    public String getFeatureTypeName() {
-        throw new UnsupportedOperationException("Why do you need this?");
-    }
-
     public void testNotXML() throws Exception {
         // init
         String body = "Hello there, can you please provide me with the SiteLocation data?";

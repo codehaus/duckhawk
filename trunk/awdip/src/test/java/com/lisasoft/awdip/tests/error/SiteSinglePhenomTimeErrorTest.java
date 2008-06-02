@@ -16,16 +16,6 @@ public class SiteSinglePhenomTimeErrorTest extends AbstractAwdipTest {
         super(getAwdipContext());
     }
     
-    @Override
-    public String getConfigFilename() {
-        throw new UnsupportedOperationException("Why do you need this?");
-    }
-
-    @Override
-    public String getFeatureTypeName() {
-        throw new UnsupportedOperationException("Why do you need this?");
-    }
-    
     public void testUnexistentNestedAttributeProperty() throws Exception {
         String body = Gml.createAndFilterMaxFeaturesRequest("aw:SiteSinglePhenomTimeSeries ", 2);
         // force in an invalid property request
