@@ -134,8 +134,24 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+          <!-- Comment out test skipping if you need to run the tests thru Maven -->
+          <skipTests>true</skipTests>
           <testFailureIgnore>true</testFailureIgnore>
         </configuration>
+      </plugin>
+    
+    
+    <!-- Build the test jar -->
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
