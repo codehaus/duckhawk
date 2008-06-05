@@ -2,7 +2,9 @@ package com.lisasoft.awdip;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.custommonkey.xmlunit.SimpleNamespaceContext;
@@ -12,6 +14,7 @@ import org.duckhawk.core.DefaultTestContext;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestPropertiesImpl;
+import org.duckhawk.core.TestType;
 import org.duckhawk.report.listener.XStreamDumper;
 import org.duckhawk.util.ConformanceSummarizer;
 import org.duckhawk.util.PerformanceSummarizer;
@@ -31,15 +34,10 @@ public class AWDIPTestSupport {
     static TestContext context;
 
     public static final String KEY_HOST = "host";
-
     public static final String KEY_PORT = "port";
-
     public static final String KEY_GS_PATH = "geoserverPath";
-
     public static final String KEY_SCHEMA_RPATH = "schemaPath";
-
     public static final String KEY_DESCRIPTION = "description";
-
     public static final String KEY_TESTS_CONFIG_DIR = "testsConfigurationDir";
 
     // startup settings for performance tests
@@ -47,11 +45,16 @@ public class AWDIPTestSupport {
 
     // startup settings for load tests
     static int loadTimes = 5;
-
     static int loadNumThreads = 3;
-
     static int loadRampUp = 1;
-
+    
+    /*static Set<TestType> performTests = EnumSet.of(
+            TestType.conformance,
+            TestType.performance,
+            TestType.stress);*/ 
+    static Set<TestType> performTests = EnumSet.of(TestType.performance);
+    
+        
     /**
      * Directory where the configuration files for the tests are TODO vmische
      * Make it a configuration file parameter
@@ -152,5 +155,13 @@ public class AWDIPTestSupport {
 
     public static int getLoadRampUp() {
         return loadRampUp;
+    }
+
+    public static Set<TestType> getPerformTests() {
+        return performTests;
+    }
+
+    public static void setPerformTests(Set<TestType> performTests) {
+        AWDIPTestSupport.performTests = performTests;
     }
 }

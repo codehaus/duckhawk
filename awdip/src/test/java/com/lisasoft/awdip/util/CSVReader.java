@@ -21,9 +21,6 @@ public class CSVReader {
     File file;
     List<String[]> lines = new ArrayList<String[]>();
     String[] fields;
-    //List<List<String>> lines = new ArrayList<List<String>>();;
-    //List<String> allTokens = new ArrayList<String>();
-
     
     public CSVReader(String filename) throws IOException {
         this.file = new File(filename);
@@ -40,11 +37,9 @@ public class CSVReader {
 
         br = new BufferedReader(new FileReader(this.file));
         String line = br.readLine();
-        //StringTokenizer tokenizer;
-        //List<String> tokens;
 
         while (line != null) {
-            if (line.trim()=="" || line.startsWith("#")) {
+            if (line.trim().equals("") || line.startsWith("#")) {
                 line = br.readLine();
                 continue;
             }
@@ -59,19 +54,12 @@ public class CSVReader {
             }
 
             this.lines.add(fields);
-            //this.allTokens.addAll(tokens);
             line = br.readLine();
-
         }
+    }
 
-    }
-/*
-    public List<String> getAllTokens() {
-        return this.allTokens;
-    }
-*/
     public List<String[]> getLines() {
         return this.lines;
     }
-
 }
+

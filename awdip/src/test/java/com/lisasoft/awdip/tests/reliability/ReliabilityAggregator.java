@@ -1,106 +1,63 @@
 package com.lisasoft.awdip.tests.reliability;
 
-import static com.lisasoft.awdip.AWDIPTestSupport.KEY_DESCRIPTION;
-import static com.lisasoft.awdip.AWDIPTestSupport.getAwdipContext;
-
-import java.io.IOException;
-import java.text.ParseException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
 import java.util.Random;
 
-import org.apache.commons.httpclient.HttpException;
-import org.custommonkey.xmlunit.exceptions.XpathException;
-import org.duckhawk.core.TestProperties;
-import org.duckhawk.junit3.PerformanceTest;
-import org.xml.sax.SAXException;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import junit.textui.TestRunner;
 
+import com.lisasoft.awdip.AbstractAwdipTest;
+import com.lisasoft.awdip.tests.general.SiteLocationBoundingBoxAndMaximumFeaturesTest;
+import com.lisasoft.awdip.tests.general.SiteLocationBoundingBoxTest;
 
-
-
-
-/**
- * Pick a random reliability test on each call and runs it
- * 
- * @author vmische
- *
- */
-public class ReliabilityAggregator extends PerformanceTest {
-    SiteLocationTest siteLocationTest;
-    SiteSinglePhenomTimeSeriesTest siteSinglePhenomTimeSeries;
-    
-    /** Number of reliability test that can be randomly chosen from */ 
-    final static int NUMBER_OF_TESTS = 4;
-    
+public class ReliabilityAggregator {
     Random random = new Random();
+    TestSuite suite = new TestSuite();
+    int numberOfTests;
+    int rand;
     
-    /** Random number of the current call */ 
-    int currentRandom;
-    int nextRandom;
-    
-    /** make properties accessible for whole class */
-    TestProperties aggregatorProps;
-    
-    
-    // properties used in the tests
-    static final String KEY_BBOX = "params.boundingBox";;
-    static final String KEY_DATE_START = "params.dateStart";
-    static final String KEY_DATE_END = "params.dateEnd";
-    
-    /** force properties to be in the output, even if "null" */
-    static final String[] forcePropertyOutput = new String[]{
-            KEY_BBOX,
-            KEY_DATE_START,
-            KEY_DATE_END            
-    };     
-    
-    public ReliabilityAggregator() {
-        super(getAwdipContext(forcePropertyOutput), 5);
-        random.setSeed(100);
-        currentRandom = random.nextInt(NUMBER_OF_TESTS);
-    }
-    
-    public void initReliabilty(TestProperties props) {
-        props.put(KEY_DESCRIPTION,
-                "Aggregator for reliabilty tests. These include:\n" +
-                " - varying bounding box\n" +
-                " - changing date intervals");  
-        this.aggregatorProps = props;
-    }
-    public void testReliabilty()
-    throws HttpException, IOException, ParseException, InterruptedException,
-    XpathException, SAXException  {
-        TestProperties callProperties = (TestProperties)getCallPropertyObject();
-        callProperties.clear();
+    /** Date format for prepending to methods with milli seconds */
+    public static DateFormat dfMilli = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+
+    public ReliabilityAggregator() throws Exception {
+        // get all tests, run them randomly with defined seed
+        Enumeration<Test> tests = ((TestSuite)SiteLocationBoundingBoxTest.suite()).tests();
+        while(tests.hasMoreElements()) {suite.addTest(tests.nextElement());}
         
-        switch (currentRandom) {
-        case 0:
-            siteLocationTest = new SiteLocationTest(null);
-            siteLocationTest.testVariableBoundingBox();
-            siteLocationTest.fillCallProperties(callProperties);
-            siteLocationTest.checkVariableBoundingBox();
-            break;
-        case 1:
-            siteSinglePhenomTimeSeries = new SiteSinglePhenomTimeSeriesTest(null);
-            siteSinglePhenomTimeSeries.testOnePhenomenonTypePREC_ToDBetweenTwoDates();
-            siteSinglePhenomTimeSeries.fillCallProperties(callProperties);
-            siteSinglePhenomTimeSeries.checkOnePhenomenonTypePREC_ToDBetweenTwoDates();
-            break;
-        case 2:
-            siteSinglePhenomTimeSeries = new SiteSinglePhenomTimeSeriesTest(null);
-            siteSinglePhenomTimeSeries.testOnePhenomenonTypePREC_ToMBetweenTwoDates();
-            siteSinglePhenomTimeSeries.fillCallProperties(callProperties);
-            siteSinglePhenomTimeSeries.checkOnePhenomenonTypePREC_ToMBetweenTwoDates();
-            break;
-        case 3:
-            siteSinglePhenomTimeSeries = new SiteSinglePhenomTimeSeriesTest(null);
-            siteSinglePhenomTimeSeries.testOnePhenomenonTypePREC_ToYBetweenTwoDates();
-            siteSinglePhenomTimeSeries.fillCallProperties(callProperties);
-            siteSinglePhenomTimeSeries.checkOnePhenomenonTypePREC_ToYBetweenTwoDates();
-            break;
+        tests = ((TestSuite)SiteLocationBoundingBoxAndMaximumFeaturesTest.suite()).tests();
+        while(tests.hasMoreElements()) {suite.addTest(tests.nextElement());}
+
+        numberOfTests = suite.testCount();
+        random.setSeed(100);
+    }
+    
+    
+    private void run(Test test) {
+        System.out.println(test.getClass().getSimpleName());
+        TestRunner.run(test);
+    }
+    
+    /**
+     * Start the reliability test
+     * 
+     * @param numberOfRandomTests Number of tests that should be performed
+     */
+    public void start(int numberOfRandomTests) {
+        for (int i=0; i<numberOfRandomTests; i++) {
+            rand = random.nextInt(numberOfTests);
+            AbstractAwdipTest test = (AbstractAwdipTest)suite.testAt(rand);
+            
+            // prepend time to ensure test run twice doesn't overwrite the
+            // results
+            String testMethodSuffix = test.getTestMethodSuffix();
+            test.setTestMethodSuffix(testMethodSuffix + "_"
+                    + dfMilli.format(new Date(System.currentTimeMillis())));
+            run(test);
+            test.setTestMethodSuffix(testMethodSuffix);
         }
-        callProperties.put("test."+KEY_DESCRIPTION,
-                "Aggregator for reliabilty tests. These include:\n" +
-                " - varying bounding box\n" +
-                " - changing date intervals");  
-        currentRandom = random.nextInt(NUMBER_OF_TESTS);
     }
 }
