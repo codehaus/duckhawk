@@ -5,6 +5,7 @@ import static com.lisasoft.awdip.AWDIPTestSupport.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -78,8 +79,8 @@ public class SiteLocationBoundingBoxAndMaximumFeaturesTest extends AbstractAwdip
      */
     public static Test suite() throws Exception {
         // read CSV file
-        String filename = (String) getAwdipContext().getEnvironment().get(KEY_TESTS_CONFIG_DIR)
-                + CONFIG_FILE;
+        String filename = (String) getAwdipContext().getEnvironment()
+                .get(KEY_TESTS_CONFIG_DIR) + CONFIG_FILE;
         CSVReader csv = new CSVReader(new File(filename));      
         
         List<String[]> lines = csv.getLines();
@@ -122,59 +123,68 @@ public class SiteLocationBoundingBoxAndMaximumFeaturesTest extends AbstractAwdip
                     (new Double(max[3])-bboxInit[i][3])/(steps[i]-1)};
         }
         
-
+         
+        Set<TestType> performTests = getPerformTests();
         TestSuite suite = new TestSuite();
-/*
-        // configure conformance tests
-        for (int i=0; i<bboxInit.length; i++) {
-            for (int j=0; j<steps[i]; j++) {
-                double[] bbox =  new double[]{
-                        bboxInit[i][0]+(bboxStep[i][0]*j),
-                        bboxInit[i][1]+(bboxStep[i][1]*j), 
-                        bboxInit[i][2]+(bboxStep[i][2]*j),
-                        bboxInit[i][3]+(bboxStep[i][3]*j),
-                };
-                suite.addTest(
-                        new SiteLocationBoundingBoxAndMaximumFeaturesTest(
-                            i+""+j, bbox, maxFeatures[i]));
+        
+        for(TestType testType : performTests) {
+            switch(testType) {
+            case conformance:
+                // configure conformance tests
+                for (int i=0; i<bboxInit.length; i++) {
+                    for (int j=0; j<steps[i]; j++) {
+                        double[] bbox =  new double[]{
+                                bboxInit[i][0]+(bboxStep[i][0]*j),
+                                bboxInit[i][1]+(bboxStep[i][1]*j), 
+                                bboxInit[i][2]+(bboxStep[i][2]*j),
+                                bboxInit[i][3]+(bboxStep[i][3]*j),
+                        };
+                        suite.addTest(
+                                new SiteLocationBoundingBoxAndMaximumFeaturesTest(
+                                        i+""+j, bbox, maxFeatures[i]));
+                    }
+                }
+                break;
+            case performance:
+                // configure performance tests
+                for (int i=0; i<bboxInit.length; i++) {
+                    for (int j=0; j<steps[i]; j++) {
+                        double[] bbox =  new double[]{
+                                bboxInit[i][0]+(bboxStep[i][0]*j),
+                                bboxInit[i][1]+(bboxStep[i][1]*j), 
+                                bboxInit[i][2]+(bboxStep[i][2]*j),
+                                bboxInit[i][3]+(bboxStep[i][3]*j),
+                        };
+                        SiteLocationBoundingBoxAndMaximumFeaturesTest test =
+                                new SiteLocationBoundingBoxAndMaximumFeaturesTest(
+                                        i+""+j, bbox, maxFeatures[i]);
+                        test.configureAsPerformanceTest(getPerfTimes());
+                        suite.addTest(test);
+                    } 
+                }
+                break;
+            case stress:
+                // configure load tests
+                for (int i=0; i<bboxInit.length; i++) {
+                    for (int j=0; j<steps[i]; j++) {
+                        double[] bbox =  new double[]{
+                                bboxInit[i][0]+(bboxStep[i][0]*j),
+                                bboxInit[i][1]+(bboxStep[i][1]*j), 
+                                bboxInit[i][2]+(bboxStep[i][2]*j),
+                                bboxInit[i][3]+(bboxStep[i][3]*j),
+                        };
+                        SiteLocationBoundingBoxAndMaximumFeaturesTest test =
+                                new SiteLocationBoundingBoxAndMaximumFeaturesTest(
+                                        i+""+j, bbox, maxFeatures[i]);
+                        test.configureAsLoadTest(getLoadTimes(),
+                                getLoadNumThreads(), getLoadRampUp());
+                        suite.addTest(test);
+                    }
+                }                   
+                break;
             }
         }
-*/
-        // configure performance tests
-        for (int i=0; i<bboxInit.length; i++) {
-            for (int j=0; j<steps[i]; j++) {
-                double[] bbox =  new double[]{
-                        bboxInit[i][0]+(bboxStep[i][0]*j),
-                        bboxInit[i][1]+(bboxStep[i][1]*j), 
-                        bboxInit[i][2]+(bboxStep[i][2]*j),
-                        bboxInit[i][3]+(bboxStep[i][3]*j),
-                };
-                SiteLocationBoundingBoxAndMaximumFeaturesTest test =
-                        new SiteLocationBoundingBoxAndMaximumFeaturesTest(
-                                i+""+j, bbox, maxFeatures[i]);
-                test.configureAsPerformanceTest(getPerfTimes());
-                suite.addTest(test);
-            }
-        }
-/*
-        // configure load tests
-        for (int i=0; i<bboxInit.length; i++) {
-            for (int j=0; j<steps[i]; j++) {
-                double[] bbox =  new double[]{
-                        bboxInit[i][0]+(bboxStep[i][0]*j),
-                        bboxInit[i][1]+(bboxStep[i][1]*j), 
-                        bboxInit[i][2]+(bboxStep[i][2]*j),
-                        bboxInit[i][3]+(bboxStep[i][3]*j),
-                };
-                SiteLocationBoundingBoxTest test =
-                        new SiteLocationBoundingBoxAndMaximumFeaturesTest(
-                                i+""+j, bbox, maxFeatures[i]););
-                test.configureAsLoadTest(getLoadTimes(), getLoadNumThreads(),
-                        getLoadRampUp());
-                suite.addTest(test);
-            }
-        }        
-*/        
+
         return suite;
     }
     

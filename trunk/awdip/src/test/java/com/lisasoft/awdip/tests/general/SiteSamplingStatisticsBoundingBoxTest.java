@@ -4,6 +4,7 @@ import static com.lisasoft.awdip.AWDIPTestSupport.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -24,22 +25,36 @@ import com.lisasoft.awdip.util.CSVReader;
 import com.lisasoft.awdip.util.Gml;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 
-public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
+public class SiteSamplingStatisticsBoundingBoxTest extends AbstractAwdipTest {
     /** the feature type to test */
-    final static String FEATURE_TYPE_NAME = "aw:SiteLocation";
-    final static String CONFIG_FILE = "/SiteLocationTestBoundingBox.csv";
+    final static String FEATURE_TYPE_NAME = "aw:SiteSamplingStatistics";
+    final static String CONFIG_FILE = "/SiteSamplingStatisticsTestBoundingBox.csv";
 
+    /** XPath to aw:availableFrom property */
+    static final String DATE_FIELD_FROM = "aw:sampledPhenomenon/aw:SummaryStatistics/aw:availableFrom";    
+    /** XPath to aw:availableTo property */
+    static final String DATE_FIELD_TO = "aw:sampledPhenomenon/aw:SummaryStatistics/aw:availableTo";    
+    /** XPath to phenomenon property */
+    static final String PHENOM_FIELD = "aw:sampledPhenomenon/aw:SummaryStatistics/aw:definition/aw:phenomenonDef/aw:name";
+    
     // properties that should make it into the output
     static final String KEY_BBOX = "params.boundingBox";
+    static final String KEY_PHENOMS_NAME = "params.phenomsName";
+    static final String KEY_DATE_RANGE = "params.dateRange";
     
     /** force properties to be in the output, even if "null" */
     static final String[] forcePropertyOutput = new String[]{
-            KEY_BBOX
+        KEY_BBOX,
+        KEY_PHENOMS_NAME,
+        KEY_DATE_RANGE
     };
 
     /** bounding box that is used in the current test */
     double[] bbox;
-    
+    /** Name of one or more  phenomena */
+    String[] phenomena;
+    /** Storing information about the date range */
+    long[] dateRange = new long[2];
     
     
     /**
@@ -48,12 +63,15 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
      * @throws InvalidConfigFileException
      * @throws IOException
      */
-    public SiteLocationBoundingBoxTest(String testNameSuffix, double[] bbox)
+    public SiteSamplingStatisticsBoundingBoxTest(String testNameSuffix,
+            double[] bbox, long[] dateRange, String[] phenomena)
     throws IOException, InvalidConfigFileException {
         super(getAwdipContext(forcePropertyOutput));
         setName("testBoundingBox");
         setTestMethodSuffix(testNameSuffix);
         this.bbox = bbox;
+        this.dateRange = dateRange;
+        this.phenomena = phenomena;
     }
     
     
@@ -68,6 +86,8 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
      *         ("min_lon,min_lat,max_lon,max_lat")
      *     3rd field: maximal extend bounding box 4 values comma separated in
      *         quotes ("min_lon,min_lat,max_lon,max_lat")
+     *     4th field: date range (comma separated, ISO: "yyyy-MM-dd,yyyy-MM-dd")
+     *     5th field: names of the phenomena (comma separated)
      * 
      * @param file file to parse
      * @throws IOException 
@@ -88,6 +108,8 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
         double[][] bboxInit = new double[lines.size()][4];
         double[][] bboxStep = new double[lines.size()][4];
         int[] steps = new int[lines.size()];
+        long[][] dateRanges = new long[lines.size()][2];
+        String[][] phenomenons = new String[lines.size()][];
         
         // remove header
         lines.remove(0);
@@ -101,6 +123,13 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
                         "Fields with bounding boxes must contain 4 comma" +
                         "seperated values!");
             }
+            
+            String[] dateRangeString = lines.get(i)[3].split(",");
+            if (dateRangeString.length<2) {
+                throw new InvalidConfigFileException(
+                        "Fields with date ranges must contain 2 comma" +
+                        "seperated values!");
+            }        
 
             steps[i] = new Integer(lines.get(i)[0]);
             
@@ -115,6 +144,13 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
                     (new Double(max[1])-bboxInit[i][1])/(steps[i]-1), 
                     (new Double(max[2])-bboxInit[i][2])/(steps[i]-1),
                     (new Double(max[3])-bboxInit[i][3])/(steps[i]-1)};
+            
+    
+            dateRanges[i] = new long[]{
+                    df.parse(dateRangeString[0]).getTime(),
+                    df.parse(dateRangeString[1]).getTime()};            
+
+            phenomenons[i] = (lines.get(i)[4].split(","));
         }
         
 
@@ -133,7 +169,8 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
                                 bboxInit[i][2]+(bboxStep[i][2]*j),
                                 bboxInit[i][3]+(bboxStep[i][3]*j),
                         };
-                        suite.addTest(new SiteLocationBoundingBoxTest(i+""+j, bbox));
+                        suite.addTest(new SiteSamplingStatisticsBoundingBoxTest(
+                                i+""+j, bbox, dateRanges[i], phenomenons[i]));
                     }
                 }
                 break;
@@ -147,8 +184,9 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
                                 bboxInit[i][2]+(bboxStep[i][2]*j),
                                 bboxInit[i][3]+(bboxStep[i][3]*j),
                         };
-                        SiteLocationBoundingBoxTest test =
-                            new SiteLocationBoundingBoxTest(i+""+j, bbox);
+                        SiteSamplingStatisticsBoundingBoxTest test =
+                            new SiteSamplingStatisticsBoundingBoxTest(i+""+j,
+                                    bbox, dateRanges[i], phenomenons[i]);
                         test.configureAsPerformanceTest(getPerfTimes());
                         suite.addTest(test);
                     }
@@ -164,10 +202,11 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
                                 bboxInit[i][2]+(bboxStep[i][2]*j),
                                 bboxInit[i][3]+(bboxStep[i][3]*j),
                         };
-                        SiteLocationBoundingBoxTest test =
-                            new SiteLocationBoundingBoxTest(i+""+j, bbox);
-                        test.configureAsLoadTest(getLoadTimes(), getLoadNumThreads(),
-                                getLoadRampUp());
+                        SiteSamplingStatisticsBoundingBoxTest  test =
+                            new SiteSamplingStatisticsBoundingBoxTest(i+""+j,
+                                    bbox, dateRanges[i], phenomenons[i]);
+                        test.configureAsLoadTest(getLoadTimes(),
+                                getLoadNumThreads(), getLoadRampUp());
                         suite.addTest(test);
                     }
                 }        
@@ -178,18 +217,88 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
         return suite;
     }
     
+    
+    /**
+     * Creates an XPath query for counting the appearance of dates on, before
+     * or after a certain date. It selects date values (yyyy-MM-dd or format)
+     * with XPath and compare it to an asserted date.
+     * It will perform: datesReturnedFromXPath operator date
+     * Write the operator as e.g. ">" and *not* "&gt;" 
+     * This one is for aw:availableFrom.
+     * 
+     * @param date Date the values selected by the XPath query should be
+     *        compared to (in format: yyyy-MM-dd or yyyMMdd)
+     * @param operator Operator to compare the dates
+     * @return XPath expression to get the count of these dates
+     */
+    private String createCountDatesXpathFrom(String operator, String date) {
+        return "count(/wfs:FeatureCollection/gml:featureMembers/aw:SiteSamplingStatistics/" +
+                DATE_FIELD_FROM + "[translate(substring(.,1,10),'-','') " +
+                operator + " translate('" +
+                date + "','-','') ])";
+    }
+    
+    /**
+     * Creates an XPath query for counting the appearance of dates on, before
+     * or after a certain date. It selects date values (yyyy-MM-dd or format)
+     * with XPath and compare it to an asserted date.
+     * It will perform: datesReturnedFromXPath operator date
+     * Write the operator as e.g. ">" and *not* "&gt;" 
+     * This one is for aw:availableTo.
+     * 
+     * @param date Date the values selected by the XPath query should be
+     *        compared to (in format: yyyy-MM-dd or yyyMMdd)
+     * @param operator Operator to compare the dates
+     * @return XPath expression to get the count of these dates
+     */    
+    private String createCountDatesXpathTo(String operator, String date) {
+        return "count(/wfs:FeatureCollection/gml:featureMembers/aw:SiteSamplingStatistics/" + 
+                DATE_FIELD_TO + "[translate(substring(.,1,10),'-','') " +
+                operator + " translate('" +
+                date + "','-','') ])";
+    }
+    
+    
+    
     public void initBoundingBox(TestProperties context) {
-        String body = Gml.createAndFilterRequest(FEATURE_TYPE_NAME,
-                Gml.createBoundingBoxFilter(bbox));
+        /** date Range formatted as strings */
+        String[] dateRangeString = new String[]{
+                df.format(new Date(dateRange[0])),
+                df.format(new Date(dateRange[1]))};
+        
+        // The four filters are:
+        // 1. bounding box
+        // 2. date range filter for the start of the measures 
+        // 3. date range filter for the end of the measures 
+        // 4. phenomena filters which consist of <ogc:Or> concatenated property
+        //    filters 
+        String[] filters = new String[4];
+        filters[0] = Gml.createBoundingBoxFilter(bbox);
+        filters[1] = Gml.createLessOrEqualFilter(DATE_FIELD_FROM,
+                dateRangeString[1]);
 
+        filters[2] = Gml.createGreaterOrEqualFilter(DATE_FIELD_TO,
+                dateRangeString[0]);
+
+        StringBuffer phenomFilters = new StringBuffer();
+        phenomFilters.append("<ogc:Or>");
+        for (String phenom : phenomena) 
+            phenomFilters.append(
+                    Gml.createPropertyFilter(PHENOM_FIELD,phenom));
+        phenomFilters.append("</ogc:Or>");        
+        filters[3] = phenomFilters.toString();
+
+        String body = Gml.createAndFilterRequest(FEATURE_TYPE_NAME, filters);
+        
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
-
+        
         context.put(KEY_BBOX, bbox);
+        context.put(KEY_PHENOMS_NAME, phenomena);
+        context.put(KEY_DATE_RANGE, dateRangeString);
         putCallProperty(TestExecutor.KEY_DESCRIPTION,
-                "Part of the growing bounding box test class. This is a test" +
-                "with the bounding box ["+
-                bbox[0]+","+bbox[1]+","+bbox[2]+","+bbox[3]+"].");
+                "Part of the growing bounding box test class (with sites" +
+                "between a certain date and certain (one or more) phenomena).");
     }
 
     public void testBoundingBox() throws HttpException, IOException {
@@ -206,6 +315,19 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
         // make sure that there were no features outside of the bounding box
         XMLAssert.assertXpathEvaluatesTo("0",
                 Gml.createCountNotWithinBoundingBoxXpath(bbox), response);
+        
+        // make sure that there were no features outside of the date range
+        // returned
+        XMLAssert.assertXpathEvaluatesTo("0",
+                createCountDatesXpathFrom(
+                        ">",
+                        df.format(new Date(dateRange[1]))),
+                response);        
+        XMLAssert.assertXpathEvaluatesTo("0",
+                createCountDatesXpathTo(
+                        "<",
+                        df.format(new Date(dateRange[0]))),
+                response);
         
         if (getTestType()==TestType.conformance) {
             AwdipConformanceTest.NumberOfFeaturesCheck(response);

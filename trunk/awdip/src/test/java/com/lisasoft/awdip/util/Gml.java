@@ -73,18 +73,47 @@ public class Gml {
     }
     
     /**
-     * Creates a WFS filter for queries between two values. The extrema are within
-     * the interval (>= and <=)
+     * Creates a WFS filter for queries between two values. The boundaries are
+     * within the interval (>= and <=)
      * @param property the property
      * @param from start start of the range (date format: yyyy-MM-dd)  
      * @param to end of the range (date format: yyyy-MM-dd)
      * @return WFS filter expression
      */
     public static String createBetweenFilter(String property, String from, String to) {
-        return "<ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyName>" + property + "</ogc:PropertyName><ogc:Literal>"
-        + from + "</ogc:Literal></ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyIsLessThanOrEqualTo><ogc:PropertyName>aw:relatedObservation/aw:PhenomenonTimeSeries/om:result/cv:CompactDiscreteTimeCoverage/cv:element/cv:CompactTimeValuePair/cv:geometry</ogc:PropertyName><ogc:Literal>"
-        + to + "</ogc:Literal></ogc:PropertyIsLessThanOrEqualTo>";        
+        return "<ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyName>"
+                + property + "</ogc:PropertyName><ogc:Literal>"
+                + from + "</ogc:Literal></ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyIsLessThanOrEqualTo><ogc:PropertyName>"
+                + property + "</ogc:PropertyName><ogc:Literal>"
+                + to + "</ogc:Literal></ogc:PropertyIsLessThanOrEqualTo>";
     }
+    
+    /**
+     * Creates a WFS filter for queries less or equal than a value (<=)
+     * @param property the property
+     * @param value value to compare to  
+     * @return WFS filter expression
+     */
+    public static String createLessOrEqualFilter(String property,
+            String value) {
+        return "<ogc:PropertyIsLessThanOrEqualTo><ogc:PropertyName>"
+                + property + "</ogc:PropertyName><ogc:Literal>"
+                + value + "</ogc:Literal></ogc:PropertyIsLessThanOrEqualTo>";
+    }    
+
+    /**
+     * Creates a WFS filter for queries greater or equal than a value (>=)
+     * @param property the property
+     * @param value value to compare to  
+     * @return WFS filter expression
+     */
+    public static String createGreaterOrEqualFilter(String property,
+            String value) {
+        return "<ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyName>"
+                + property + "</ogc:PropertyName><ogc:Literal>"
+                + value + "</ogc:Literal></ogc:PropertyIsGreaterThanOrEqualTo>";
+    }    
+    
     
     /** Creates the body for a request with a bounding box filter
      * 

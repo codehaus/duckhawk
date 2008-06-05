@@ -5,6 +5,7 @@ import static com.lisasoft.awdip.AWDIPTestSupport.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -116,42 +117,54 @@ public class SiteLocationMaximumFeaturesTest extends AbstractAwdipTest {
         }
         
 
+        Set<TestType> performTests = getPerformTests();
         TestSuite suite = new TestSuite();
-/*
-        // configure conformance tests
-        for (int i=0; i<bboxInit.length; i++) {
-            for (int j=0; j<steps[i]; j++) {
-                int maxFeatures =  maxFeaturesInit[i] + maxFeaturesStep[i]*j;
-                suite.addTest(SiteLocationMaximumFeaturesTest(
-                                i+""+j, bbox[i], maxFeatures]));
+
+        for(TestType testType : performTests) {
+            switch(testType) {
+            case conformance:
+                // configure conformance tests
+                for (int i=0; i<maxFeaturesInit.length; i++) {
+                    for (int j=0; j<steps[i]; j++) {
+                        int maxFeatures =
+                                maxFeaturesInit[i] + maxFeaturesStep[i]*j;
+                        suite.addTest(new SiteLocationMaximumFeaturesTest(
+                                i+""+j, bbox[i], maxFeatures));
+                    }
+                }
+                break;
+            case performance:                
+                // configure performance tests
+                for (int i=0; i<maxFeaturesInit.length; i++) {
+                    for (int j=0; j<steps[i]; j++) {
+                        int maxFeatures =
+                                maxFeaturesInit[i] + maxFeaturesStep[i]*j;
+                        SiteLocationMaximumFeaturesTest test =
+                            new SiteLocationMaximumFeaturesTest(
+                                    i+""+j, bbox[i], maxFeatures);
+                        test.configureAsPerformanceTest(getPerfTimes());
+                        suite.addTest(test);
+                    }
+                }
+                break;
+            case stress:
+                // configure load tests
+                for (int i=0; i<maxFeaturesInit.length; i++) {
+                    for (int j=0; j<steps[i]; j++) {
+                        int maxFeatures =
+                                maxFeaturesInit[i] + maxFeaturesStep[i]*j;
+                        SiteLocationMaximumFeaturesTest test =
+                            new SiteLocationMaximumFeaturesTest(
+                                    i+""+j, bbox[i], maxFeatures);
+                        test.configureAsLoadTest(getLoadTimes(),
+                                getLoadNumThreads(), getLoadRampUp());
+                        suite.addTest(test);
+                    }
+                }        
+                break;
             }
         }
-*/
-        // configure performance tests
-        for (int i=0; i<maxFeaturesInit.length; i++) {
-            for (int j=0; j<steps[i]; j++) {
-                int maxFeatures =  maxFeaturesInit[i] + maxFeaturesStep[i]*j;
-                SiteLocationMaximumFeaturesTest test =
-                        new SiteLocationMaximumFeaturesTest(
-                                i+""+j, bbox[i], maxFeatures);
-                test.configureAsPerformanceTest(getPerfTimes());
-                suite.addTest(test);
-            }
-        }
-/*
-        // configure load tests
-        for (int i=0; i<bboxInit.length; i++) {
-            for (int j=0; j<steps[i]; j++) {
-                int maxFeatures =  maxFeaturesInit[i] + maxFeaturesStep[i]*j;
-                SiteLocationMaximumFeaturesTest test =
-                        new SiteLocationMaximumFeaturesTest(
-                                i+""+j, bbox[i], maxFeatures);
-                test.configureAsLoadTest(getLoadTimes(), getLoadNumThreads(),
-                        getLoadRampUp());
-                suite.addTest(test);
-            }
-        }        
-*/        
+
         return suite;
     }
     

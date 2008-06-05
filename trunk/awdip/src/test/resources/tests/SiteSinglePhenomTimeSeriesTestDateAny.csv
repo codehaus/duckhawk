@@ -1,6 +1,17 @@
 site,phenomenon
-"DIAMANTINA RIVER @ Birdsville",FLOW_Mean_Daily
-"DIAMANTINA RIVER @ Birdsville",FLOW_Maximum_Daily
-"DRAIN M @ Woakwine Amtd 5.1km",ELECTRICAL_CONDUCTIVITY_Maximum_Daily
-"BAKERS RANGE WATERCOURSE @ G Cutting",ELECTRICAL_CONDUCTIVITY_Minimum_Daily
-"DIAMANTINA RIVER @ Birdsville",FLOW
+# SA data
+#"DIAMANTINA RIVER @ Birdsville",FLOW_Mean_Daily
+#"DIAMANTINA RIVER @ Birdsville",FLOW_Maximum_Daily
+#"DRAIN M @ Woakwine Amtd 5.1km",ELECTRICAL_CONDUCTIVITY_Maximum_Daily
+#"DRAIN M @ Woakwine Amtd 5.1km",ELECTRICAL_CONDUCTIVITY_Mean_Daily
+#"BAKERS RANGE WATERCOURSE @ G Cutting",ELECTRICAL_CONDUCTIVITY_Minimum_Daily
+#"DIAMANTINA RIVER @ Birdsville",FLOW
+# QLD data
+111101d,waterlevel_1_day_mean
+111101d,waterlevel_1_day_max
+111101d,waterlevel_1_day_min
+111101d,waterlevel_1_year_mean
+111101d,flowrate_1_day_min
+105102a,waterlevel_1_day_max
+116014a,waterlevel_1_day_min
+116014a,waterlevel_1_month_mean

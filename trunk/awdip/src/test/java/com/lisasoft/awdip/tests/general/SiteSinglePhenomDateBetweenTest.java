@@ -6,18 +6,30 @@ import static com.lisasoft.awdip.AWDIPTestSupport.getLoadNumThreads;
 import static com.lisasoft.awdip.AWDIPTestSupport.getLoadRampUp;
 import static com.lisasoft.awdip.AWDIPTestSupport.getLoadTimes;
 import static com.lisasoft.awdip.AWDIPTestSupport.getPerfTimes;
+import static com.lisasoft.awdip.AWDIPTestSupport.getPerformTests;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.httpclient.HttpException;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestProperties;
+import org.duckhawk.core.TestType;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import junit.framework.Test;
@@ -44,16 +56,18 @@ public class SiteSinglePhenomDateBetweenTest extends AbstractAwdipTest {
     static final String KEY_SITE_NAME = "params.siteName";
     static final String KEY_PHENOMS_NAME = "params.phenomsName";
     static final String KEY_DATE_RANGE = "params.dateRange";
-    
+    static final String KEY_NUM_MEASURES = "test.numMeasures";
+
     /** force properties to be in the output, even if "null" */
     static final String[] forcePropertyOutput = new String[]{
             KEY_SITE_NAME,
             KEY_PHENOMS_NAME,
-            KEY_DATE_RANGE 
+            KEY_DATE_RANGE,
+            KEY_NUM_MEASURES
     };
     
     /** Name of the site */
-    String site;
+    String[] sites;
     /** Name of one or more  phenomena */
     String[] phenomena;
     /** Storing information about the date range */
@@ -66,13 +80,13 @@ public class SiteSinglePhenomDateBetweenTest extends AbstractAwdipTest {
      * @throws InvalidConfigFileException
      * @throws IOException
      */
-    public SiteSinglePhenomDateBetweenTest(String testNameSuffix, String site,
-            String[] phenomena, long[] dateRange)
+    public SiteSinglePhenomDateBetweenTest(String testNameSuffix,
+            String[] sites, String[] phenomena, long[] dateRange)
     throws IOException, InvalidConfigFileException {
         super(getAwdipContext(forcePropertyOutput));
         setName("testBetweenDate");
         setTestMethodSuffix(testNameSuffix);
-        this.site = site;
+        this.sites = sites;
         this.phenomena = phenomena;
         this.dateRange = dateRange;
     }
@@ -84,7 +98,7 @@ public class SiteSinglePhenomDateBetweenTest extends AbstractAwdipTest {
      * 1st line: names of the fields
      * next lines:
      *     1st field: number of steps till full range
-     *     2nd field: name of a site
+     *     2nd field: one or more names of a sites (comma separated)
      *     3rd field: date range (comma separated, ISO: "yyyy-MM-dd,yyyy-MM-dd")
      *     4th field: names of the phenomena (comma separated)     
      */
@@ -98,7 +112,7 @@ public class SiteSinglePhenomDateBetweenTest extends AbstractAwdipTest {
         CSVReader csv = new CSVReader(new File(filename));   
 
         // store the values in lists, so you need to parse the file only once
-        List<String> sites = new ArrayList<String>();
+        List<String[]> sites = new ArrayList<String[]>();
         List<String[]> phenomenons = new ArrayList<String[]>();
         List<long[]> dateRanges = new ArrayList<long[]>();
         /** number of steps that should be performed to until the full given
@@ -115,67 +129,75 @@ public class SiteSinglePhenomDateBetweenTest extends AbstractAwdipTest {
         lines.remove(0);
 
         for (String[] line : lines) {
-            sites.add(line[1]);
+            numberOfSteps.add(new Integer(line[0]));
+            sites.add(line[1].split(","));
             String[] dateRangeString = line[2].split(",");
             phenomenons.add(line[3].split(","));
             dateRanges.add(new long[]{
                     df.parse(dateRangeString[0]).getTime(),
                     df.parse(dateRangeString[1]).getTime()});
-            numberOfSteps.add(new Integer(line[0]));
         }
 
         // creating tests
         //------------------------------
         
 
+        Set<TestType> performTests = getPerformTests();
         TestSuite suite = new TestSuite();
-/*            
-        // create conformance tests
-        for (int i=0; i<sites.size(); i++) {
-            // we want a growing range
-            long[][] growingDateRange = divideDateRange(dateRanges.get(i),
-                   numberOfSteps.get(i));
-            for (long[] range : growingDateRange) {
-                DateBetweenParametrizedTest test =
-                    new DateBetweenParametrizedTest(
-                            i+"_"+dff.format(new Date(range[1])), sites.get(i),
-                            phenomenons.get(i), range);
-                suite.addTest(test);                
+
+        for(TestType testType : performTests) {
+            switch(testType) {
+            case conformance:
+                // configure conformance tests
+                for (int i=0; i<sites.size(); i++) {
+                    // we want a growing range
+                    long[][] growingDateRange = divideDateRange(dateRanges.get(i),
+                            numberOfSteps.get(i));
+                    for (long[] range : growingDateRange) {
+                        SiteSinglePhenomDateBetweenTest test =
+                            new SiteSinglePhenomDateBetweenTest(
+                                    i+"_"+dff.format(new Date(range[1])),
+                                    sites.get(i), phenomenons.get(i), range);
+                        suite.addTest(test);                
+                    }
+                }
+                break;
+            case performance:                
+                // configure performance tests
+                for (int i=0; i<sites.size(); i++) {
+                    // we want a growing range
+                    long[][] growingDateRange = divideDateRange(dateRanges.get(i),
+                            numberOfSteps.get(i));
+                    for (long[] range : growingDateRange) {
+                        SiteSinglePhenomDateBetweenTest test =
+                            new SiteSinglePhenomDateBetweenTest(
+                                    i+"_"+dff.format(new Date(range[1])),
+                                    sites.get(i), phenomenons.get(i), range);
+                        test.configureAsPerformanceTest(getPerfTimes());
+                        suite.addTest(test);
+                    }
+                }
+                break;
+            case stress:
+                // configure load tests
+                for (int i=0; i<sites.size(); i++) {
+                    // we want a growing range
+                    long[][] growingDateRange = divideDateRange(dateRanges.get(i),
+                            numberOfSteps.get(i));
+                    for (long[] range : growingDateRange) {
+                        SiteSinglePhenomDateBetweenTest test =
+                            new SiteSinglePhenomDateBetweenTest(
+                                    i+"_"+dff.format(new Date(range[1])),
+                                    sites.get(i), phenomenons.get(i), range);
+                        test.configureAsLoadTest(getLoadTimes(),
+                                getLoadNumThreads(), getLoadRampUp());
+                        suite.addTest(test);
+                    }            
+                }
+                break;
             }
         }
-*/    
-        // create performance tests
-        for (int i=0; i<sites.size(); i++) {
-            // we want a growing range
-            long[][] growingDateRange = divideDateRange(dateRanges.get(i),
-                   numberOfSteps.get(i));
-            for (long[] range : growingDateRange) {
-                SiteSinglePhenomDateBetweenTest test =
-                    new SiteSinglePhenomDateBetweenTest(
-                            i+"_"+dff.format(new Date(range[1])), sites.get(i),
-                            phenomenons.get(i), range);
-                test.configureAsPerformanceTest(getPerfTimes());
-                suite.addTest(test);
-            }
-        }
-            
-/*
-        // create load tests
-        for (int i=0; i<sites.size(); i++) {
-            // we want a growing range
-            long[][] growingDateRange = divideDateRange(dateRanges.get(i),
-                   numberOfSteps.get(i));
-            for (long[] range : growingDateRange) {
-                DateBetweenParametrizedTest test =
-                    new DateBetweenParametrizedTest(
-                            i+"_"+dff.format(new Date(range[1])), sites.get(i),
-                            phenomenons.get(i), range);
-                test.configureAsLoadTest(getLoadTimes(), getLoadNumThreads(),
-                        getLoadRampUp());
-                suite.addTest(test);
-            }            
-        }
-*/
+
         return suite;
     }
     
@@ -187,7 +209,8 @@ public class SiteSinglePhenomDateBetweenTest extends AbstractAwdipTest {
     private static long[][] divideDateRange(long[] dateRange,
             int numberOfPieces) {
         long[][] dateRanges = new long[numberOfPieces][];
-        long pieceSize = (dateRange[1] - dateRange[0])/numberOfPieces;
+        // "*2" as we extend on both ends of the range
+        long pieceSize = (dateRange[1] - dateRange[0])/(numberOfPieces*2);
         
         for (int i=0; i<numberOfPieces; i++) { 
             dateRanges[i] = new long[]{
@@ -220,6 +243,46 @@ public class SiteSinglePhenomDateBetweenTest extends AbstractAwdipTest {
     }
     
     
+    /**
+     * Counts the number of measures in a response
+     * @param input XML response
+     * @return
+     */
+    private static int countMeasures(String input)
+    throws XPathExpressionException {
+        XPathFactory factory = XPathFactory.newInstance();
+        XPath xpath = factory.newXPath();
+
+        xpath.setNamespaceContext(new NamespaceContext() {
+                public String getNamespaceURI(String prefix) {
+                    if (prefix.equals("wfs"))
+                        return "http://www.opengis.net/wfs";
+                    else if (prefix.equals("gml"))
+                        return "http://www.opengis.net/gml";
+                    else if (prefix.equals("aw"))
+                        return "http://www.water.gov.au/awdip";
+                    else if (prefix.equals("om"))
+                        return "http://www.opengis.net/om/1.0";
+                    else if (prefix.equals("cv"))
+                        return "http://www.opengis.net/cv/0.2.1";
+                    return null;
+                }
+
+                public String getPrefix(String namespaceURI) {
+                    throw new UnsupportedOperationException();
+                }
+
+                public Iterator<String> getPrefixes(String namespaceURI) {
+                    throw new UnsupportedOperationException();
+                }
+        });
+        
+        InputSource inputSource = new InputSource(new StringReader(input));
+        return ((Double)xpath.evaluate(
+                "count(wfs:FeatureCollection/gml:featureMembers/aw:SiteSinglePhenomTimeSeries/aw:relatedObservation/aw:PhenomenonTimeSeries/om:result/cv:CompactDiscreteTimeCoverage/cv:element)",
+                inputSource, XPathConstants.NUMBER)).intValue();
+    }
+    
     
     
     /**
@@ -234,32 +297,40 @@ public class SiteSinglePhenomDateBetweenTest extends AbstractAwdipTest {
                 df.format(new Date(dateRange[0])),
                 df.format(new Date(dateRange[1]))};
         
-        // The three filters are:
-        // 1. site name property filter
+        // The two filters are:
+        // 1. site name property filter with phenomena filters which consist of
+        //    <ogc:Or> concatenated property filters 
         // 2. date range filter
-        // 3. phenomena filters which consist of <ogc:Or> concatenated property
-        //    filters 
-        String[] filters = new String[3];
-        filters[0] = Gml.createPropertyFilter("gml:name", site);
+        String[] filters = new String[2];
+        //filters[0] = Gml.createPropertyFilter("gml:name", sites);
+
+        StringBuffer phenomFilters = new StringBuffer();
+        phenomFilters.append("<ogc:Or>");
+        for (String phenom : phenomena) 
+            phenomFilters.append(Gml.createPropertyFilter(PHENOM_FIELD,phenom));
+        phenomFilters.append("</ogc:Or>");        
+        String phenomFiltersString = phenomFilters.toString();
+        
+        StringBuffer siteFilters = new StringBuffer();
+        siteFilters.append("<ogc:Or>");
+        for (String site : sites) {
+            siteFilters.append("<ogc:And>");
+            siteFilters.append(Gml.createPropertyFilter("gml:name",site));
+            siteFilters.append(phenomFiltersString);
+            siteFilters.append("</ogc:And>");
+        }
+        siteFilters.append("</ogc:Or>");
+        filters[0] = siteFilters.toString();
+        
         filters[1] = Gml.createBetweenFilter(DATE_FIELD,
                 dateRangeString[0], dateRangeString[1]);
         
-        //String[] phenomFilters = new String[phenoms.length];
-        StringBuffer phenomFilters = new StringBuffer();
-        phenomFilters.append("<ogc:Or>");
-        //for (int i=0; i<phenomena.length; i++)
-        for (String phenom : phenomena) 
-            phenomFilters.append(
-                    Gml.createPropertyFilter(PHENOM_FIELD,phenom));
-        phenomFilters.append("</ogc:Or>");        
-        filters[2] = phenomFilters.toString();
-
         String body = Gml.createAndFilterRequest(FEATURE_TYPE_NAME, filters);
 
         data.put("body", body);
         putCallProperty(TestExecutor.KEY_REQUEST, body);
 
-        context.put(KEY_SITE_NAME, site);
+        context.put(KEY_SITE_NAME, sites);
         context.put(KEY_PHENOMS_NAME, phenomena);
         context.put(KEY_DATE_RANGE, dateRangeString);
         putCallProperty(TestExecutor.KEY_DESCRIPTION,
@@ -276,10 +347,11 @@ public class SiteSinglePhenomDateBetweenTest extends AbstractAwdipTest {
     }
     
     public void checkBetweenDate()
-    throws XpathException, SAXException, IOException {
+    throws XpathException, SAXException, IOException, XPathExpressionException {
+        String response = (String) getCallProperty(TestExecutor.KEY_RESPONSE);
         XMLAssert.assertXpathExists(
                 "/wfs:FeatureCollection/gml:featureMembers",
-                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+                response);
         
         // make sure that there were no features outside of the date range
         // returned
@@ -287,12 +359,15 @@ public class SiteSinglePhenomDateBetweenTest extends AbstractAwdipTest {
                 createCountDatesXpath(
                         "<",
                         df.format(new Date(dateRange[0]))),
-                (String)getCallProperty(TestExecutor.KEY_RESPONSE));        
+                response);        
         XMLAssert.assertXpathEvaluatesTo("0",
                 createCountDatesXpath(
                         ">",
                         df.format(new Date(dateRange[1]))),
-                (String)getCallProperty(TestExecutor.KEY_RESPONSE));
+                response);
+        
+        // save the number of returned measures in the call properties
+        putCallProperty(KEY_NUM_MEASURES, countMeasures(response));        
     }
     
 }
