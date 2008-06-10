@@ -59,7 +59,7 @@ public class AWDIPTestSupport {
      * Directory where the configuration files for the tests are TODO vmische
      * Make it a configuration file parameter
      */
-    private static String testsConfigDir = "src/test/resources/tests";
+    private static String testsConfigDir = "src/main/resources/tests";
 
     /**
      * Setting up the environment for the AWDIP test suite.
