@@ -77,7 +77,7 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
         // read CSV file
         String filename = (String) getAwdipContext().getEnvironment().get(KEY_TESTS_CONFIG_DIR)
                 + CONFIG_FILE;
-        CSVReader csv = new CSVReader(new File(filename));      
+        CSVReader csv = new CSVReader(new File(filename));
         
         List<String[]> lines = csv.getLines();
         
@@ -103,18 +103,25 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
             }
 
             steps[i] = new Integer(lines.get(i)[0]);
-            
-            bboxInit[i] = new double[]{
-                    new Double(init[0]),
-                    new Double(init[1]), 
-                    new Double(init[2]),
-                    new Double(init[3])};
 
-            bboxStep[i] = new double[]{
-                    (new Double(max[0])-bboxInit[i][0])/(steps[i]-1),
-                    (new Double(max[1])-bboxInit[i][1])/(steps[i]-1), 
-                    (new Double(max[2])-bboxInit[i][2])/(steps[i]-1),
-                    (new Double(max[3])-bboxInit[i][3])/(steps[i]-1)};
+            // only one step => use maximum bounding box
+            if (steps[i]>1) {
+                bboxInit[i] = new double[]{
+                        new Double(init[0]),
+                        new Double(init[1]), 
+                        new Double(init[2]),
+                        new Double(init[3])};                
+                
+                bboxStep[i] = new double[]{
+                        (new Double(max[0])-bboxInit[i][0])/(steps[i]-1),
+                        (new Double(max[1])-bboxInit[i][1])/(steps[i]-1), 
+                        (new Double(max[2])-bboxInit[i][2])/(steps[i]-1),
+                        (new Double(max[3])-bboxInit[i][3])/(steps[i]-1)};
+            }
+            else
+                bboxStep[i] = new double[]{
+                    new Double(max[0]), new Double(max[1]), 
+                    new Double(max[2]), new Double(max[3])};
         }
         
 
