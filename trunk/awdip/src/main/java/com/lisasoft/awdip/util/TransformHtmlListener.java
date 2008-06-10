@@ -1,9 +1,9 @@
 package com.lisasoft.awdip.util;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -12,6 +12,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.io.FileUtils;
 import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestMetadata;
@@ -52,51 +53,54 @@ public class TransformHtmlListener implements TestSuiteListener {
                 .get(XML_MAIN_REPORT);
             String xmlReportName = xmlReportFile.getName();
             Source xmlReportSource = new StreamSource(xmlReportFile);
+            
+            // setup XSLT parser
+            System.setProperty("javax.xml.transform.TransformerFactory",
+                "net.sf.saxon.TransformerFactoryImpl");
+                TransformerFactory tf = TransformerFactory.newInstance();
 
-            InputStream xsltStream = getClass()
-                    .getResourceAsStream("/listeners/dh2xhtml.xsl");
+            // generate general overview report
+            URL xsltUrl = getClass()
+                    .getResource("/listeners/dh2xhtml_general.xsl");
+            URLConnection urlConn = xsltUrl.openConnection();
+            InputStream xsltStream = urlConn.getInputStream();
             Source xsltSource = new StreamSource(xsltStream);
+            xsltSource.setSystemId(xsltUrl.getPath());
             
             File htmlReport = new File(htmlDir, xmlReportName.substring(0,
                     xmlReportName.length()-4) + ".html");
             
             Result transResult = new StreamResult(htmlReport);             
-            System.setProperty("javax.xml.transform.TransformerFactory",
-                "net.sf.saxon.TransformerFactoryImpl");
-            TransformerFactory tf = TransformerFactory.newInstance();
             Transformer t = tf.newTransformer(xsltSource);
+            t.transform(xmlReportSource, transResult);
 
+            
+            // generate detailed report. Java might run out of memory. This
+            // isn't a problem, as no one wants to open such big HTML files
+            // in the browser anyway.
+            xsltUrl = getClass()
+                    .getResource("/listeners/dh2xhtml_details.xsl");
+            urlConn = xsltUrl.openConnection();
+            xsltStream = urlConn.getInputStream();            
+            xsltSource = new StreamSource(xsltStream);
+            xsltSource.setSystemId(xsltUrl.getPath());
+            
+            t = tf.newTransformer(xsltSource);
+            // there isn't any outputs only into a sub-directory, not to the
+            // main file (the general report won't be overwritten)          
             t.transform(xmlReportSource, transResult);
             
             // copy css file
-            saveStream(getClass()
-                    .getResourceAsStream("/listeners/dh-report.css"),
-                    htmlDir + "/dh-report.css");
-            
+            File css = new File(htmlDir + "/dh-report.css");
+            if (!css.exists())
+                FileUtils.copyURLToFile(
+                        getClass().getResource("/listeners/dh-report.css"),
+                        new File(htmlDir + "/dh-report.css"));
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }        
+        }    
     }
 
-    
-    /**
-     * Saves Input stream to file
-     * @throws IOException 
-     * @throws Exception 
-     */
-    private static void saveStream(InputStream src, String dest)
-    throws IOException {
-        FileOutputStream fos = new FileOutputStream(dest);
-        byte[] buf = new byte[1024];
-        int i = 0;
-        
-        while ((i = src.read(buf)) != -1) {
-            fos.write(buf, 0, i);
-        }            
-     
-        fos.close();
-    }
-    
 
     public void testSuiteStarting(TestContext context) {
     }
