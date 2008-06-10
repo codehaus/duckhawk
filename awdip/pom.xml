@@ -141,7 +141,7 @@
       </plugin>
     
     
-    <!-- Build the test jar -->
+      <!-- Build the test jar -->
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
@@ -153,8 +153,31 @@
           </execution>
         </executions>
       </plugin>
+
+      <!-- Build one big executable jar that starts the test runner --> 
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>com.lisasoft.awdip.AWDIPTestRunner</mainClass>
+            </manifest>
+          </archive>	  
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attached</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
     </plugins>
   </build>
-  
- 
 </project>
