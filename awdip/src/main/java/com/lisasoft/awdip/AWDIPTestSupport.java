@@ -1,11 +1,13 @@
 package com.lisasoft.awdip;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.custommonkey.xmlunit.SimpleNamespaceContext;
 import org.custommonkey.xmlunit.XMLUnit;
@@ -20,6 +22,7 @@ import org.duckhawk.util.ConformanceSummarizer;
 import org.duckhawk.util.PerformanceSummarizer;
 import org.duckhawk.util.PrintStreamListener;
 
+import com.lisasoft.awdip.util.PropertyNotFoundException;
 import com.lisasoft.awdip.util.SetPropertyListener;
 import com.lisasoft.awdip.util.TransformHtmlListener;
 import com.lisasoft.awdip.util.Util;
@@ -40,26 +43,24 @@ public class AWDIPTestSupport {
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_TESTS_CONFIG_DIR = "testsConfigurationDir";
 
+    // TODO make it a runner parameter
+    static String configurationFile = "awdip.properties";
+    
     // startup settings for performance tests
-    static int perfTimes = 10;
+    static int perfTimes;
 
     // startup settings for load tests
-    static int loadTimes = 5;
-    static int loadNumThreads = 3;
-    static int loadRampUp = 1;
+    static int loadTimes;
+    static int loadNumThreads;
+    static int loadRampUp;
     
     /*static Set<TestType> performTests = EnumSet.of(
             TestType.conformance,
             TestType.performance,
             TestType.stress);*/ 
-    static Set<TestType> performTests = EnumSet.of(TestType.performance);
+    //static Set<TestType> performTests = EnumSet.of(TestType.performance);
+    static Set<TestType> performTests = EnumSet.noneOf(TestType.class);
     
-        
-    /**
-     * Directory where the configuration files for the tests are TODO vmische
-     * Make it a configuration file parameter
-     */
-    private static String testsConfigDir = "src/main/resources/tests";
 
     /**
      * Setting up the environment for the AWDIP test suite.
@@ -80,7 +81,23 @@ public class AWDIPTestSupport {
      */
     public static TestContext getAwdipContext(String[] forcePropertyOutputLocal) {
         if (context == null) {
-            // init xmlunit (from geotools' WFSVTestSupport)
+            Configuration config = loadAwdipProperties(configurationFile);
+            
+            perfTimes = config.getInt("perfTimes");
+            loadTimes = config.getInt("loadTimes");
+            loadNumThreads = config.getInt("loadNumThreads");
+            loadRampUp = config.getInt("loadRampUp");
+            
+            for (String type : config.getStringArray("performTests")) {
+                if (type.equals("performance"))
+                    performTests.add(TestType.performance);
+                else if (type.equals("conformance"))
+                    performTests.add(TestType.conformance);
+                else if (type.equals("stress"))
+                    performTests.add(TestType.stress);
+            }
+            
+            // init xmlunit (from GeoTools' WFSVTestSupport)
             HashMap<String, String> namespaces = new HashMap<String, String>();
             namespaces.put("wfs", "http://www.opengis.net/wfs");
             namespaces.put("ows", "http://www.opengis.net/ows");
@@ -100,14 +117,21 @@ public class AWDIPTestSupport {
 
             // setup the environment
             TestProperties environment = new TestPropertiesImpl();
+/*            
             environment.put(KEY_HOST, "thor3.adl.ardec.com.au");
             //environment.put(KEY_HOST, "venus.adl.ardec.com.au");
             environment.put(KEY_PORT, 5580);
             environment.put(KEY_GS_PATH, "geoserver2/wfs");
             //environment.put(KEY_GS_PATH, "geoserver/wfs");
+*/
+            environment.put(KEY_HOST, config.getString("host"));
+            environment.put(KEY_PORT, config.getInt("port"));
+            environment.put(KEY_GS_PATH, config.getString("geoserverPath"));
+            
+            environment.put(KEY_TESTS_CONFIG_DIR,
+                    config.getString("testsConfigDir"));
             environment.put(KEY_SCHEMA_RPATH,
                     "src/test/resources/schemas/all.xsd");
-            environment.put(KEY_TESTS_CONFIG_DIR, testsConfigDir);
 
             /**
              * test call properties that definitely be in the output (set to
@@ -134,12 +158,48 @@ public class AWDIPTestSupport {
                     new SetPropertyListener(forcePropertyOutput),
                     //new PrintStreamListener(true, true),
                     new PrintStreamListener(false, true),
-                    new XStreamDumper(new File("./target/dh-report/xml")),
+                    new XStreamDumper(
+                            new File(config.getString("reportXmlDir"))),
                     new TransformHtmlListener(
-                            new File("./target/dh-report/html")));
+                            new File(config.getString("reportHtmlDir"))));
         }
         return context;
     }
+    
+    /** Load the settings (like server settings, output directories) from the
+     * main AWDIP configuration file
+     * 
+     * @param filename filename of the configuration file 
+     */ 
+    private static Configuration loadAwdipProperties(String filename) {
+        String[] obligatoryProps = new String[]{
+                "perfTimes",
+                "loadTimes",
+                "loadNumThreads", 
+                "loadRampUp"
+        }; 
+        
+        try {
+            Configuration config = new PropertiesConfiguration(filename);
+            
+            for (String prop : obligatoryProps) {
+                if (!config.containsKey(prop))
+                    throw new PropertyNotFoundException("Property \"" + prop
+                            + "\" not found in configuration file.");
+            }
+            return config;
+        } catch (PropertyNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+            System.exit(0);
+        } catch (ConfigurationException e) {
+            e.printStackTrace();
+            System.out.println("Error reading Configuration file \""
+                    + filename + "\".");
+            System.exit(0);            
+        }
+        return null;
+    }
+    
 
     public static int getPerfTimes() {
         return perfTimes;

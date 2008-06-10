@@ -112,8 +112,13 @@ public class SiteLocationMaximumFeaturesTest extends AbstractAwdipTest {
             steps[i] = new Integer(lines.get(i)[0]);
             maxFeaturesInit[i] = new Integer(lines.get(i)[1]);
             int maxFeaturesMax = new Integer(lines.get(i)[2]);
-            maxFeaturesStep[i] =
+            
+            // only one step => use maximum features
+            if (steps[i]>1)
+                maxFeaturesStep[i] =
                     (maxFeaturesMax-maxFeaturesInit[i]) / (steps[i]-1);
+            else
+                maxFeaturesStep[i] = maxFeaturesMax;
         }
         
 
