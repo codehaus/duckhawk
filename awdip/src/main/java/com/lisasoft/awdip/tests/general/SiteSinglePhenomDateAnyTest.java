@@ -93,51 +93,42 @@ public class SiteSinglePhenomDateAnyTest extends AbstractAwdipTest {
         if (lines==null)
             throw new InvalidConfigFileException(
                     "File doesn't contain any data!");
-
+        
         // remove header
         lines.remove(0);
+        
+        String[] sites = new String[lines.size()];
+        String[] phenomenons = new String[lines.size()];
+
+        for (int i=0; i<lines.size(); i++) {
+            sites[i] = lines.get(i)[0];
+            phenomenons[i] = lines.get(i)[1];
+        }
 
         Set<TestType> performTests = getPerformTests();
         TestSuite suite = new TestSuite();
 
         for(TestType testType : performTests) {
-            switch(testType) {
-            case conformance:
-                // configure conformance tests
-                int i = 1;    
-                for (String[] line : lines) {
-                    suite.addTest(new SiteSinglePhenomDateAnyTest(i+"", line[0],
-                            line[1]));
-                    i++;
-                }
-                break;
-            case performance:                
-                // configure performance tests
-                i = 1;
-                for (String[] line : lines) {
-                    SiteSinglePhenomDateAnyTest test =
-                            new SiteSinglePhenomDateAnyTest(i+"", line[0],
-                                    line[1]);
+            for (int i=0; i<lines.size(); i++) {
+                SiteSinglePhenomDateAnyTest test =
+                        new SiteSinglePhenomDateAnyTest(
+                                i+"", sites[i], phenomenons[i]);
+                switch(testType) {
+                case performance:
                     test.configureAsPerformanceTest(getPerfTimes());
-                    suite.addTest(test);
-                    i++;
-                }
-                break;
-            case stress:
-                // configure load tests
-                i = 1;
-                for (String[] line : lines) {
-                    SiteSinglePhenomDateAnyTest test =
-                            new SiteSinglePhenomDateAnyTest(i+"", line[0],
-                                    line[1]);
+                    break;
+                case stress:
                     test.configureAsLoadTest(getLoadTimes(),
                             getLoadNumThreads(), getLoadRampUp());
-                    suite.addTest(test);
-                    i++;
+                    break;
+                case conformance:
+                    // nothing needs to be done, as the constructor initializes
+                    // it as conformance
+                    break;
                 }
-                break;
+                suite.addTest(test);
             }
-        }
+         }
 
         return suite;
     }
@@ -191,11 +182,11 @@ public class SiteSinglePhenomDateAnyTest extends AbstractAwdipTest {
                 Gml.createPropertyFilter(PHENOM_FIELD, phenomenon));
 
         data.put("body", body);
-        putCallProperty(TestExecutor.KEY_REQUEST, body);
+        context.put(TestExecutor.KEY_REQUEST, body);
 
         context.put(KEY_SITE_NAME, site);
         context.put(KEY_PHENOM_NAME, phenomenon);
-        putCallProperty(TestExecutor.KEY_DESCRIPTION,
+        context.put(TestExecutor.KEY_DESCRIPTION,
                 "Part of the testing a single phenomenon at any date test" +
                 "class.");
     }
