@@ -135,63 +135,35 @@ public class SiteLocationBoundingBoxAndMaximumFeaturesTest extends AbstractAwdip
         TestSuite suite = new TestSuite();
         
         for(TestType testType : performTests) {
-            switch(testType) {
-            case conformance:
-                // configure conformance tests
-                for (int i=0; i<bboxInit.length; i++) {
-                    for (int j=0; j<steps[i]; j++) {
-                        double[] bbox =  new double[]{
-                                bboxInit[i][0]+(bboxStep[i][0]*j),
-                                bboxInit[i][1]+(bboxStep[i][1]*j), 
-                                bboxInit[i][2]+(bboxStep[i][2]*j),
-                                bboxInit[i][3]+(bboxStep[i][3]*j),
-                        };
-                        suite.addTest(
-                                new SiteLocationBoundingBoxAndMaximumFeaturesTest(
-                                        i+""+j, bbox, maxFeatures[i]));
-                    }
-                }
-                break;
-            case performance:
-                // configure performance tests
-                for (int i=0; i<bboxInit.length; i++) {
-                    for (int j=0; j<steps[i]; j++) {
-                        double[] bbox =  new double[]{
-                                bboxInit[i][0]+(bboxStep[i][0]*j),
-                                bboxInit[i][1]+(bboxStep[i][1]*j), 
-                                bboxInit[i][2]+(bboxStep[i][2]*j),
-                                bboxInit[i][3]+(bboxStep[i][3]*j),
-                        };
-                        SiteLocationBoundingBoxAndMaximumFeaturesTest test =
-                                new SiteLocationBoundingBoxAndMaximumFeaturesTest(
-                                        i+""+j, bbox, maxFeatures[i]);
+            for (int i=0; i<bboxInit.length; i++) {
+                for (int j=0; j<steps[i]; j++) {
+                    double[] bbox =  new double[]{
+                            bboxInit[i][0]+(bboxStep[i][0]*j),
+                            bboxInit[i][1]+(bboxStep[i][1]*j), 
+                            bboxInit[i][2]+(bboxStep[i][2]*j),
+                            bboxInit[i][3]+(bboxStep[i][3]*j),
+                    };
+                    SiteLocationBoundingBoxAndMaximumFeaturesTest test =
+                            new SiteLocationBoundingBoxAndMaximumFeaturesTest(
+                                    i+""+j, bbox, maxFeatures[i]);
+            
+                    switch(testType) {
+                    case performance:
                         test.configureAsPerformanceTest(getPerfTimes());
-                        suite.addTest(test);
-                    } 
-                }
-                break;
-            case stress:
-                // configure load tests
-                for (int i=0; i<bboxInit.length; i++) {
-                    for (int j=0; j<steps[i]; j++) {
-                        double[] bbox =  new double[]{
-                                bboxInit[i][0]+(bboxStep[i][0]*j),
-                                bboxInit[i][1]+(bboxStep[i][1]*j), 
-                                bboxInit[i][2]+(bboxStep[i][2]*j),
-                                bboxInit[i][3]+(bboxStep[i][3]*j),
-                        };
-                        SiteLocationBoundingBoxAndMaximumFeaturesTest test =
-                                new SiteLocationBoundingBoxAndMaximumFeaturesTest(
-                                        i+""+j, bbox, maxFeatures[i]);
+                        break;
+                    case stress:
                         test.configureAsLoadTest(getLoadTimes(),
                                 getLoadNumThreads(), getLoadRampUp());
-                        suite.addTest(test);
+                        break;
+                    case conformance:
+                        // nothing needs to be done, as the constructor
+                        // initializes it as conformance
+                        break;
                     }
-                }                   
-                break;
+                    suite.addTest(test);
+                }
             }
         }
-
         return suite;
     }
     
@@ -201,11 +173,11 @@ public class SiteLocationBoundingBoxAndMaximumFeaturesTest extends AbstractAwdip
                 maxFeatures,
                 Gml.createBoundingBoxFilter(bbox));
         data.put("body", body);
-        putCallProperty(TestExecutor.KEY_REQUEST, body);
+        context.put(TestExecutor.KEY_REQUEST, body);
 
         context.put(KEY_BBOX, bbox);
         context.put(KEY_MAX_FEATURES, maxFeatures);
-        putCallProperty(TestExecutor.KEY_DESCRIPTION,
+        context.put(TestExecutor.KEY_DESCRIPTION,
                 "Part of the growing bounding box test class. This is a test" +
                 "with the bounding box ["+
                 bbox[0]+","+bbox[1]+","+bbox[2]+","+bbox[3]+"].");

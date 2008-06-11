@@ -129,56 +129,32 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
         TestSuite suite = new TestSuite();
 
         for(TestType testType : performTests) {
-            switch(testType) {
-            case conformance:
-                // configure conformance tests
-                for (int i=0; i<bboxInit.length; i++) {
-                    for (int j=0; j<steps[i]; j++) {
-                        double[] bbox =  new double[]{
-                                bboxInit[i][0]+(bboxStep[i][0]*j),
-                                bboxInit[i][1]+(bboxStep[i][1]*j), 
-                                bboxInit[i][2]+(bboxStep[i][2]*j),
-                                bboxInit[i][3]+(bboxStep[i][3]*j),
-                        };
-                        suite.addTest(new SiteLocationBoundingBoxTest(i+""+j, bbox));
-                    }
-                }
-                break;
-            case performance:                
-                // configure performance tests
-                for (int i=0; i<bboxInit.length; i++) {
-                    for (int j=0; j<steps[i]; j++) {
-                        double[] bbox =  new double[]{
-                                bboxInit[i][0]+(bboxStep[i][0]*j),
-                                bboxInit[i][1]+(bboxStep[i][1]*j), 
-                                bboxInit[i][2]+(bboxStep[i][2]*j),
-                                bboxInit[i][3]+(bboxStep[i][3]*j),
-                        };
-                        SiteLocationBoundingBoxTest test =
-                            new SiteLocationBoundingBoxTest(i+""+j, bbox);
+            for (int i=0; i<bboxInit.length; i++) {
+                for (int j=0; j<steps[i]; j++) {
+                    double[] bbox =  new double[]{
+                            bboxInit[i][0]+(bboxStep[i][0]*j),
+                            bboxInit[i][1]+(bboxStep[i][1]*j), 
+                            bboxInit[i][2]+(bboxStep[i][2]*j),
+                            bboxInit[i][3]+(bboxStep[i][3]*j),
+                    };
+                    SiteLocationBoundingBoxTest test =
+                        new SiteLocationBoundingBoxTest(i+""+j, bbox);
+            
+                    switch(testType) {
+                    case performance:
                         test.configureAsPerformanceTest(getPerfTimes());
-                        suite.addTest(test);
+                        break;
+                    case stress:
+                        test.configureAsLoadTest(getLoadTimes(),
+                                getLoadNumThreads(), getLoadRampUp());
+                        break;
+                    case conformance:
+                        // nothing needs to be done, as the constructor
+                        // initializes it as conformance
+                        break;
                     }
+                    suite.addTest(test);
                 }
-                break;
-            case stress:
-                // configure load tests
-                for (int i=0; i<bboxInit.length; i++) {
-                    for (int j=0; j<steps[i]; j++) {
-                        double[] bbox =  new double[]{
-                                bboxInit[i][0]+(bboxStep[i][0]*j),
-                                bboxInit[i][1]+(bboxStep[i][1]*j), 
-                                bboxInit[i][2]+(bboxStep[i][2]*j),
-                                bboxInit[i][3]+(bboxStep[i][3]*j),
-                        };
-                        SiteLocationBoundingBoxTest test =
-                            new SiteLocationBoundingBoxTest(i+""+j, bbox);
-                        test.configureAsLoadTest(getLoadTimes(), getLoadNumThreads(),
-                                getLoadRampUp());
-                        suite.addTest(test);
-                    }
-                }        
-                break;
             }
         }
 
@@ -190,10 +166,10 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
                 Gml.createBoundingBoxFilter(bbox));
 
         data.put("body", body);
-        putCallProperty(TestExecutor.KEY_REQUEST, body);
+        context.put(TestExecutor.KEY_REQUEST, body);
 
         context.put(KEY_BBOX, bbox);
-        putCallProperty(TestExecutor.KEY_DESCRIPTION,
+        context.put(TestExecutor.KEY_DESCRIPTION,
                 "Part of the growing bounding box test class. This is a test" +
                 "with the bounding box ["+
                 bbox[0]+","+bbox[1]+","+bbox[2]+","+bbox[3]+"].");

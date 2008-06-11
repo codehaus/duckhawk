@@ -165,62 +165,35 @@ public class SiteSamplingStatisticsBoundingBoxTest extends AbstractAwdipTest {
         TestSuite suite = new TestSuite();
 
         for(TestType testType : performTests) {
-            switch(testType) {
-            case conformance:
-                // configure conformance tests
-                for (int i=0; i<bboxInit.length; i++) {
-                    for (int j=0; j<steps[i]; j++) {
-                        double[] bbox =  new double[]{
-                                bboxInit[i][0]+(bboxStep[i][0]*j),
-                                bboxInit[i][1]+(bboxStep[i][1]*j), 
-                                bboxInit[i][2]+(bboxStep[i][2]*j),
-                                bboxInit[i][3]+(bboxStep[i][3]*j),
-                        };
-                        suite.addTest(new SiteSamplingStatisticsBoundingBoxTest(
-                                i+""+j, bbox, dateRanges[i], phenomenons[i]));
-                    }
-                }
-                break;
-            case performance:                
-                // configure performance tests
-                for (int i=0; i<bboxInit.length; i++) {
-                    for (int j=0; j<steps[i]; j++) {
-                        double[] bbox =  new double[]{
-                                bboxInit[i][0]+(bboxStep[i][0]*j),
-                                bboxInit[i][1]+(bboxStep[i][1]*j), 
-                                bboxInit[i][2]+(bboxStep[i][2]*j),
-                                bboxInit[i][3]+(bboxStep[i][3]*j),
-                        };
-                        SiteSamplingStatisticsBoundingBoxTest test =
-                            new SiteSamplingStatisticsBoundingBoxTest(i+""+j,
-                                    bbox, dateRanges[i], phenomenons[i]);
+            for (int i=0; i<bboxInit.length; i++) {
+                for (int j=0; j<steps[i]; j++) {
+                    double[] bbox =  new double[]{
+                            bboxInit[i][0]+(bboxStep[i][0]*j),
+                            bboxInit[i][1]+(bboxStep[i][1]*j), 
+                            bboxInit[i][2]+(bboxStep[i][2]*j),
+                            bboxInit[i][3]+(bboxStep[i][3]*j),
+                    };
+                    SiteSamplingStatisticsBoundingBoxTest test =
+                        new SiteSamplingStatisticsBoundingBoxTest(i+""+j,
+                                bbox, dateRanges[i], phenomenons[i]);
+            
+                    switch(testType) {
+                    case performance:
                         test.configureAsPerformanceTest(getPerfTimes());
-                        suite.addTest(test);
-                    }
-                }
-                break;
-            case stress:
-                // configure load tests
-                for (int i=0; i<bboxInit.length; i++) {
-                    for (int j=0; j<steps[i]; j++) {
-                        double[] bbox =  new double[]{
-                                bboxInit[i][0]+(bboxStep[i][0]*j),
-                                bboxInit[i][1]+(bboxStep[i][1]*j), 
-                                bboxInit[i][2]+(bboxStep[i][2]*j),
-                                bboxInit[i][3]+(bboxStep[i][3]*j),
-                        };
-                        SiteSamplingStatisticsBoundingBoxTest  test =
-                            new SiteSamplingStatisticsBoundingBoxTest(i+""+j,
-                                    bbox, dateRanges[i], phenomenons[i]);
+                        break;
+                    case stress:
                         test.configureAsLoadTest(getLoadTimes(),
                                 getLoadNumThreads(), getLoadRampUp());
-                        suite.addTest(test);
+                        break;
+                    case conformance:
+                        // nothing needs to be done, as the constructor initializes
+                        // it as conformance
+                        break;
                     }
-                }        
-                break;
+                    suite.addTest(test);
+                }
             }
         }
-
         return suite;
     }
     
@@ -298,12 +271,12 @@ public class SiteSamplingStatisticsBoundingBoxTest extends AbstractAwdipTest {
         String body = Gml.createAndFilterRequest(FEATURE_TYPE_NAME, filters);
         
         data.put("body", body);
-        putCallProperty(TestExecutor.KEY_REQUEST, body);
+        context.put(TestExecutor.KEY_REQUEST, body);
         
         context.put(KEY_BBOX, bbox);
         context.put(KEY_PHENOMS_NAME, phenomena);
         context.put(KEY_DATE_RANGE, dateRangeString);
-        putCallProperty(TestExecutor.KEY_DESCRIPTION,
+        context.put(TestExecutor.KEY_DESCRIPTION,
                 "Part of the growing bounding box test class (with sites" +
                 "between a certain date and certain (one or more) phenomena).");
     }

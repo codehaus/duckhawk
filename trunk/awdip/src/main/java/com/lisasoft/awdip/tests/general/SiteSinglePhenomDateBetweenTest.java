@@ -146,55 +146,31 @@ public class SiteSinglePhenomDateBetweenTest extends AbstractAwdipTest {
         TestSuite suite = new TestSuite();
 
         for(TestType testType : performTests) {
-            switch(testType) {
-            case conformance:
-                // configure conformance tests
-                for (int i=0; i<sites.size(); i++) {
-                    // we want a growing range
-                    long[][] growingDateRange = divideDateRange(dateRanges.get(i),
-                            numberOfSteps.get(i));
-                    for (long[] range : growingDateRange) {
-                        SiteSinglePhenomDateBetweenTest test =
-                            new SiteSinglePhenomDateBetweenTest(
-                                    i+"_"+dff.format(new Date(range[1])),
-                                    sites.get(i), phenomenons.get(i), range);
-                        suite.addTest(test);                
-                    }
-                }
-                break;
-            case performance:                
-                // configure performance tests
-                for (int i=0; i<sites.size(); i++) {
-                    // we want a growing range
-                    long[][] growingDateRange = divideDateRange(dateRanges.get(i),
-                            numberOfSteps.get(i));
-                    for (long[] range : growingDateRange) {
-                        SiteSinglePhenomDateBetweenTest test =
-                            new SiteSinglePhenomDateBetweenTest(
-                                    i+"_"+dff.format(new Date(range[1])),
-                                    sites.get(i), phenomenons.get(i), range);
+            for (int i=0; i<sites.size(); i++) {
+                // we want a growing range
+                long[][] growingDateRange = divideDateRange(dateRanges.get(i),
+                        numberOfSteps.get(i));
+                for (long[] range : growingDateRange) {
+                    SiteSinglePhenomDateBetweenTest test =
+                        new SiteSinglePhenomDateBetweenTest(
+                                i+"_"+dff.format(new Date(range[1])),
+                                sites.get(i), phenomenons.get(i), range);
+           
+                    switch(testType) {
+                    case performance:
                         test.configureAsPerformanceTest(getPerfTimes());
-                        suite.addTest(test);
-                    }
-                }
-                break;
-            case stress:
-                // configure load tests
-                for (int i=0; i<sites.size(); i++) {
-                    // we want a growing range
-                    long[][] growingDateRange = divideDateRange(dateRanges.get(i),
-                            numberOfSteps.get(i));
-                    for (long[] range : growingDateRange) {
-                        SiteSinglePhenomDateBetweenTest test =
-                            new SiteSinglePhenomDateBetweenTest(
-                                    i+"_"+dff.format(new Date(range[1])),
-                                    sites.get(i), phenomenons.get(i), range);
+                        break;
+                    case stress:
                         test.configureAsLoadTest(getLoadTimes(),
                                 getLoadNumThreads(), getLoadRampUp());
-                        suite.addTest(test);
-                    }            
+                        break;
+                    case conformance:
+                        // nothing needs to be done, as the constructor initializes
+                        // it as conformance
+                        break;
+                    }
+                    suite.addTest(test);
                 }
-                break;
             }
         }
 
@@ -328,12 +304,12 @@ public class SiteSinglePhenomDateBetweenTest extends AbstractAwdipTest {
         String body = Gml.createAndFilterRequest(FEATURE_TYPE_NAME, filters);
 
         data.put("body", body);
-        putCallProperty(TestExecutor.KEY_REQUEST, body);
+        context.put(TestExecutor.KEY_REQUEST, body);
 
         context.put(KEY_SITE_NAME, sites);
         context.put(KEY_PHENOMS_NAME, phenomena);
         context.put(KEY_DATE_RANGE, dateRangeString);
-        putCallProperty(TestExecutor.KEY_DESCRIPTION,
+        context.put(TestExecutor.KEY_DESCRIPTION,
                 "Part of the testing a single phenomenon between two dates" +
                 " test class.");
     }

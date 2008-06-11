@@ -126,47 +126,29 @@ public class SiteLocationMaximumFeaturesTest extends AbstractAwdipTest {
         TestSuite suite = new TestSuite();
 
         for(TestType testType : performTests) {
-            switch(testType) {
-            case conformance:
-                // configure conformance tests
-                for (int i=0; i<maxFeaturesInit.length; i++) {
-                    for (int j=0; j<steps[i]; j++) {
-                        int maxFeatures =
-                                maxFeaturesInit[i] + maxFeaturesStep[i]*j;
-                        suite.addTest(new SiteLocationMaximumFeaturesTest(
-                                i+""+j, bbox[i], maxFeatures));
-                    }
-                }
-                break;
-            case performance:                
-                // configure performance tests
-                for (int i=0; i<maxFeaturesInit.length; i++) {
-                    for (int j=0; j<steps[i]; j++) {
-                        int maxFeatures =
-                                maxFeaturesInit[i] + maxFeaturesStep[i]*j;
-                        SiteLocationMaximumFeaturesTest test =
-                            new SiteLocationMaximumFeaturesTest(
-                                    i+""+j, bbox[i], maxFeatures);
+            for (int i=0; i<maxFeaturesInit.length; i++) {
+                for (int j=0; j<steps[i]; j++) {
+                    int maxFeatures =
+                            maxFeaturesInit[i] + maxFeaturesStep[i]*j;
+                    SiteLocationMaximumFeaturesTest test =
+                        new SiteLocationMaximumFeaturesTest(
+                                i+""+j, bbox[i], maxFeatures);
+            
+                    switch(testType) {
+                    case performance:
                         test.configureAsPerformanceTest(getPerfTimes());
-                        suite.addTest(test);
-                    }
-                }
-                break;
-            case stress:
-                // configure load tests
-                for (int i=0; i<maxFeaturesInit.length; i++) {
-                    for (int j=0; j<steps[i]; j++) {
-                        int maxFeatures =
-                                maxFeaturesInit[i] + maxFeaturesStep[i]*j;
-                        SiteLocationMaximumFeaturesTest test =
-                            new SiteLocationMaximumFeaturesTest(
-                                    i+""+j, bbox[i], maxFeatures);
+                        break;
+                    case stress:
                         test.configureAsLoadTest(getLoadTimes(),
                                 getLoadNumThreads(), getLoadRampUp());
-                        suite.addTest(test);
+                        break;
+                    case conformance:
+                        // nothing needs to be done, as the constructor
+                        // initializes it as conformance
+                        break;
                     }
-                }        
-                break;
+                    suite.addTest(test);
+                }
             }
         }
 
@@ -180,11 +162,11 @@ public class SiteLocationMaximumFeaturesTest extends AbstractAwdipTest {
                 Gml.createBoundingBoxFilter(bbox));
         
         data.put("body", body);
-        putCallProperty(TestExecutor.KEY_REQUEST, body);
+        context.put(TestExecutor.KEY_REQUEST, body);
 
         context.put(KEY_BBOX, bbox);
         context.put(KEY_MAX_FEATURES, maxFeatures);
-        putCallProperty(TestExecutor.KEY_DESCRIPTION,
+        context.put(TestExecutor.KEY_DESCRIPTION,
                 "Part of the maximum features test class. This is a test" +
                 " a maximum of " + maxFeatures + " features and the bounding" +
                 " box [" +bbox[0]+","+bbox[1]+","+bbox[2]+","+bbox[3]+"].");
