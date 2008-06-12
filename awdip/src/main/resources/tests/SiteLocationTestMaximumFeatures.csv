@@ -1,7 +1,12 @@
 num_steps,max_features,bbox
 #10,50,500,"134.1,-35.6,144.2,-25.7"
+# QLD Data
 #this bounding box encloses 730 features
-10,50,700,"-180,-90,180,90"
+#1,2000,3000,"-180,-90,180,90"
 #smaller bounding box that still includes all features
 #(shouldn't make much difference in the performance)
 #10,50,700,"130,-20,145,-40"
+# BOM data
+#10,50,700,"122.2,-22.9,132.3,-12.8"
+#10,500,5000,"-180,-90,180,90"
+10,5,10,"-180,-90,180,90"
