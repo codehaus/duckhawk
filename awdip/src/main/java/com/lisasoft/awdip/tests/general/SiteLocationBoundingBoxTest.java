@@ -68,12 +68,8 @@ public class SiteLocationBoundingBoxTest extends AbstractAwdipTest {
      *         ("min_lon,min_lat,max_lon,max_lat")
      *     3rd field: maximal extend bounding box 4 values comma separated in
      *         quotes ("min_lon,min_lat,max_lon,max_lat")
-     * 
-     * @param file file to parse
-     * @throws IOException 
-     * @throws InvalidConfigFileException 
      */
-    public static Test suite() throws Exception {
+    public static Test suite() throws InvalidConfigFileException, IOException {
         // read CSV file
         String filename = (String) getAwdipContext().getEnvironment().get(KEY_TESTS_CONFIG_DIR)
                 + CONFIG_FILE;

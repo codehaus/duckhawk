@@ -11,6 +11,7 @@ import static com.lisasoft.awdip.AWDIPTestSupport.getPerformTests;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -102,7 +103,8 @@ public class SiteSinglePhenomDateBetweenTest extends AbstractAwdipTest {
      *     3rd field: date range (comma separated, ISO: "yyyy-MM-dd,yyyy-MM-dd")
      *     4th field: names of the phenomena (comma separated)     
      */
-    public static Test suite() throws Exception {
+    public static Test suite()
+    throws InvalidConfigFileException, IOException, ParseException {
         // Parsing configuration file
         //------------------------------
         

@@ -4,6 +4,7 @@ import static com.lisasoft.awdip.AWDIPTestSupport.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -88,12 +89,9 @@ public class SiteSamplingStatisticsBoundingBoxTest extends AbstractAwdipTest {
      *         quotes ("min_lon,min_lat,max_lon,max_lat")
      *     4th field: date range (comma separated, ISO: "yyyy-MM-dd,yyyy-MM-dd")
      *     5th field: names of the phenomena (comma separated)
-     * 
-     * @param file file to parse
-     * @throws IOException 
-     * @throws InvalidConfigFileException 
      */
-    public static Test suite() throws Exception {
+    public static Test suite()
+    throws InvalidConfigFileException, IOException, ParseException {
         // read CSV file
         String filename = (String) getAwdipContext().getEnvironment().get(KEY_TESTS_CONFIG_DIR)
                 + CONFIG_FILE;

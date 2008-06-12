@@ -77,7 +77,7 @@ public class SiteLocationBoundingBoxAndMaximumFeaturesTest extends AbstractAwdip
      *     4th field: maximal extend bounding box 4 values comma separated in
      *         quotes ("min_lon,min_lat,max_lon,max_lat")
      */
-    public static Test suite() throws Exception {
+    public static Test suite() throws InvalidConfigFileException, IOException {
         // read CSV file
         String filename = (String) getAwdipContext().getEnvironment()
                 .get(KEY_TESTS_CONFIG_DIR) + CONFIG_FILE;
