@@ -192,8 +192,7 @@ public class AWDIPTestSupport {
             System.out.println("Error: " + e.getMessage());
             System.exit(0);
         } catch (ConfigurationException e) {
-            e.printStackTrace();
-            System.out.println("Error reading Configuration file \""
+            System.out.println("Error reading configuration file \""
                     + filename + "\".");
             System.exit(0);            
         }

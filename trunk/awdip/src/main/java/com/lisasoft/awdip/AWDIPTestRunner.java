@@ -27,7 +27,38 @@ public class AWDIPTestRunner {
             run(com.lisasoft.awdip.tests.general.SiteSinglePhenomDateBetweenTest.suite());
             run(com.lisasoft.awdip.tests.general.SiteLocationBoundingBoxTest.suite());
             run(com.lisasoft.awdip.tests.general.SiteLocationBoundingBoxAndMaximumFeaturesTest.suite());
-            */
             run(com.lisasoft.awdip.tests.general.SiteLocationMaximumFeaturesTest.suite());
+        */
+
+            try {
+                run(com.lisasoft.awdip.tests.general.SiteLocationBoundingBoxAndMaximumFeaturesTest.suite());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            
+            try {
+                run(com.lisasoft.awdip.tests.general.SiteLocationBoundingBoxTest.suite());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            
+            try {
+                run(com.lisasoft.awdip.tests.general.SiteLocationMaximumFeaturesTest.suite());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            
+/*            
+            try {
+                run(com.lisasoft.awdip.tests.general.SiteLocationBoundingBoxAndMaximumFeaturesTest.suite());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            try {
+                run(com.lisasoft.awdip.tests.general.SiteLocationBoundingBoxTest.suite());
+            } catch (Exception e) {
+                    System.out.println(e.getMessage());
+            }
+*/           
 	}
 }
