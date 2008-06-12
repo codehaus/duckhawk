@@ -83,7 +83,7 @@ public class SiteSinglePhenomDateAnyTest extends AbstractAwdipTest {
      *     1st field: name of a site
      *     2nd field: names of the phenomenon
      */
-    public static Test suite() throws Exception {
+    public static Test suite() throws InvalidConfigFileException, IOException {
         // read CSV file
         String filename = (String) getAwdipContext().getEnvironment().get(KEY_TESTS_CONFIG_DIR)
                 + CONFIG_FILE;
