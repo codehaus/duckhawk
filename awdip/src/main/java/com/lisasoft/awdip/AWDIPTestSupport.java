@@ -131,7 +131,7 @@ public class AWDIPTestSupport {
             environment.put(KEY_TESTS_CONFIG_DIR,
                     config.getString("testsConfigDir"));
             environment.put(KEY_SCHEMA_RPATH,
-                    "src/test/resources/schemas/all.xsd");
+                    "src/main/resources/schemas/all.xsd");
 
             /**
              * test call properties that definitely be in the output (set to
