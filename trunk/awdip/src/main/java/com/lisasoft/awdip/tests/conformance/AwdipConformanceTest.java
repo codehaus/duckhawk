@@ -32,6 +32,7 @@ public class AwdipConformanceTest {
         InputSource is = new InputSource(new StringReader(response));
         Validator v = new Validator(is);
         v.useXMLSchema(true);
+        System.out.println(System.getProperty("user.dir"));
         v.setJAXP12SchemaSource(new File((String)getAwdipContext()
                 .getEnvironment().get(KEY_SCHEMA_RPATH)));
         
