@@ -16,15 +16,14 @@ import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestProperties;
 import org.duckhawk.core.TestPropertiesImpl;
-import org.duckhawk.report.listener.XStreamDumper;
 import org.duckhawk.util.ConformanceSummarizer;
 import org.duckhawk.util.PerformanceSummarizer;
 import org.duckhawk.util.PrintStreamListener;
 
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 import com.lisasoft.awdip.util.SetPropertyListener;
-import com.lisasoft.awdip.util.TransformHtmlListener;
 import com.lisasoft.awdip.util.Util;
+import com.lisasoft.ows6.listener.OWS6TransformHtmlListener;
 
 /**
  * Test runner for the OWS6 GML profile validation test suite.
@@ -105,13 +104,12 @@ public class OWS6TestRunner {
 		environment.put(OWS6Keys.KEY_SCHEMA_RPATH, "http://schemas.opengis.net/wfs/1.1.0/wfs.xsd");
 
 		environment.put(OWS6Keys.KEY_SCHEMATRON_FOLDER, config.getString("schematronFolder"));
-		environment.put(OWS6Keys.KEY_SCHEMATRON_RULES, config.getString("schematronRules"));
+		environment.put(OWS6Keys.KEY_SCHEMATRON_FILE_EXTENSION, config.getString("schematronFilesExtension"));
 		environment.put(OWS6Keys.KEY_SCHEMATRON_TRANSFORMER, config.getString("schematronTransformer"));
 
 		//setting which properties are put into the report
 		String[] forcePropertyOutputGlobal = new String[] {
-				TestExecutor.KEY_REQUEST, TestExecutor.KEY_RESPONSE, 
-				OWS6Keys.KEY_SCHEMATRON_RESPONSE, OWS6Keys.KEY_SCHEMATRON_XLST };
+				TestExecutor.KEY_REQUEST, TestExecutor.KEY_RESPONSE};
 		String[] forcePropertyOutput;
 
 		forcePropertyOutput = Util.concatStringArrays(
@@ -124,9 +122,10 @@ public class OWS6TestRunner {
 				new SetPropertyListener(forcePropertyOutput),
 				//new PrintStreamListener(true, true),
 				new PrintStreamListener(false, true),
-				new XStreamDumper(
-						new File(config.getString("reportXmlDir"))),
-						new TransformHtmlListener(new File(config.getString("reportHtmlDir"))));
+				//new XStreamDumper(new File(config.getString("reportXmlDir"))),
+				//new TransformHtmlListener(new File(config.getString("reportHtmlDir")))
+				new OWS6TransformHtmlListener(new File(config.getString("reportXmlDir")), new File(config.getString("reportHtmlDir")))
+				);
 
 		return context;
 

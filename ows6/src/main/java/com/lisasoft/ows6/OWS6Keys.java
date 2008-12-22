@@ -13,6 +13,7 @@ public class OWS6Keys {
     
     public static final String KEY_SCHEMATRON_FOLDER = "schematronFolder";
     public static final String KEY_SCHEMATRON_RULES = "schematronRules";
+    public static final String KEY_SCHEMATRON_FILE_EXTENSION = "schematronFileExtension";
     public static final String KEY_SCHEMATRON_TRANSFORMER = "schematronTransformer";
 
     public static final String KEY_TYPE_NAME = "params.typeName";
