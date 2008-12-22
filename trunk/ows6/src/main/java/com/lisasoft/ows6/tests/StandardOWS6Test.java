@@ -6,8 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import javax.xml.transform.TransformerException;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -17,11 +15,12 @@ import org.custommonkey.xmlunit.exceptions.ConfigurationException;
 import org.duckhawk.core.TestContext;
 import org.duckhawk.core.TestExecutor;
 import org.duckhawk.core.TestProperties;
-import org.xml.sax.SAXException;
 
 import com.lisasoft.awdip.util.CSVReader;
 import com.lisasoft.awdip.util.InvalidConfigFileException;
 import com.lisasoft.ows6.OWS6Keys;
+import com.lisasoft.ows6.validator.XMLSchemaValidator;
+
 
 /**
  * An example test for OWS6
@@ -172,25 +171,14 @@ public class StandardOWS6Test extends AbstractOWS6Test {
 		try {
 
 			//XML schema validation
-			this.validateSchema(response);
-			
-			//load schematron files
-			String rules =   (String)this.context.getEnvironment().get(OWS6Keys.KEY_SCHEMATRON_FOLDER) 
-                           + (String)this.context.getEnvironment().get(OWS6Keys.KEY_SCHEMATRON_RULES);
-			String transformer =   (String)this.context.getEnvironment().get(OWS6Keys.KEY_SCHEMATRON_FOLDER) 
-            					 + (String)this.context.getEnvironment().get(OWS6Keys.KEY_SCHEMATRON_TRANSFORMER);
+			XMLSchemaValidator xsv = new XMLSchemaValidator();
+			xsv.validate(response);
 			
 			//schematron validation
-			this.validateSchematron(response, rules, transformer);
+			this.validateSchematron(response);
 
 		} catch (ConfigurationException e) {
 			log.error("ConfigurationException during XML validation!", e);
-		} catch (SAXException e) {
-			log.error("SAXException during validation!", e);
-		} catch (TransformerException e) {
-			log.error("TransformerException during schematron validation!", e);
-		} catch (IOException e) {
-			log.error("IOException TransformerException during schematron validation!", e);
 		}
 	}
 
