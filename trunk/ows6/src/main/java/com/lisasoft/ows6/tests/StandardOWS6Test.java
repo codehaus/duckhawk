@@ -175,7 +175,7 @@ public class StandardOWS6Test extends AbstractOWS6Test {
 			xsv.validate(response);
 			
 			//schematron validation
-			this.validateSchematron(response);
+			//this.validateSchematron(response);
 
 		} catch (ConfigurationException e) {
 			log.error("ConfigurationException during XML validation!", e);
@@ -195,7 +195,9 @@ public class StandardOWS6Test extends AbstractOWS6Test {
         StringBuffer request = new StringBuffer();
         request.append("<wfs:GetFeature version=\"1.1.0\" xmlns:citygml=\"http://www.citygml.org/citygml/1/0/0\" " +
         		"xmlns:wfs=\"http://www.opengis.net/wfs\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
-        		"xsi:schemaLocation=\"http://www.opengis.net/wfs  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\"");
+        		"xmlns:utds=\"http://www.opengis.net/ows-6/utds/0.2\" " +
+        		"xsi:schemaLocation=\"http://www.opengis.net/wfs  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd "+
+        		"http://www.opengis.net/ows-6/utds/0.2 http://www.interactive-instruments.de/schema/ows6/utds-citygml/UTDS-CityGML.xsd\"");
         if (maxFeatures>0)
             request.append(" maxFeatures=\"" + maxFeatures + "\"");
         request.append(">");

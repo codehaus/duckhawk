@@ -2,7 +2,7 @@ body {
     font-size:0.8em;
 }
 
-p, table, h1, h2, h3, h4 ,h5 , h6, ul {
+p, table, h1, h2, h3, h4 ,h5 , h6, ul, pre {
 font-family:sans-serif;
 }
 

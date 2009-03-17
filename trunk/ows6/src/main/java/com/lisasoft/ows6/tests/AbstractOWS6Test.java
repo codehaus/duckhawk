@@ -5,7 +5,18 @@ import static com.lisasoft.ows6.OWS6Keys.KEY_GS_PATH;
 import static com.lisasoft.ows6.OWS6Keys.KEY_HOST;
 import static com.lisasoft.ows6.OWS6Keys.KEY_PORT;
 
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.HashMap;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 import org.duckhawk.core.ConformanceTestRunner;
@@ -106,5 +117,41 @@ public class AbstractOWS6Test extends AbstractDuckHawkTest {
 		sv.validate(response);
 		
 	}
+	
+	
+	/**
+	 * Formats the XML document in the given String
+	 * 
+	 * @param xml unformatted XML document
+	 * @return formatted XML document
+	 * @throws TransformerFactoryConfigurationError
+	 * @throws TransformerException
+	 */
+	public static String formatXML (String xml) {
+		
+		String prettyResponse = xml;
+		
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			//initialize StreamResult with File object to save to file
+			StreamResult result = new StreamResult(new StringWriter());
+			Source source = new StreamSource(new StringReader(xml));
+		
+			transformer.transform(source, result);
+			prettyResponse = result.getWriter().toString();
+		} catch (TransformerFactoryConfigurationError e) {
+			log.debug("TransformerFactoryConfigurationError:\n"+xml);
+		} catch (TransformerException e) {
+			log.debug("TransformerException:\n"+xml);
+		}
+		
+		log.debug(prettyResponse);
+		
+		
+		return prettyResponse;
+	}
+	
+	
 
 }

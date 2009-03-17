@@ -9,7 +9,8 @@ public class OWS6Keys {
     public static final String KEY_SCHEMA_RPATH = "schemaPath";
     //public static final String KEY_SCHEMATRON_PATH = "schematronPath";
     //public static final String KEY_DESCRIPTION = "description";
-    public static final String KEY_TESTS_CONFIG_DIR = "testsConfigurationDir";
+    public static final String KEY_TESTS_CONFIG_DIR = "testsConfigDir";
+    public static final String KEY_TESTS_CONFIG_FILE = "testsConfigFile";
     
     public static final String KEY_SCHEMATRON_FOLDER = "schematronFolder";
     public static final String KEY_SCHEMATRON_RULES = "schematronRules";

@@ -12,13 +12,13 @@ import java.net.URLConnection;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.duckhawk.core.TestContext;
 import org.duckhawk.report.listener.XStreamDumper;
 
@@ -38,6 +38,7 @@ import org.duckhawk.report.listener.XStreamDumper;
  */
 public class OWS6TransformHtmlListener extends XStreamDumper {
 	
+	private static final Logger log = Logger.getLogger(OWS6TransformHtmlListener.class);
 	
 	public static final String XML_MAIN_REPORT = "xmlMainReportFile";
     /** Output directory for XHTML report */
@@ -88,7 +89,7 @@ public class OWS6TransformHtmlListener extends XStreamDumper {
 
             // generate general overview report
             URL xsltUrl = getClass()
-                    .getResource("/listeners/dh2xhtml_general.xsl");
+                    .getResource("/listeners/ows62xhtml_general.xsl");
             URLConnection urlConn = xsltUrl.openConnection();
             InputStream xsltStream = urlConn.getInputStream();
             Source xsltSource = new StreamSource(xsltStream);
@@ -106,7 +107,7 @@ public class OWS6TransformHtmlListener extends XStreamDumper {
             // isn't a problem, as no one wants to open such big HTML files
             // in the browser anyway.
             xsltUrl = getClass()
-                    .getResource("/listeners/dh2xhtml_details.xsl");
+                    .getResource("/listeners/ows62xhtml_details.xsl");
             urlConn = xsltUrl.openConnection();
             xsltStream = urlConn.getInputStream();            
             xsltSource = new StreamSource(xsltStream);
@@ -118,15 +119,14 @@ public class OWS6TransformHtmlListener extends XStreamDumper {
             t.transform(xmlReportSource, transResult);
             
             // copy css file
-            File css = new File(htmlDir + "/dh-report.css");
+            File css = new File(htmlDir + "/ows6-report.css");
+            
             if (!css.exists())
                 FileUtils.copyURLToFile(
-                        getClass().getResource("/listeners/dh-report.css"),
-                        new File(htmlDir + "/dh-report.css"));
+                        getClass().getResource("/listeners/ows6-report.css"),
+                        new File(htmlDir + "/ows6-report.css"));
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } catch (TransformerConfigurationException e) {
-        	throw new RuntimeException(e);
 		} catch (TransformerException e) {
 			throw new RuntimeException(e);
 		}   
