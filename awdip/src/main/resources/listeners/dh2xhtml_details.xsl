@@ -169,7 +169,14 @@ select="$entries/callProperties[$detailPosition]/entry">
                     <xsl:if test="string-length() &gt; 1024">
                       <xsl:attribute name="class">huge</xsl:attribute>
                     </xsl:if>
-                    <xsl:value-of select="."/>
+					<xsl:if test="@name='response'">
+					<pre>
+						<xsl:value-of select="."/>
+                    </pre>
+					</xsl:if>
+					<xsl:if test="not(@name='response')">
+						<xsl:value-of select="."/>
+					</xsl:if>
                 </td>
               </xsl:for-each>   
             </tr>
@@ -382,7 +389,21 @@ properties - data to build the table upon
         <xsl:for-each select="$properties/entry">
           <tr>
             <td><xsl:value-of select="@name"/></td>
-            <td><xsl:value-of select="."/></td>
+            <td>
+				<xsl:if test="@name='request'">
+					<pre>
+                        <xsl:value-of select="."/>
+                    </pre>
+				</xsl:if>
+                <xsl:if test="@name='response'">
+					<pre>
+						<xsl:value-of select="."/>
+                    </pre>
+				</xsl:if>
+                <xsl:if test="not(@name='request')">
+                    <xsl:value-of select="."/>
+				</xsl:if>
+			</td>
           </tr>
         </xsl:for-each>
       </tbody>

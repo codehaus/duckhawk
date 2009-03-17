@@ -64,7 +64,8 @@ public class OWS6TestRunner {
 			//Load context
 			context = getContext(OWS6_PROPERTIES_FILE, args);
 			//Start tests suites
-			run(com.lisasoft.ows6.tests.StandardOWS6Test.suite(context));
+			//run(com.lisasoft.ows6.tests.StandardOWS6Test.suite(context));
+			run(com.lisasoft.ows6.tests.OWS6GenericTest.suite(context));
 
 		} catch (ConfigurationException e) {
 			log.error("ConfigurationExciption in main()", e);
@@ -101,6 +102,8 @@ public class OWS6TestRunner {
 
 		environment.put(OWS6Keys.KEY_TESTS_CONFIG_DIR,
 				config.getString("testsConfigDir"));
+		environment.put(OWS6Keys.KEY_TESTS_CONFIG_FILE,
+				config.getString("testsConfigFile"));
 		environment.put(OWS6Keys.KEY_SCHEMA_RPATH, "http://schemas.opengis.net/wfs/1.1.0/wfs.xsd");
 
 		environment.put(OWS6Keys.KEY_SCHEMATRON_FOLDER, config.getString("schematronFolder"));

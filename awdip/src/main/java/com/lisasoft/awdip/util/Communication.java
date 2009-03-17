@@ -21,6 +21,7 @@
 package com.lisasoft.awdip.util;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -38,162 +39,244 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
  * same time
  */
 public class Communication {
-    /** Supported request methods */
-    public enum RequestMethod {
-        GET, POST
-    };
+	/** Supported request methods */
+	public enum RequestMethod {
+		GET, POST
+	};
 
-    /** Hostname/-adress of the server to connect to */
-    String host;
+	/** Hostname/-adress of the server to connect to */
+	String host;
 
-    /** Port to connect to */
-    int port;
+	/** Port to connect to */
+	int port;
 
-    /** Http client to make requests to server */
-    HttpClient client;
+	/** Http client to make requests to server */
+	HttpClient client;
 
-    private MultiThreadedHttpConnectionManager manager;
+	private MultiThreadedHttpConnectionManager manager;
 
-    /**
-     * Setting for the connection to a server
-     * 
-     * @param host
-     *                Host of the server
-     * @param port
-     *                Port of the server
-     */
-    public Communication(String host, int port) {
-        this.host = host;
-        this.port = port;
+	/**
+	 * Setting for the connection to a server
+	 * 
+	 * @param host
+	 *                Host of the server
+	 * @param port
+	 *                Port of the server
+	 */
+	public Communication(String host, int port) {
+		this.host = host;
+		this.port = port;
 
-        this.manager = new MultiThreadedHttpConnectionManager();
-        this.client = new HttpClient(manager);
-    }
-    
-    /**
-     * Send request to server. HTTP GET will use all values of the key-value
-     * pair, HTTP POST will only use the value of a key named "body".
-     * 
-     * @param request
-     *                Request to the server
-     * @return Response the server made
-     * @throws IOException
-     * @throws HttpException
-     */
-    public String sendRequest(Request request) throws HttpException,
-            IOException {
-        URI uri = new URI("http", null, host, port, request.getPath());
-        System.out.println(uri);
-        switch (request.getMethod()) {
-        case GET:
-            return sendGetRequest(request.getDataAsNameValuePairs(), uri);
-        case POST:
-            return sendPostRequest(request.getBody(), uri);
-        default:
-            throw new HttpException("Request Method not supported");
-        }
-    }
+		this.manager = new MultiThreadedHttpConnectionManager();
+		this.client = new HttpClient(manager);
+	}
 
-    /**
-     * Send request with specific data to server (previously set data will be
-     * replaced
-     * 
-     * @param request
-     *                Request to the server
-     * @return Response the server made
-     * @throws IOException
-     * @throws HttpException
-     * @throws Exception
-     */
-    public String sendRequest(Request request, HashMap<String, String> data)
-            throws HttpException, IOException {
-        request.setData(data);
-        return sendRequest(request);
-    }
+	/**
+	 * Send request to server. HTTP GET will use all values of the key-value
+	 * pair, HTTP POST will only use the value of a key named "body".
+	 * 
+	 * @param request
+	 *                Request to the server
+	 * @return Response the server made
+	 * @throws IOException
+	 * @throws HttpException
+	 */
+	public String sendRequest(Request request) throws HttpException,
+	IOException {
+		URI uri = new URI("http", null, host, port, request.getPath());
 
-    /**
-     * Send GET request to server
-     * 
-     * @param data
-     *                Data to send
-     * @param uri
-     *                Adress to send the data
-     * @return Response the server made
-     * 
-     * @throws HttpException
-     * @throws IOException
-     */
-    private String sendGetRequest(NameValuePair[] data, URI uri)
-            throws HttpException, IOException {
-        GetMethod reqGet = new GetMethod();
-        reqGet.setURI(uri);
-        reqGet.setQueryString(data);
-        client.executeMethod(reqGet);
-        return reqGet.getResponseBodyAsString();
-    }
+		switch (request.getMethod()) {
+		case GET:
+			return sendGetRequest(request.getDataAsNameValuePairs(), uri);
+		case POST:
+			return sendPostRequest(request.getBody(), uri);
+		default:
+			throw new HttpException("Request Method not supported");
+		}
+	}
 
-    /**
-     * Send POST request to server
-     * 
-     * Data is set as key/value pair.
-     * 
-     * @param data
-     *                Data to send
-     * @param uri
-     *                Address to send the data
-     * @return Response the server made
-     * 
-     * @throws HttpException
-     * @throws IOException
-     */
-    private String sendPostRequest(String data, URI uri) throws HttpException,
-            IOException {
-        PostMethod reqPost = new PostMethod();
-        reqPost.setURI(uri);
-        reqPost.setRequestHeader("Content-type", "text/xml; charset=UTF-8");
-        reqPost.setRequestEntity(new StringRequestEntity(data));
+	public InputStream sendRequestStreamResponse(Request request) throws HttpException, IOException {
+		URI uri = new URI("http", null, host, port, request.getPath());
 
-        client.executeMethod(reqPost);
-        return reqPost.getResponseBodyAsString();
-    }
+		switch (request.getMethod()) {
+		case GET:
+			return sendGetRequestStreamResponse(request.getDataAsNameValuePairs(), uri);
+		case POST:
+			return sendPostRequestStreamResponse(request.getBody(), uri);
+		default:
+			throw new HttpException("Request Method not supported");
+		}
+	}
 
-    public static void main(String[] args) throws Exception {
-        Communication com = new Communication("192.168.2.136", 8080);
-        HashMap<String, String> data = new HashMap<String, String>();
-        /*
-         * // get request data.put("request", "GetFeature"); data.put("version",
-         * "1.1.0"); data.put("typename", "topp:states");
-         * data.put("outputFormat", "GML2"); data.put("FEATUREID", "states.3");
-         * 
-         * Request request = new Request(RequestMethod.GET, data,
-         * "/geoserver/wfs"); String response = com.sendRequest(request);
-         */
 
-        // post request
-        String body = "<wfs:GetFeature service=\"WFS\" version=\"1.1.0\" xmlns:topp=\"http://www.openplans.org/topp\" xmlns:wfs=\"http://www.opengis.net/wfs\"   xmlns:ogc=\"http://www.opengis.net/ogc\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"   xsi:schemaLocation=\"http://www.opengis.net/wfs                       http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">   <wfs:Query typeName=\"topp:states\">      <ogc:Filter>        <ogc:FeatureId fid=\"states.3\"/>     </ogc:Filter>     </wfs:Query> </wfs:GetFeature>";
-        data.put("url", "http://192.168.2.136:8080/geoserver/wfs");
-        data.put("body", body);
-        Request request = new Request(RequestMethod.GET,
-                "/geoserver/TestWfsPost", data);
-        String response = com.sendRequest(request);
 
-        System.out.println(response);
-    }
+	/**
+	 * Send request with specific data to server (previously set data will be
+	 * replaced
+	 * 
+	 * @param request
+	 *                Request to the server
+	 * @return Response the server made
+	 * @throws IOException
+	 * @throws HttpException
+	 * @throws Exception
+	 */
+	public String sendRequest(Request request, HashMap<String, String> data)
+	throws HttpException, IOException {
+		request.setData(data);
+		return sendRequest(request);
+	}
 
-    public static String sendWFSPost(String host, int port,
-            String geoserverLocation, String body) throws IOException {
+	public InputStream sendRequestStreamResponse(Request request, HashMap<String, String> data)
+	throws HttpException, IOException {
+		request.setData(data);
+		return sendRequestStreamResponse(request);
+	}
+	
+	
+	/**
+	 * Send GET request to server
+	 * 
+	 * @param data
+	 *                Data to send
+	 * @param uri
+	 *                Adress to send the data
+	 * @return Response the server made
+	 * 
+	 * @throws HttpException
+	 * @throws IOException
+	 */
+	private String sendGetRequest(NameValuePair[] data, URI uri)
+	throws HttpException, IOException {
+		GetMethod reqGet = new GetMethod();
+		reqGet.setURI(uri);
+		reqGet.setQueryString(data);
+		client.executeMethod(reqGet);
+		return reqGet.getResponseBodyAsString();
+	}
 
-        Communication comm = new Communication(host, port);
-        URI uri = new URI("http", null, host, port, "/" + geoserverLocation);
+	
+	/**
+	 * Send GET request to server
+	 * 
+	 * @param data
+	 *                Data to send
+	 * @param uri
+	 *                Adress to send the data
+	 * @return Response the server made as stream
+	 * 
+	 * @throws HttpException
+	 * @throws IOException
+	 */
+	private InputStream sendGetRequestStreamResponse(NameValuePair[] data, URI uri)
+	throws HttpException, IOException {
+		GetMethod reqGet = new GetMethod();
+		reqGet.setURI(uri);
+		reqGet.setQueryString(data);
+		client.executeMethod(reqGet);
+		return reqGet.getResponseBodyAsStream();
+	}
 
-        return comm.sendPostRequest(body, uri);
 
-    }
+	/**
+	 * Send POST request to server
+	 * 
+	 * Data is set as key/value pair.
+	 * 
+	 * @param data
+	 *                Data to send
+	 * @param uri
+	 *                Address to send the data
+	 * @return Response the server made as String
+	 * 
+	 * @throws HttpException
+	 * @throws IOException
+	 */
+	private String sendPostRequest(String data, URI uri) throws HttpException,
+	IOException {
+		PostMethod reqPost = new PostMethod();
+		reqPost.setURI(uri);
+		reqPost.setRequestHeader("Content-type", "text/xml; charset=UTF-8");
+		reqPost.setRequestEntity(new StringRequestEntity(data));
 
-    /**
-     * Call this method to abruptly cease any communication with the server
-     */
-    public void dispose() {
-        manager.shutdown();
-    }
+		client.executeMethod(reqPost);
+		return reqPost.getResponseBodyAsString();
+	}
+
+
+	/**
+	 * Send POST request to server
+	 * 
+	 * Data is set as key/value pair.
+	 * 
+	 * @param data
+	 *                Data to send
+	 * @param uri
+	 *                Address to send the data
+	 * @return Response the server made as stream
+	 * 
+	 * @throws HttpException
+	 * @throws IOException
+	 */
+	private InputStream sendPostRequestStreamResponse(String data, URI uri) throws HttpException,
+	IOException {
+		PostMethod reqPost = new PostMethod();
+		reqPost.setURI(uri);
+		reqPost.setRequestHeader("Content-type", "text/xml; charset=UTF-8");
+		reqPost.setRequestEntity(new StringRequestEntity(data));
+
+		client.executeMethod(reqPost);
+		return reqPost.getResponseBodyAsStream();
+	}
+
+
+	public static void main(String[] args) throws Exception {
+		Communication com = new Communication("192.168.2.136", 8080);
+		HashMap<String, String> data = new HashMap<String, String>();
+		/*
+		 * // get request data.put("request", "GetFeature"); data.put("version",
+		 * "1.1.0"); data.put("typename", "topp:states");
+		 * data.put("outputFormat", "GML2"); data.put("FEATUREID", "states.3");
+		 * 
+		 * Request request = new Request(RequestMethod.GET, data,
+		 * "/geoserver/wfs"); String response = com.sendRequest(request);
+		 */
+
+		// post request
+		String body = "<wfs:GetFeature service=\"WFS\" version=\"1.1.0\" xmlns:topp=\"http://www.openplans.org/topp\" xmlns:wfs=\"http://www.opengis.net/wfs\"   xmlns:ogc=\"http://www.opengis.net/ogc\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"   xsi:schemaLocation=\"http://www.opengis.net/wfs                       http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">   <wfs:Query typeName=\"topp:states\">      <ogc:Filter>        <ogc:FeatureId fid=\"states.3\"/>     </ogc:Filter>     </wfs:Query> </wfs:GetFeature>";
+		data.put("url", "http://192.168.2.136:8080/geoserver/wfs");
+		data.put("body", body);
+		Request request = new Request(RequestMethod.GET,
+				"/geoserver/TestWfsPost", data);
+		String response = com.sendRequest(request);
+
+		System.out.println(response);
+	}
+
+	public static String sendWFSPost(String host, int port,
+			String geoserverLocation, String body) throws IOException {
+
+		Communication comm = new Communication(host, port);
+		URI uri = new URI("http", null, host, port, "/" + geoserverLocation);
+
+		return comm.sendPostRequest(body, uri);
+
+	}
+	
+	public static InputStream sendWFSPostStreamResponse(String host, int port,
+			String geoserverLocation, String body) throws IOException {
+
+		Communication comm = new Communication(host, port);
+		URI uri = new URI("http", null, host, port, "/" + geoserverLocation);
+
+		return comm.sendPostRequestStreamResponse(body, uri);
+
+	}
+
+	/**
+	 * Call this method to abruptly cease any communication with the server
+	 */
+	public void dispose() {
+		manager.shutdown();
+	}
 }
