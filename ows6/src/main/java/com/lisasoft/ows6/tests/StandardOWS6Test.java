@@ -83,6 +83,7 @@ public class StandardOWS6Test extends AbstractOWS6Test {
 
 		//if CSV file is empty
 		if (lines==null) {
+			log.error("StandardOWS6Test: File doesn't contain any data!");
 			throw new InvalidConfigFileException("File doesn't contain any data!");
 		}
 
