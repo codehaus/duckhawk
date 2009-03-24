@@ -58,15 +58,23 @@ public class OWS6TransformHtmlListener extends XStreamDumper {
 		super(xmlDir);
 		
 		if (!htmlDir.exists())
-            if (!htmlDir.mkdirs())
+            if (!htmlDir.mkdirs()) {
+            	log.error("Directory for HTML output"
+                        + htmlDir.getAbsolutePath()
+                        + " does not exist and cannot be created either");
                 throw new IllegalArgumentException("Directory for HTML output"
                         + htmlDir.getAbsolutePath()
                         + " does not exist and cannot be created either");
-        if (htmlDir.exists() && !htmlDir.isDirectory())
+            }
+        if (htmlDir.exists() && !htmlDir.isDirectory()) {
+        	log.error("Directory for HTML output "
+                    + htmlDir.getAbsolutePath()
+                    + " is supposed to be a directory");
             throw new IllegalArgumentException("Directory for HTML output "
                     + htmlDir.getAbsolutePath()
                     + " is supposed to be a directory");
-
+        }
+        
         this.htmlDir = htmlDir;
 	}
     
@@ -126,8 +134,10 @@ public class OWS6TransformHtmlListener extends XStreamDumper {
                         getClass().getResource("/listeners/ows6-report.css"),
                         new File(htmlDir + "/ows6-report.css"));
         } catch (IOException e) {
+        	log.error("IOException in OWS6TransformHtmlListener!", e);
             throw new RuntimeException(e);
 		} catch (TransformerException e) {
+			log.error("TransformerException in OWS6TransformHtmlListener!", e);
 			throw new RuntimeException(e);
 		}   
     }

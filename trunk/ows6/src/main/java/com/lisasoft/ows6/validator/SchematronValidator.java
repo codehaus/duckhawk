@@ -36,6 +36,7 @@ public class SchematronValidator implements Validator {
 	
 	//Schematron response without any errors
 	public static final String EMPTY_SCHEMATRON_RESULT = "";
+	public static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 	
 	//List of files containing Schematron rules
 	List<File> rules;
@@ -88,6 +89,7 @@ public class SchematronValidator implements Validator {
 	public SchematronValidator (File r, String transformerFile) {
 		
 		if (r == null) {
+			log.error("File with Schematron rules is NULL!");
 			throw new IllegalArgumentException("File shouldn't be null!");
 		}
 		
@@ -107,6 +109,7 @@ public class SchematronValidator implements Validator {
 	public SchematronValidator (List<File> rs, String transformerFile) {
 		
 		if (rs == null) {
+			log.error("List of Schematron rules is NULL!");
 			throw new IllegalArgumentException("List shouldn't be null!");
 		}
 		
@@ -135,15 +138,15 @@ public class SchematronValidator implements Validator {
 		String schematronResult = sb.toString();
 		try {
 			
-			if (!EMPTY_SCHEMATRON_RESULT.equals(schematronResult)) {
-		    	log.debug("Result is not empty! "+schematronResult);
+			if (!EMPTY_SCHEMATRON_RESULT.equals(schematronResult) && XML_HEADER.equals(schematronResult)) {
+		    	log.debug("Result is not empty!\n"+schematronResult);
 		    	throw new ValidationError(AbstractOWS6Test.formatXML(schematronResult));
 		    }
 			
 		} catch (TransformerFactoryConfigurationError e) {
-			e.printStackTrace();
-			if (!EMPTY_SCHEMATRON_RESULT.equals(schematronResult)) {
-		    	log.debug("Result is not empty! "+schematronResult);
+			log.error("TransformerFactoryConfigurationError during SchematronValidation", e);
+			if (!EMPTY_SCHEMATRON_RESULT.equals(schematronResult) && XML_HEADER.equals(schematronResult)) {
+		    	log.debug("Result is not empty!\n"+schematronResult);
 		    	throw new ValidationError(schematronResult);
 		    }
 		/*} catch (TransformerException e) {
@@ -173,14 +176,14 @@ public class SchematronValidator implements Validator {
 		String schematronResult = sb.toString();
 		try {
 			
-			if (!EMPTY_SCHEMATRON_RESULT.equals(schematronResult)) {
+			if (!EMPTY_SCHEMATRON_RESULT.equals(schematronResult) && XML_HEADER.equals(schematronResult)) {
 		    	log.debug("Result is not empty! "+schematronResult);
 		    	throw new ValidationError(AbstractOWS6Test.formatXML(schematronResult));
 		    }
 			
 		} catch (TransformerFactoryConfigurationError e) {
-			e.printStackTrace();
-			if (!EMPTY_SCHEMATRON_RESULT.equals(schematronResult)) {
+			log.error("TransformerFactoryConfigurationError during SchematronValidation", e);
+			if (!EMPTY_SCHEMATRON_RESULT.equals(schematronResult) && XML_HEADER.equals(schematronResult)) {
 		    	log.debug("Result is not empty! "+schematronResult);
 		    	throw new ValidationError(schematronResult);
 		    }
@@ -232,10 +235,10 @@ public class SchematronValidator implements Validator {
 	    return schematronResult;
 	    
 	    } catch (TransformerException e) {
-	    	log.debug("Validating Schematron: TransformationException: "+e);
+	    	log.error("Validating Schematron: TransformationException: "+e);
 	    	throw new ValidationError(e);
 		} catch (UnsupportedEncodingException e) {
-			log.debug("Validating Schematron: UnsupportedEncodingException: "+e);
+			log.error("Validating Schematron: UnsupportedEncodingException: "+e);
 			throw new ValidationError(e);
 		}
 	}
