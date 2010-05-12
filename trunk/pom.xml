@@ -196,6 +196,8 @@
           <relaxed>false</relaxed>
         </configuration>
       </plugin>
+      
+      
     </plugins>
   </reporting>
 
@@ -221,6 +223,6 @@
     <module>dh-sample</module>
     <module>awdip</module>
     <module>awdip-jetty</module>
-    <module>ows6</module>
+    <module>wfs-validator</module>
   </modules>
 </project>

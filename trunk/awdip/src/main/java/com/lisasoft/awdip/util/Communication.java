@@ -5,7 +5,7 @@
  * 
  *    http://docs.codehaus.org/display/DH/Home
  * 
- *    Copyright (C) 2008 TOPP - http://www.openplans.org.
+ *    Copyright (C) 2008 LISAsoft- http://www.lisasoft.com.
  *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,8 @@ package com.lisasoft.awdip.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -95,6 +97,11 @@ public class Communication {
 		}
 	}
 
+	public String sendUriAsString (Request request) throws IOException{
+		URI uri = new URI("http", null, host, port, request.getPath());
+		return uri.toString();
+	}
+	
 	public InputStream sendRequestStreamResponse(Request request) throws HttpException, IOException {
 		URI uri = new URI("http", null, host, port, request.getPath());
 
@@ -107,8 +114,6 @@ public class Communication {
 			throw new HttpException("Request Method not supported");
 		}
 	}
-
-
 
 	/**
 	 * Send request with specific data to server (previously set data will be
@@ -132,8 +137,7 @@ public class Communication {
 		request.setData(data);
 		return sendRequestStreamResponse(request);
 	}
-	
-	
+
 	/**
 	 * Send GET request to server
 	 * 

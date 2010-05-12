@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sch:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+   <sch:title xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+              xmlns="http://www.w3.org/2001/XMLSchema">Schematron validation</sch:title>
+   <sch:title xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:gml="http://www.opengis.net/gml"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              xmlns="http://www.w3.org/2001/XMLSchema">Schematron validation</sch:title>
+   <sch:ns xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:gml="http://www.opengis.net/gml"
+           xmlns:xlink="http://www.w3.org/1999/xlink"
+           xmlns="http://www.w3.org/2001/XMLSchema"
+           prefix="gml"
+           uri="http://www.opengis.net/gml"/>
+   <sch:ns xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:gml="http://www.opengis.net/gml"
+           xmlns:xlink="http://www.w3.org/1999/xlink"
+           xmlns="http://www.w3.org/2001/XMLSchema"
+           prefix="xlink"
+           uri="http://www.w3.org/1999/xlink"/>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="refAndContent co-occurence prohibited">
+					<sch:rule context="gml:isolated">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="refAndContent co-occurence prohibited">
+					<sch:rule context="gml:containerProperty">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="refAndContent co-occurence prohibited">
+					<sch:rule context="gml:directedNode">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="refAndContent co-occurence prohibited">
+					<sch:rule context="gml:directedEdge">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="refAndContent co-occurence prohibited">
+					<sch:rule context="gml:directedFace">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="refAndContent co-occurence prohibited">
+					<sch:rule context="gml:directedTopoSolid">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="refAndContent co-occurence prohibited">
+					<sch:rule context="gml:subComplex">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="refAndContent co-occurence prohibited">
+					<sch:rule context="gml:superComplex">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="refAndContent co-occurence prohibited">
+					<sch:rule context="gml:subComplex">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="refAndContent co-occurence prohibited">
+					<sch:rule context="gml:topoPrimitiveMember">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="refAndContent co-occurence prohibited">
+					<sch:rule context="gml:topoPrimitiveMember">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="Check either href or content not both">
+									<sch:rule context="gml:solidMember">
+										<sch:extends rule="hrefOrContent"/>
+									</sch:rule>
+								</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="Check either codeSpace or uom not both">
+					<sch:rule context="gml:ValueArray">
+						   <sch:report test="@codeSpace and @uom">ValueArray may not carry both a reference to a codeSpace and a uom</sch:report>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="Check components are homogeneous">
+					<sch:rule context="gml:ValueArray">
+						   <sch:assert test="count(gml:valueComponent/*) = count(gml:valueComponent/*[name() = name(../../gml:valueComponent[1]/*[1])])">All components of <sch:name/> must be of the same type</sch:assert>
+						   <sch:assert test="count(gml:valueComponents/*) = count(gml:valueComponents/*[name() = name(../*[1])])">All components of <sch:name/> must be of the same type</sch:assert>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                name="Check either href or content not both">
+					<sch:rule context="gml:multiGeometryProperty">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                name="Check either href or content not both">
+					<sch:rule context="gml:multiPointProperty">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                name="Check either href or content not both">
+					<sch:rule context="gml:multiCurveProperty">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                name="Check either href or content not both">
+					<sch:rule context="gml:multiSurfaceProperty">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                name="Check either href or content not both">
+					<sch:rule context="gml:multiSolidProperty">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="Check either href or content not both">
+					<sch:rule context="gml:surfaceProperty">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="Check SRS tags">
+				  <sch:rule abstract="true" id="CRSLabels">
+					    <sch:report test="not(@srsDimension) or @srsName">The presence of a dimension attribute implies the presence of the srsName attribute.</sch:report>
+					    <sch:report test="not(@axisLabels) or @srsName">The presence of an axisLabels attribute implies the presence of the srsName attribute.</sch:report>
+					    <sch:report test="not(@uomLabels) or @srsName">The presence of an uomLabels attribute implies the presence of the srsName attribute.</sch:report>
+					    <sch:report test="(not(@uomLabels) and not(@axisLabels)) or (@uomLabels and @axisLabels)">The presence of an uomLabels attribute implies the presence of the axisLabels attribute and vice versa.</sch:report>
+				  </sch:rule>
+			</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="Check Dimension">
+				  <sch:rule abstract="true" id="Count">
+					    <sch:report test="not(@count) or @srsDimension">The presence of a count attribute implies the presence of the dimension attribute.</sch:report>
+				  </sch:rule>
+			</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="Check SRS tags">
+					<sch:rule context="gml:_Geometry">
+						   <sch:extends rule="CRSLabels"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="Check either href or content not both">
+					<sch:rule context="gml:pointProperty">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="Check either href or content not both">
+					<sch:rule context="gml:curveProperty">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="Check SRS tags">
+					<sch:rule context="gml:pos">
+						   <sch:extends rule="CRSLabels"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="Check SRS tags">
+					<sch:rule context="gml:posList">
+						   <sch:extends rule="CRSLabels"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="Check Dimension">
+					<sch:rule context="gml:posList">
+						   <sch:extends rule="Count"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="Check SRS tags">
+					<sch:rule context="gml:vector">
+						   <sch:extends rule="CRSLabels"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                name="Check either href or content not both">
+					<sch:rule context="gml:baseCurve">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                name="Check either href or content not both">
+					<sch:rule context="gml:baseSurface">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                name="Check either href or content not both">
+					<sch:rule context="gml:solidProperty">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:pattern xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                name="Check either href or content not both">
+									<sch:rule context="gml:exterior">
+										<sch:extends rule="hrefOrContent"/>
+									</sch:rule>
+								</sch:pattern>
+   <sch:pattern xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                name="Check either href or content not both">
+									<sch:rule context="gml:interior">
+										<sch:extends rule="hrefOrContent"/>
+									</sch:rule>
+								</sch:pattern>
+   <sch:pattern xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:gml="http://www.opengis.net/gml"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="Check either href or content not both">
+				  <sch:rule abstract="true" id="hrefOrContent">
+					    <sch:report test="@xlink:href and (*|text())">Property element may not carry both a reference to an object and contain an object.</sch:report>
+					    <sch:assert test="@xlink:href | (*|text())">Property element must either carry a reference to an object or contain an object.</sch:assert>
+				  </sch:rule>
+			</sch:pattern>
+   <sch:pattern xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:gml="http://www.opengis.net/gml"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                name="refAndContent co-occurence prohibited">
+					<sch:rule context="gml:_strictAssociation">
+						   <sch:extends rule="hrefOrContent"/>
+					</sch:rule>
+				</sch:pattern>
+   <sch:diagnostics/>
+</sch:schema>

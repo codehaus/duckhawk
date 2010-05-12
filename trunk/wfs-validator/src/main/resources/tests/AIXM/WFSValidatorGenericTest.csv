@@ -1,0 +1,5 @@
+request
+<wfs:GetFeature service="WFS" version="1.1.0" maxFeatures="10" xmlns:wfs="http://www.opengis.net/wfs"> <wfs:Query typeName="aixm:AirportClearanceService"> </wfs:Query> </wfs:GetFeature>
+<wfs:GetFeature service="WFS" version="1.1.0" maxFeatures="10" xmlns:wfs="http://www.opengis.net/wfs"> <wfs:Query typeName="aixm:VerticalStructure"> </wfs:Query> </wfs:GetFeature>
+<wfs:GetFeature service="WFS" version="1.1.0" maxFeatures="10" xmlns:wfs="http://www.opengis.net/wfs"> <wfs:Query typeName="aixm:Runway"> </wfs:Query> </wfs:GetFeature>
+<wfs:GetFeature service="WFS" version="1.1.0" maxFeatures="10" xmlns:wfs="http://www.opengis.net/wfs"> <wfs:Query typeName="aixm:Apron"> </wfs:Query> </wfs:GetFeature>
