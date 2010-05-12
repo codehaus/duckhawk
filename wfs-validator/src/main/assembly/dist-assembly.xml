@@ -1,0 +1,96 @@
+<assembly>
+  <id>dist</id>
+  <formats>
+      <format>zip</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <includeSiteDirectory>false</includeSiteDirectory>
+  <fileSets>
+  
+    <!-- include and do not filter jar -->
+    <fileSet>
+      <directory>target</directory>
+      <filtered>false</filtered>
+      <outputDirectory>jar</outputDirectory>
+      <includes>
+        <include>${pom.artifactId}-${pom.version}-jar-with-dependencies.jar</include>
+      </includes>
+    </fileSet>
+  
+    <!-- include and do not filter config file -->
+    <fileSet>
+      <directory>target/classes/tests</directory>
+      <filtered>false</filtered>
+      <outputDirectory>tests</outputDirectory>
+      <includes>
+        <include>*/*</include>
+      </includes>
+    </fileSet>
+  
+    <!-- include and do not filter Schematron -->
+    <fileSet>
+      <directory>target/classes/schematron</directory>
+      <filtered>false</filtered>
+      <outputDirectory>schematron</outputDirectory>
+      <includes>
+        <include>*/*</include>
+      </includes>
+    </fileSet>
+  
+    <!-- include and do not filter configs -->
+    <fileSet>
+      <directory>/</directory>
+      <filtered>false</filtered>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>*.properties</include>
+      </includes>
+    </fileSet>
+  
+  <!-- include and do not filter empty dirs for reports -->
+ 	<fileSet>
+      <directory>/</directory>
+      <filtered>false</filtered>
+      <outputDirectory>/reports</outputDirectory>
+      <excludes>
+        <exclude>**/*</exclude>
+      </excludes>
+    </fileSet>
+	<fileSet>
+      <directory>/</directory>
+      <filtered>false</filtered>
+      <outputDirectory>/reports/html</outputDirectory>
+      <excludes>
+        <exclude>**/*</exclude>
+      </excludes>
+    </fileSet>
+   	<fileSet>
+      <directory>/</directory>
+      <filtered>false</filtered>
+      <outputDirectory>/reports/xml</outputDirectory>
+      <excludes>
+        <exclude>**/*</exclude>
+      </excludes>
+    </fileSet> 
+    
+    <!-- include and do not filter bin -->
+    <fileSet>
+      <directory>bin</directory>
+      <filtered>false</filtered>
+      <outputDirectory>bin</outputDirectory>
+      <includes>
+        <include>*</include>
+      </includes>
+    </fileSet>
+    
+    <!-- include and do not filter docs -->
+    <fileSet>
+      <directory>docs</directory>
+      <filtered>false</filtered>
+      <outputDirectory>docs</outputDirectory>
+      <includes>
+        <include>*</include>
+      </includes>
+    </fileSet>  
+  </fileSets>
+</assembly>

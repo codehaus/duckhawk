@@ -1,0 +1,2 @@
+request
+<wfs:GetFeature service="WFS" version="1.1.0" maxFeatures="2" xmlns:utds="http://www.opengis.net/ows-6/utds/0.3" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs  http://schemas.opengis.net/wfs/1.1.0/wfs.xsd http://www.opengis.net/ows-6/utds/0.3 http://services.interactive-instruments.de/ows6/data/schema/UTDS-CityGML.xsd">  <wfs:Query typeName="utds:Fence"> </wfs:Query> </wfs:GetFeature>
