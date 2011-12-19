@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message:AIXMBasicMessage xmlns:message="http://www.aixm.aero/schema/5.1/message" xmlns:aixm="http://www.aixm.aero/schema/5.1" xmlns:event="http://www.aixm.aero/schema/5.1/event" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xsi:schemaLocation="http://www.aixm.aero/schema/5.1/message message/AIXM_BasicMessage.xsd" gml:id="M00001">
+	<message:hasMember>
+		<event:Event gml:id="event.other_example">
+			<gml:identifier codeSpace="urn:uuid:">event.other_example</gml:identifier>
+			<event:timeSlice>
+				<event:EventTimeSlice gml:id="e01-1">
+					<gml:validTime>
+						<!-- Note that this time should be the same as for the associated feature, see element with gml:id=AS01_TS01 -->
+						<gml:TimeInstant gml:id="e01-2">
+							<gml:timePosition>2009-11-07T08:00:00</gml:timePosition>
+						</gml:TimeInstant>
+					</gml:validTime>
+					<aixm:interpretation>PERMDELTA</aixm:interpretation>
+					<aixm:sequenceNumber>2</aixm:sequenceNumber>
+					<aixm:featureLifetime>
+						<gml:TimePeriod gml:id="e01-3">
+							<gml:beginPosition>2009-11-07T08:00:00</gml:beginPosition>
+							<gml:endPosition>2009-11-17T17:00:00</gml:endPosition>
+						</gml:TimePeriod>
+					</aixm:featureLifetime>
+					<event:name>UFO INVASION NORTH OF SJAELLANDS ODDE</event:name>
+					<event:encoding>ANNOTATION</event:encoding>
+					<event:scenario>OTHER.1.0</event:scenario>
+					<event:revision>2009-11-06T15:30:00</event:revision>
+					<event:textNOTAM>
+						<event:NOTAM gml:id="e01-4">
+							<event:series>M</event:series>
+							<event:number>0667</event:number>
+							<event:year>2009</event:year>
+							<event:type>N</event:type>
+							<event:issued>2009-11-07T04:00:00</event:issued>
+							<event:selectionCode>QRRCA</event:selectionCode>
+							<event:traffic>IV</event:traffic>
+							<event:purpose>BO</event:purpose>
+							<event:scope>W</event:scope>
+							<event:minimumFL>000</event:minimumFL>
+							<event:maximumFL>600</event:maximumFL>
+							<event:coordinates>5606N01130E</event:coordinates>
+							<event:radius>012</event:radius>
+							<event:location>EKDK</event:location>
+							<event:effectiveStart>0911070800</event:effectiveStart>
+							<event:effectiveEnd>0911171700</event:effectiveEnd>
+							<event:schedule>DAILY 0800-1700</event:schedule>
+							<event:text>UFO INVASION 
+AS FOLLOWS NORTH OF SJAELLANDS ODDE: 
+560028N 0111656E - 560643N 0111026E - 561500N 0112400E - 561500N 0113600E -560112N 0114736E - 555730N 0113830E - 560028N 0111656E 
+RELEVANT ATS UNITS REF. AIP DENMARK ENR 5.1 ITEM 3: AARHUS APP/TWR, ACC KOEBENHAVN</event:text>
+							<event:lowerLimit>GND</event:lowerLimit>
+							<event:upperLimit>60 000 FT MSL</event:upperLimit>
+							<event:publisherNOF xlink:href="urn:faa:gov:nasr:a82b3fc9-4aa4-4e67-8def-aaea1ac595j" xlink:title="EKCHYNYX"/>
+						</event:NOTAM>
+					</event:textNOTAM>
+				</event:EventTimeSlice>
+			</event:timeSlice>
+		</event:Event>
+	</message:hasMember>
+	<message:hasMember>
+		<aixm:RunwayDirection gml:id="urn.uuid.c8455a6b-9319-4bb7-b797-08e644342d65">
+			<gml:identifier codeSpace="urn:uuid:">c8455a6b-9319-4bb7-b797-08e644342d65</gml:identifier>
+			<aixm:timeSlice>
+				<aixm:RunwayDirectionTimeSlice gml:id="RDTS0EADD09L27R-b">
+					<gml:validTime>
+						<gml:TimePeriod gml:id="vtILURU95-b">
+							<gml:beginPosition>2009-01-01T00:00:00.000</gml:beginPosition>
+							<gml:endPosition indeterminatePosition="unknown"/>
+						</gml:TimePeriod>
+					</gml:validTime>
+					<aixm:interpretation>TEMPDELTA</aixm:interpretation>
+					<aixm:sequenceNumber>1</aixm:sequenceNumber>
+					<aixm:featureLifetime>
+						<gml:TimePeriod gml:id="ltILURU95-b">
+							<gml:beginPosition>2009-01-01T00:00:00.000</gml:beginPosition>
+							<gml:endPosition indeterminatePosition="unknown"/>
+						</gml:TimePeriod>
+					</aixm:featureLifetime>
+					<aixm:annotation>
+						<aixm:Note gml:id="N-b8accf2a">
+							<aixm:purpose>WARNING</aixm:purpose>
+							<aixm:translatedNote>
+								<aixm:LinguisticNote gml:id="L-f5c0f16c">
+									<aixm:note lang="en-gb">UFO INVASION 
+AS FOLLOWS NORTH OF SJAELLANDS ODDE: 
+560028N 0111656E - 560643N 0111026E - 561500N 0112400E - 561500N 0113600E -560112N 0114736E - 555730N 0113830E - 560028N 0111656E 
+RELEVANT ATS UNITS REF. AIP DENMARK ENR 5.1 ITEM 3: AARHUS APP/TWR, ACC KOEBENHAVN</aixm:note>
+								</aixm:LinguisticNote>
+							</aixm:translatedNote>
+						</aixm:Note>
+					</aixm:annotation>
+					<aixm:extension>
+						<event:RunwayDirectionExtension gml:id="runwaydirectionextension.event.other_example">
+							<event:theEvent xlink:href="#event.other_example"/>
+						</event:RunwayDirectionExtension>
+					</aixm:extension>
+				</aixm:RunwayDirectionTimeSlice>
+			</aixm:timeSlice>
+		</aixm:RunwayDirection>
+	</message:hasMember>
+</message:AIXMBasicMessage>

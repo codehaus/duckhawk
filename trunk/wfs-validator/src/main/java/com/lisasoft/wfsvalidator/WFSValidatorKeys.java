@@ -26,7 +26,9 @@ public class WFSValidatorKeys {
 	public static final String KEY_HOST = "host";
     public static final String KEY_PORT = "port";
     public static final String KEY_GS_PATH = "serverPath";
-    public static final String KEY_SCHEMA_RPATH = "schemaPath";
+
+    public static final String KEY_SCHEMA_FOLDER = "schemaFolder";
+    public static final String KEY_SCHEMA_FILE = "schemaFile";
     //public static final String KEY_SCHEMATRON_PATH = "schematronPath";
     //public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_TESTS_CONFIG_DIR = "testsConfigDir";

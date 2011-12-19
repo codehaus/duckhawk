@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message:AIXMBasicMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:message="http://www.aixm.aero/schema/5.1/message" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gss="http://www.isotc211.org/2005/gss" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gsr="http://www.isotc211.org/2005/gsr" xmlns:aixm="http://www.aixm.aero/schema/5.1" xmlns:event="http://www.aixm.aero/schema/5.1/event" xmlns:aimsaa="urn:us:gov:dot:faa:aim:saa:5.1" xmlns:aimsua="urn:us:gov:dot:faa:aim:saa:sua:5.1" xsi:schemaLocation="http://www.aixm.aero/schema/5.1/message message/AIXM_BasicMessage.xsd" gml:id="gml_fc_1">
+	<!--Created by GO Publisher Desktop 2.0-sprint28 Build 22318 from 2011-03-15 19:17-->
+	<!--Snowflake Software Ltd. (http://www.snowflakesoftware.com)-->
+	<!--**THIS DATA SHOULD NOT BE USED FOR NAVIGATION**-->
+	<message:hasMember>
+		<event:Event gml:id="event.aerodrome_closure_example">
+			<event:timeSlice>
+				<event:EventTimeSlice gml:id="eventtimeslice.aerodrome_closure_example">
+					<gml:validTime>
+						<gml:TimePeriod gml:id="validtime_timeperiod.aerodrome_closure_example">
+							<gml:beginPosition>2011-04-13T14:40:00.000Z</gml:beginPosition>
+							<gml:endPosition>2011-04-13T15:20:00.000Z</gml:endPosition>
+						</gml:TimePeriod>
+					</gml:validTime>
+					<aixm:interpretation>BASELINE</aixm:interpretation>
+					<aixm:sequenceNumber>1</aixm:sequenceNumber>
+					<aixm:correctionNumber>0</aixm:correctionNumber>
+					<aixm:featureLifetime>
+						<gml:TimePeriod gml:id="featurelifetime_timeperiod.aerodrome_closure_example">
+							<gml:beginPosition>2011-04-13T14:40:00.000Z</gml:beginPosition>
+							<gml:endPosition>2011-04-13T15:20:00.000Z</gml:endPosition>
+						</gml:TimePeriod>
+					</aixm:featureLifetime>
+					<event:name>PAPI</event:name>
+					<event:encoding>DIGITAL</event:encoding>
+					<event:scenario>AD.CLS.1.0</event:scenario>
+					<event:revision>2011-04-12T15:55:03.000Z</event:revision>
+				</event:EventTimeSlice>
+			</event:timeSlice>
+		</event:Event>
+	</message:hasMember>
+	<message:hasMember>
+		<aixm:AirportHeliport gml:id="urn.uuid.08add931-1dd2-4f3c-b6cd-7c3dd80743fb">
+			<gml:identifier codeSpace="urn:uuid:">08add931-1dd2-4f3c-b6cd-7c3dd80743fb</gml:identifier>
+			<aixm:timeSlice>
+				<aixm:AirportHeliportTimeSlice gml:id="VID1091163">
+					<gml:validTime>
+						<gml:TimePeriod gml:id="OB1000071">
+							<gml:beginPosition>2011-04-13T14:40:00.000Z</gml:beginPosition>
+							<gml:endPosition>2011-04-13T15:20:00.000Z</gml:endPosition>
+						</gml:TimePeriod>
+					</gml:validTime>
+					<aixm:interpretation>TEMPDELTA</aixm:interpretation>
+					<aixm:sequenceNumber>3</aixm:sequenceNumber>
+					<aixm:correctionNumber>0</aixm:correctionNumber>
+					<aixm:featureLifetime>
+						<gml:TimePeriod gml:id="OB2000072">
+							<gml:beginPosition>2011-04-13T14:40:00.000Z</gml:beginPosition>
+							<gml:endPosition>2011-04-13T15:20:00.000Z</gml:endPosition>
+						</gml:TimePeriod>
+					</aixm:featureLifetime>
+					<aixm:designator>EBBR</aixm:designator>
+					<aixm:name>BRUSSELS/BRUSSELS-NATIONAL</aixm:name>
+					<aixm:locationIndicatorICAO>EBBR</aixm:locationIndicatorICAO>
+					<aixm:designatorIATA>BRU</aixm:designatorIATA>
+					<aixm:type>AD</aixm:type>
+					<aixm:controlType>OTHER</aixm:controlType>
+					<aixm:fieldElevation uom="FT">184</aixm:fieldElevation>
+					<aixm:magneticVariation>-1.25</aixm:magneticVariation>
+					<aixm:dateMagneticVariation>2005</aixm:dateMagneticVariation>
+					<aixm:magneticVariationChange>.12</aixm:magneticVariationChange>
+					<aixm:referenceTemperature uom="C">23.2</aixm:referenceTemperature>
+					<aixm:altimeterCheckLocation>YES</aixm:altimeterCheckLocation>
+					<aixm:windDirectionIndicator>YES</aixm:windDirectionIndicator>
+					<aixm:landingDirectionIndicator>NO</aixm:landingDirectionIndicator>
+					<aixm:transitionAltitude uom="FT">4500</aixm:transitionAltitude>
+					<aixm:servedCity>
+						<aixm:City gml:id="O1">
+							<aixm:name>BRUSSELS</aixm:name>
+						</aixm:City>
+					</aixm:servedCity>
+					<aixm:ARP>
+						<aixm:ElevatedPoint gml:id="OB3000073" srsName="urn:ogc:def:crs:EPSG::4326">
+							<gml:pos>50.90139444 4.48457222</gml:pos>
+							<aixm:elevation uom="FT">184</aixm:elevation>
+							<aixm:geoidUndulation uom="FT">141</aixm:geoidUndulation>
+						</aixm:ElevatedPoint>
+					</aixm:ARP>
+					<aixm:availability>
+						<aixm:AirportHeliportAvailability gml:id="airportheliportoperationalstatus.aerodrome_closure_example">
+							<aixm:timeInterval>
+								<aixm:Timesheet gml:id="T-e921a1ce">
+									<aixm:timeReference>UTC</aixm:timeReference>
+									<aixm:day>ANY</aixm:day>
+									<aixm:startTime>06:00</aixm:startTime>
+									<aixm:endTime>07:00</aixm:endTime>
+								</aixm:Timesheet>
+							</aixm:timeInterval>
+							<aixm:timeInterval>
+								<aixm:Timesheet gml:id="T-d9e420be">
+									<aixm:timeReference>UTC</aixm:timeReference>
+									<aixm:day>ANY</aixm:day>
+									<aixm:startTime>22:00</aixm:startTime>
+									<aixm:endTime>23:00</aixm:endTime>
+								</aixm:Timesheet>
+							</aixm:timeInterval>
+							<aixm:operationalStatus>CLOSED</aixm:operationalStatus>
+							<aixm:usage>
+								<aixm:AirportHeliportUsage gml:id="A-d38f0d0f">
+									<aixm:type>CONDITIONAL</aixm:type>
+									<!-- <aixm:priorPermission>30</aixm:priorPermission> -->
+									<aixm:selection>
+										<aixm:ConditionCombination gml:id="C-ad9e4d95">
+											<aixm:logicalOperator>NONE</aixm:logicalOperator>
+											<aixm:aircraft>
+												<aixm:AircraftCharacteristic gml:id="A-a10bc8d4">
+													<aixm:type>HELICOPTER</aixm:type>
+												</aixm:AircraftCharacteristic>
+											</aixm:aircraft>
+										</aixm:ConditionCombination>
+									</aixm:selection>
+									<aixm:operation>ALL</aixm:operation>
+								</aixm:AirportHeliportUsage>
+							</aixm:usage>
+						</aixm:AirportHeliportAvailability>
+					</aixm:availability>
+					<aixm:extension>
+						<event:AirportHeliportExtension gml:id="airportheliportextension.aerodrome_closure_example">
+							<event:theEvent xlink:href="#event.aerodrome_closure_example"/>
+						</event:AirportHeliportExtension>
+					</aixm:extension>
+				</aixm:AirportHeliportTimeSlice>
+			</aixm:timeSlice>
+		</aixm:AirportHeliport>
+	</message:hasMember>
+</message:AIXMBasicMessage>

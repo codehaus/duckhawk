@@ -33,7 +33,17 @@
       <filtered>false</filtered>
       <outputDirectory>schematron</outputDirectory>
       <includes>
-        <include>*/*</include>
+        <include>**/*</include>
+      </includes>
+    </fileSet>
+  
+    <!-- include and do not filter Schema -->
+    <fileSet>
+      <directory>target/classes/schema</directory>
+      <filtered>false</filtered>
+      <outputDirectory>schema</outputDirectory>
+      <includes>
+        <include>**/*</include>
       </includes>
     </fileSet>
   
