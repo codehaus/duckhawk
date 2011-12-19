@@ -59,7 +59,7 @@ public class WFSValidatorTestRunner {
 	private static final Logger log = Logger.getLogger(WFSValidatorTestRunner.class);
 
 	//name of the properties file
-	public static final String OWS6_PROPERTIES_FILE = "WFSValidator.properties";
+	public static final String PROPERTIES_FILE = "WFSValidator.properties";
 	public static final String LOG4J_PROPERTIES_FILE = "log4j.properties";
 
 
@@ -82,7 +82,7 @@ public class WFSValidatorTestRunner {
 		try {
 
 			//Load context
-			context = getContext(OWS6_PROPERTIES_FILE, args);
+			context = getContext(PROPERTIES_FILE, args);
 			//Start tests suites
 			//run(com.lisasoft.wfsvalidator.tests.StandardOWS6Test.suite(context));
 			run(com.lisasoft.wfsvalidator.tests.WFSValidatorGenericTest.suite(context));
@@ -124,7 +124,8 @@ public class WFSValidatorTestRunner {
 				config.getString("testsConfigDir"));
 		environment.put(WFSValidatorKeys.KEY_TESTS_CONFIG_FILE,
 				config.getString("testsConfigFile"));
-		environment.put(WFSValidatorKeys.KEY_SCHEMA_RPATH, "http://schemas.opengis.net/wfs/1.1.0/wfs.xsd");
+                environment.put(WFSValidatorKeys.KEY_SCHEMA_FOLDER, config.getString("schemaFolder"));
+		environment.put(WFSValidatorKeys.KEY_SCHEMA_FILE, config.getString("schemaFile"));
 
 		environment.put(WFSValidatorKeys.KEY_SCHEMATRON_FOLDER, config.getString("schematronFolder"));
 		environment.put(WFSValidatorKeys.KEY_SCHEMATRON_FILE_EXTENSION, config.getString("schematronFilesExtension"));
